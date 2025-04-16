@@ -128,6 +128,7 @@ export default class Telegram {
       }
     } catch (e) {
       try {
+        this.topic = Helper.TELEGRAM_TOPICS.BUG
         await this.logAdmins(
           JSON.stringify([e.message, e.lineNumber, e.fileName]),
           null,
@@ -218,6 +219,8 @@ export default class Telegram {
       }
       return res.data
     } catch (error) {
+      this.logAdmins(JSON.stringify(error), null, Helper.TELEGRAM_TOPICS.BUG)
+
       // console.log(error)
       // this.sendMessage(`${Helper.TELEGRAM_LOGS[0]}`, `${error.message}\n${JSON.stringify(datas)}`)
       return null
