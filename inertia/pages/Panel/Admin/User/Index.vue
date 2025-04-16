@@ -177,7 +177,7 @@
                   scope="col"
                   class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
                   @click="
-                    (params.order_by = 'name'),
+                    (params.order_by = 'full_name'),
                       (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
                       (params.page = 1),
                       getData()

@@ -9,10 +9,10 @@
         class="relative bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-rose-300 to-rose-700"
       >
         <!--Hero-->
-        <div
-          class="opacity-60 bg-no-repeat bg-cover blur-sm z-0 absolute bottom-2 w-full h-full"
-          :style="`background-image: url(${heroImage})`"
-        ></div>
+        <!--        <div-->
+        <!--          class="opacity-60 bg-no-repeat bg-cover blur-sm z-0 absolute bottom-2 w-full h-full"-->
+        <!--          :style="`background-image: url(${heroImage})`"-->
+        <!--        ></div>-->
 
         <div class="pt-24 md:pt-32 xl:py-32 z-10 z-[1044] mx-auto">
           <div class="justify-center px-3 sm:px-1 flex flex-col md:flex-row items-center">
@@ -54,14 +54,14 @@
                   />
                 </div>
               </div>
-              <div class="p-3 gap-2 grid grid-cols-1 sm:grid-cols-2 items-center">
-                <SecondaryButton
-                  @click="$inertia.visit(route('shop.index'))"
+              <div class="p-3 gap-2 z-[14] grid grid-cols-1 sm:grid-cols-1 items-center">
+                <PrimaryButton
+                  @click="$inertia.visit(route('admin.panel.index'))"
                   class="grow"
                   classes="     py-4  "
                 >
-                  {{ __('shop') }}
-                </SecondaryButton>
+                  {{ __('panel') }}
+                </PrimaryButton>
               </div>
             </div>
           </div>
@@ -70,33 +70,12 @@
         <!--wave-->
         <div class="absolute bottom-0 start-0 end-0">
           <svg
-            viewBox="0 0 1400 174"
-            version="1.1"
+            class="relative block w-full h-[200px]"
             xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 1440 200"
+            preserveAspectRatio="none"
           >
-            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g transform="translate(-4.000000, 76.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                <path
-                  d="m 2 7 C 121 -73 570 -118 718 -73 Q 974 34 1233 -47 C 1282 -81 1330 -90 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
-                  opacity="0.100000001"
-                ></path>
-                <path
-                  d="m 2 7 C 240 6 654 -116 772 -55 Q 925 -3 1096 12 C 1249 23 1330 -90 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
-                  opacity="0.100000001"
-                ></path>
-                <path
-                  d="m 2 7 C 99 -11 212 -74 425 -23 Q 1142 84 1082 -55 C 1248 -38 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
-                  id="Path-4"
-                  opacity="0.200000003"
-                ></path>
-              </g>
-              <g transform="translate(-4.000000, 76.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                <path
-                  d="m 2 7 C 99 -11 212 -74 425 -23 Q 1142 84 1082 -55 C 1248 -38 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
-                ></path>
-              </g>
-            </g>
+            <path d="M0,100 C360,0 1080,200 1440,100 L1440,200 L0,200 Z" fill="#ffffff"></path>
           </svg>
         </div>
       </div>
@@ -228,7 +207,7 @@ import {
 } from '@heroicons/vue/24/solid'
 import { PhoneIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/vue/24/outline'
 import { __ } from '../js/mixins.js'
-
+import { route } from '@izzyjs/route/client'
 
 export default {
   data() {
@@ -284,6 +263,7 @@ export default {
     // initTE()
   },
   methods: {
+    route,
     __,
     updateSearchResults() {
       // this.log('search')

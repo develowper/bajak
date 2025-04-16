@@ -16,7 +16,7 @@ jobs:
           port: 21
           username: soheilm4
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /daberna_bajak/
+          server-dir: /bajak.sib-market.ir/
           dangerous-clean-slate: false
           exclude: |
             **/.git*
