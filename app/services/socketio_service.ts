@@ -76,7 +76,10 @@ export default class SocketIo {
       // else this.user = this.authenticateSessionUser({ socket })
 
       if (roomType) {
-        const res = await socket.join(`room-${roomType}`)
+        const res =
+          this.user.role != 'ad'
+            ? await socket.join(`room-${roomType}`)
+            : await socket.join(`ad-room-${roomType}`)
 
         // const room = await Room.findBy('type', roomType)
         // if (room)
@@ -166,6 +169,7 @@ export default class SocketIo {
 
       emitter.on('room-update', (data: any) => {
         SocketIo.wsIo.to(`room-${data.type}`).volatile.emit(`room-update`, data)
+        SocketIo.wsIo.to(`ad-room-${data.type}`).volatile.emit(`room-update`, data)
         // logger.info(data)
       })
 

@@ -714,7 +714,7 @@ class Helper {
   static createUsers() {
     User.createMany([
       {
-        username: 'mahyar.sh',
+        username: 'admin1',
         password: 'm2330m',
         phone: '09011111111',
         agencyId: 1,
@@ -774,7 +774,7 @@ class Helper {
   static createAdmins() {
     Admin.createMany([
       {
-        username: 'mahyar.sh',
+        username: 'admin1',
         password: env.get('pswd'),
         phone: '09011111111',
         role: 'go',
