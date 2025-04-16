@@ -53,7 +53,7 @@ export default class SettingController {
         }
       }),
       ad: Helper.AD,
-      game: await Daberna.find(2),
+      // game: await Daberna.find(2),
       blackjack_help: blackjackHelp,
       cards: Helper.BLACKJACK.cards,
       coins: Helper.BLACKJACK.coins,
