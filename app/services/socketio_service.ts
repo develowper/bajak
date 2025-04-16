@@ -77,7 +77,7 @@ export default class SocketIo {
 
       if (roomType) {
         const res =
-          this.user.role != 'ad'
+          this.user?.role != 'ad'
             ? await socket.join(`room-${roomType}`)
             : await socket.join(`ad-room-${roomType}`)
 
