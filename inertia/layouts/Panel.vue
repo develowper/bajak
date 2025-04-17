@@ -29,7 +29,10 @@
             <Link
               :href="route('admin.panel.index')"
               class="py-4 flex px-3 outline-none transition duration-300 ease-linear hover:bg-primary-200 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
-              :class="{ ' bg-primary-100 text-primary-500': menuIsActive('admin.panel.index') }"
+              :class="{
+                ' bg-primary-100 dark:bg-slate-700 text-primary-500':
+                  menuIsActive('admin.panel.index'),
+              }"
             >
               <span class="w-full text-primary-600 dark:text-slate-100 text-center">
                 {{ __('admin_dashboard') }}</span
