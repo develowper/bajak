@@ -486,7 +486,7 @@ class Helper {
     bank: '',
   }
   public static TELEGRAM_BOT: string = 'dbrna_bot'
-  public static TELEGRAM_LINK: string = 'https://bot.soheil-market.ir/api/bot/telegram/daberna'
+  public static TELEGRAM_LINK: string = 'https://bot.soheil-market.ir/api/bot/telegram/bajak'
   public static TELEGRAM_CHANNEL: string = 'dabernabajak'
 
   public static getFakeHttpCtx(): HttpContext {
