@@ -140,10 +140,7 @@ export default class SocketIo {
             }
           })
           socket.join(`${game}-${data?.id}`)
-          socket.emit(
-            `joined-${game}`,
-            await (game == 'dooz' ? Dooz : Blackjack).find('id', data?.id)
-          )
+          socket.emit(`joined-${game}`, await (game == 'dooz' ? Dooz : Blackjack).find(data?.id))
           // const roomSockets2 = await SocketIo.wsIo?.in(`${game}-${data?.id}`).fetchSockets()
           // console.log(' >---game sockets---< ', roomSockets2.length)
         })
