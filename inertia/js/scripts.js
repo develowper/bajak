@@ -27,6 +27,7 @@ window.onload = (event) => {
   // console.log('***************')
   // window.tailwindElements()
 
+  return
   try {
     if (
       localStorage.theme === 'dark' ||

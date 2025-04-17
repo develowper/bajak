@@ -30,7 +30,7 @@
       class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out p-5 md:p-10"
     >
       <div
-        class="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600"
+        class="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-slate-800"
       >
         <div
           class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50"
@@ -64,7 +64,7 @@
         <div class="relative flex-auto p-4" data-te-modal-body-ref>
           <div class="px-2 flex flex-col md:px-4">
             <div class="flex-col bg-white overflow-x-auto rounded-lg">
-              <div class="flex flex-wrap items-center justify-between py-4 dark:bg-gray-800 p-4">
+              <div class="flex flex-wrap items-center justify-between py-4 dark:bg-slate-800 p-4">
                 <!--              Dropdown Paginate-->
                 <div class="flex items-center p-1">
                   <div class="relative mx-1" data-te-dropdown-ref>
@@ -97,7 +97,7 @@
                         <div
                           @click.stop="((params.paginate = num), (params.page = 1)), getData()"
                           role="menuitem"
-                          class="cursor-pointer select-none block p-2 px-6 text-sm transition-colors hover:bg-gray-100 dark:text-light dark:hover:bg-primary"
+                          class="cursor-pointer select-none block p-2 px-6 text-sm transition-colors dark:text-slate-100 hover:bg-gray-100 dark:text-light dark:hover:bg-primary"
                         >
                           {{ num }}
                         </div>
@@ -205,7 +205,7 @@
                         <!--                      <div class="font-normal text-gray-500"></div>-->
                       </td>
 
-                      <td v-else class="px-2 py-4">
+                      <td v-else class="px-2 py-4 dark:text-slate-100">
                         {{ callback && callback[col] ? callback[col](d[col]) : __(d[col]) }}
                       </td>
                     </template>

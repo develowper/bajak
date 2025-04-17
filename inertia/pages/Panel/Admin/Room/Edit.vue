@@ -34,7 +34,7 @@
         </div>
         <div
           v-if="data && data.id"
-          class="mx-auto md:max-w-3xl my-6 px-2 md:px-4 py-4 bg-white shadow-md overflow-hidden rounded-lg"
+          class="mx-auto md:max-w-3xl my-6 px-2 md:px-4 py-4 bg-white dark:bg-slate-600 shadow-md overflow-hidden rounded-lg"
         >
           <!--          <div-->
           <!--            class="lg:flex-col flex flex-wrap self-center md:m-2 lg:mx-2 md:items-center lg:items-stretch rounded-lg"-->

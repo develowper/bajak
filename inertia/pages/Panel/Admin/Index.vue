@@ -6,7 +6,7 @@
 
     <template #content>
       <!-- Content header -->
-      <div class="flex items-center justify-between px-4 py-2 border-b lg:py-4">
+      <div class="flex items-center justify-between px-4 py-2 border-b lg:py-4 dark:text-slate-600">
         <h1 class="text-2xl font-semibold">{{ __('admin_panel') }}</h1>
       </div>
 
@@ -18,14 +18,16 @@
           <section
             v-if="agency"
             :class="cardShadow"
-            class="flex hover:scale-[101%] transition duration-300 cursor-pointer items-center justify-between p-4 bg-white rounded-lg"
+            class="flex hover:scale-[101%] transition duration-300 cursor-pointer items-center justify-between p-4 bg-white dark:bg-slate-600 rounded-lg"
           >
             <div class="flex flex-col">
-              <h6 class="text-md font-bold border-b py-3 tracking-wider text-gray-500">
+              <h6
+                class="text-md font-bold border-b py-3 tracking-wider text-gray-500 dark:text-slate-100"
+              >
                 {{ agency.name }}
                 <span class="text-xs">{{ `(${$page.props.auth.user.username})` }}</span>
               </h6>
-              <div class="flex flex-wrap text-gray-700 my-2">
+              <div class="flex flex-wrap text-gray-700 dark:text-slate-200 my-2">
                 <div class="flex text-sm mx-2">
                   <div class="font-bold">{{ `${__('balance')}: ` }}</div>
                   <div class="mx-1">
@@ -36,7 +38,7 @@
               </div>
             </div>
             <div>
-              <IdentificationIcon class="w-12 h-12 text-primary-300" />
+              <IdentificationIcon class="w-12 h-12 text-primary-300 dark:text-slate-200" />
             </div>
           </section>
           <!-- setting card -->
@@ -44,15 +46,17 @@
             v-if="hasAccess('edit_settings')"
             :href="route('admin.panel.setting.index')"
             :class="cardShadow"
-            class="flex hover:scale-[101%] transition duration-300 cursor-pointer items-center justify-between p-4 bg-white rounded-lg"
+            class="flex hover:scale-[101%] transition duration-300 cursor-pointer items-center justify-between p-4 bg-white dark:bg-slate-600 rounded-lg"
           >
             <div>
-              <h6 class="text-xl font-bold py-2 tracking-wider text-gray-500 uppercase">
+              <h6
+                class="text-xl font-bold py-2 tracking-wider text-gray-500 dark:text-slate-200 uppercase"
+              >
                 {{ __('settings') }}
               </h6>
             </div>
             <div>
-              <Cog6ToothIcon class="w-12 h-12 text-primary-300" />
+              <Cog6ToothIcon class="w-12 h-12 text-primary-300 dark:text-slate-200" />
             </div>
           </Link>
           <!-- ticket card -->
@@ -60,10 +64,12 @@
           <Link
             :href="route(`${isAdmin() ? 'admin' : 'user'}.panel.ticket.index`)"
             :class="cardShadow"
-            class="flex hover:scale-[101%] transition duration-300 cursor-pointer items-center justify-around p-4 bg-white rounded-lg"
+            class="flex hover:scale-[101%] transition duration-300 cursor-pointer items-center justify-around p-4 bg-white dark:bg-slate-600 rounded-lg"
           >
             <div class="flex flex-col grow">
-              <h6 class="text-xs font-bold py-2 tracking-wider text-gray-500 uppercase">
+              <h6
+                class="text-md font-bold py-2 tracking-wider text-gray-500 dark:text-slate-100 uppercase"
+              >
                 {{ __('tickets') }}
               </h6>
 
@@ -93,17 +99,19 @@
               </div>
             </div>
             <div class="flex">
-              <TicketIcon class="w-12 h-12 text-primary-300" />
+              <TicketIcon class="w-12 h-12 text-primary-300 dark:text-slate-200" />
             </div>
           </Link>
 
           <!-- transaction card -->
           <section
             :class="cardShadow"
-            class="flex transition duration-300 items-center justify-around p-4 bg-white rounded-lg"
+            class="flex transition duration-300 items-center justify-around p-4 bg-white dark:bg-slate-600 rounded-lg"
           >
             <div class="flex flex-col grow">
-              <h6 class="text-xs font-bold py-2 tracking-wider text-gray-500 uppercase">
+              <h6
+                class="text-md font-bold py-2 tracking-wider text-gray-500 dark:text-slate-200 uppercase"
+              >
                 {{ __('requests') }}
               </h6>
 
@@ -140,7 +148,7 @@
               </div>
             </div>
             <div class="flex">
-              <BanknotesIcon class="w-12 h-12 text-primary-300" />
+              <BanknotesIcon class="w-12 h-12 text-primary-300 dark:text-slate-200" />
             </div>
           </section>
 

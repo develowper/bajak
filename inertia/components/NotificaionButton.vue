@@ -19,7 +19,7 @@
       <BellAlertIcon class="w-7 h-7" />
     </button>
     <ul
-      class="absolute z-[99000] p-1 start-[1rem] end-[1rem] hidden max-h-[80vh] overflow-x-hidden overflow-y-scroll w-[90vw] sm:w-[20rem] list-none rounded-lg border-none bg-white bg-clip-padding text-start text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block"
+      class="absolute z-[99000] p-1 start-[1rem] end-[1rem] hidden max-h-[80vh] overflow-x-hidden overflow-y-scroll w-[90vw] sm:w-[20rem] list-none rounded-lg border-none bg-white bg-clip-padding text-start text-base shadow-lg dark:bg-neutral-100 [&[data-te-dropdown-show]]:block"
       aria-labelledby="dropdownNotidicationSetting"
       data-te-dropdown-menu-ref
     >

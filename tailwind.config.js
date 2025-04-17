@@ -4,7 +4,7 @@ import colors from 'tailwindcss/colors'
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ['class'],
-  safelist: ['dark'],
+  // safelist: ['dark'],
   prefix: '',
 
   content: [

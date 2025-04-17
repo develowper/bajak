@@ -57,18 +57,20 @@ export default {
     <Alert ref="alert" />
     <Toast ref="toast" />
 
-    <div class="px-2 min-h-screen flex flex-col sm:justify-center items-center pt-2 bg-gray-100">
+    <div
+      class="px-2 min-h-screen flex flex-col sm:justify-center items-center pt-2 dark:bg-gray-500 bg-gray-100"
+    >
       <div>
         <Link href="/">
           <ApplicationLogo type="outline-dark" class="w-25 h-20 fill-current text-gray-500" />
-          <div v-if="route().current('admin.login-form')" class="w-full text-end">
+          <div v-if="route().current('admin.login-form')" class="w-full text-end dark:text-white">
             {{ __('admin_portal') }}
           </div>
         </Link>
       </div>
 
       <div
-        class="w-full sm:max-w-lg z-0 mt-6 px-6 py-4 bg-white shadow-md overflow-hidden rounded-lg"
+        class="w-full sm:max-w-lg z-0 mt-6 px-6 py-4 dark:bg-slate-600 bg-white shadow-md overflow-hidden rounded-lg"
       >
         <slot />
       </div>

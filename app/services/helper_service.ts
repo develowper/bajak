@@ -716,7 +716,7 @@ class Helper {
     User.createMany([
       {
         username: 'admin1',
-        password: 'm2330m',
+        password: '123123',
         phone: '09011111111',
         agencyId: 1,
         agencyLevel: 0,

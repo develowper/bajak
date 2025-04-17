@@ -9,7 +9,7 @@
       <Dialog ref="modal" />
       <Toast ref="toast" />
       <WalletCharge ref="walletChargeModal" />
-      <div class="flex antialiased text-gray-900 bg-gray-100">
+      <div class="flex antialiased text-gray-900 bg-gray-100 dark:bg-slate-300">
         <!-- Loading screen -->
         <div v-if="loading" class="fixed w-screen h-screen backdrop-blur-sm z-[999999]">
           <div class="flex items-center justify-center w-full h-full">
@@ -30,7 +30,7 @@
         <!--Panel Main Side-->
         <div id="toggler" class="flex-1 h-screen overflow-x-hidden overflow-y-auto">
           <!-- Navbar -->
-          <header class="relative bg-white">
+          <header class="relative bg-white dark:bg-slate-500">
             <div class="flex items-center justify-between p-2 border-b">
               <!--   Sidenav toggle button -->
               <!--                    @click="showSidenav=!showSidenav"-->
@@ -40,10 +40,10 @@
                 aria-controls="#sidenav-1"
                 aria-haspopup="true"
                 aria-expanded="false"
-                class="block border-0 bg-transparent px-2.5 text-gray-500 hover:no-underline hover:shadow-none focus:no-underline focus:shadow-none focus:outline-none focus:ring-0"
+                class="block border-0 bg-transparent px-2.5 text-gray-500 dark:text-gray-100 hover:no-underline hover:shadow-none focus:no-underline focus:shadow-none focus:outline-none focus:ring-0"
               >
                 <span>
-                  <Bars3Icon class="w-7 text-primary-500" />
+                  <Bars3Icon class="w-7 text-primary-500 dark:text-gray-100" />
                 </span>
               </button>
 

@@ -38,7 +38,7 @@
         </div>
         <div
           v-if="data && data.id"
-          class="mx-auto md:max-w-3xl my-6 px-2 md:px-4 py-4 bg-white shadow-md overflow-hidden rounded-lg"
+          class="mx-auto md:max-w-3xl my-6 px-2 md:px-4 py-4 bg-white dark:bg-slate-600 shadow-md overflow-hidden rounded-lg"
         >
           <div class="flex flex-col p-2 my-4 border border-gray-300 rounded-lg">
             <!--            select user-->
@@ -64,7 +64,7 @@
                 <template v-slot:selector="props">
                   <div
                     :class="props.selectedText ? 'py-2' : 'py-2'"
-                    class="px-4 border border-gray-200 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center"
+                    class="px-4 border dark:text-slate-100 dark:hover:bg-gray-700 border-gray-200 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center"
                   >
                     <div class="grow text-sm p-1">
                       {{ props.selectedText ?? __('select_user') }}
@@ -113,7 +113,7 @@
             </div>
           </div>
 
-          <div class="border-b">{{ __('players') }}</div>
+          <div class="border-b dark:text-slate-100">{{ __('players') }}</div>
 
           <div v-for="player in socketParams.players">
             <div class="flex items-center justify-center m-2 p-2 rounded-md bg-gray-100">

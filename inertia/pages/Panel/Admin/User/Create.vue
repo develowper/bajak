@@ -15,7 +15,7 @@
       <!-- Content -->
       <div class="px-2 md:px-4">
         <div
-          class="lg:grid mx-auto md:max-w-2xl my-6 px-2 md:px-4 py-4 bg-white shadow-md overflow-hidden rounded-lg"
+          class="lg:grid mx-auto md:max-w-2xl my-6 px-2 md:px-4 py-4 bg-white dark:bg-slate-600 shadow-md overflow-hidden rounded-lg"
         >
           <!--          <div-->
           <!--            class="lg:flex-col flex flex-wrap self-center md:m-2 lg:mx-2 md:items-center lg:items-stretch rounded-lg"-->

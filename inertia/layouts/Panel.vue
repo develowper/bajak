@@ -9,7 +9,7 @@
     <template #sidenav>
       <nav
         id="sidenav-1"
-        class="fixed start-0 top-0 z-[1035] h-screen w-60 -translate-x-full overflow-hidden bg-white shadow-[0_4px_12px_0_rgba(0,0,0,0.07),_0_2px_4px_rgba(0,0,0,0.05)] md:data-[te-sidenav-hidden='false']:translate-x-0"
+        class="fixed start-0 top-0 z-[1035] h-screen w-60 -translate-x-full overflow-hidden bg-white dark:bg-slate-600 shadow-[0_4px_12px_0_rgba(0,0,0,0.07),_0_2px_4px_rgba(0,0,0,0.05)] md:data-[te-sidenav-hidden='false']:translate-x-0"
         data-te-sidenav-mode-breakpoint-over="0"
         data-te-sidenav-mode-breakpoint-side="md"
         data-te-sidenav-hidden="false"
@@ -31,7 +31,9 @@
               class="py-4 flex px-3 outline-none transition duration-300 ease-linear hover:bg-primary-200 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
               :class="{ ' bg-primary-100 text-primary-500': menuIsActive('admin.panel.index') }"
             >
-              <span class="w-full text-primary-600 text-center"> {{ __('admin_dashboard') }}</span>
+              <span class="w-full text-primary-600 dark:text-slate-100 text-center">
+                {{ __('admin_dashboard') }}</span
+              >
             </Link>
 
             <!--            <hr class="border-gray-200 py-2 mx-4">-->
@@ -86,17 +88,20 @@
           <!-- Agencies links -->
           <li v-if="false && hasAccess('view_agency')" class="relative">
             <a
-              :class="{ 'bg-primary-50 text-primary-500': menuIsActive('admin.panel.agency.*') }"
-              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+              :class="{
+                'bg-primary-50 text-primary-500 dark:bg-slate-700 dark:text-slate-100':
+                  menuIsActive('admin.panel.agency.*'),
+              }"
+              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 dark:text-slate-100 outline-none transition duration-300 ease-linear hover:bg-primary-100 dark:hover:bg-slate-700 dark:hover:text-slate-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
               data-te-sidenav-link-ref
             >
               <UserGroupIcon class="w-5 h-5" />
               <span class="mx-2 text-sm"> {{ __('agencies') }} </span>
               <span
-                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:text-slate-100"
                 data-te-sidenav-rotate-icon-ref
               >
-                <ChevronDownIcon class="h-5 w-5" />
+                <ChevronDownIcon class="h-5 w-5 dark:text-slate-100" />
               </span>
             </a>
             <ul
@@ -112,7 +117,7 @@
                   :href="route('admin.panel.agency.index')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.agency.index')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <Bars2Icon class="w-5 h-5 mx-1" />
                   {{ __('list') }}
@@ -121,7 +126,7 @@
                   :href="route('admin.panel.agency.create')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.agency.create')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <PlusSmallIcon class="w-5 h-5 mx-1" />
                   {{ __('new') }}
@@ -133,17 +138,20 @@
           <!-- Users links -->
           <li v-if="hasAccess('view_user')" class="relative">
             <a
-              :class="{ 'bg-primary-50 text-primary-500': menuIsActive('admin.panel.user.*') }"
-              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+              :class="{
+                'bg-primary-50 text-primary-500 dark:bg-slate-700 dark:text-slate-100  ':
+                  menuIsActive('admin.panel.user.*'),
+              }"
+              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 dark:text-slate-100 outline-none transition duration-300 ease-linear hover:bg-primary-100 dark:hover:bg-slate-700 dark:hover:text-slate-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
               data-te-sidenav-link-ref
             >
               <UserCircleIcon class="w-5 h-5" />
               <span class="mx-2 text-sm"> {{ __('users') }} </span>
               <span
-                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:text-slate-100"
                 data-te-sidenav-rotate-icon-ref
               >
-                <ChevronDownIcon class="h-5 w-5" />
+                <ChevronDownIcon class="h-5 w-5 dark:text-slate-100" />
               </span>
             </a>
             <ul
@@ -159,7 +167,7 @@
                   :href="route('admin.panel.user.index')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.user.index')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <Bars2Icon class="w-5 h-5 mx-1" />
                   {{ __('list') }}
@@ -168,7 +176,7 @@
                   :href="route('admin.panel.user.create')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.user.create')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <PlusSmallIcon class="w-5 h-5 mx-1" />
                   {{ __('new') }}
@@ -181,17 +189,20 @@
 
           <li v-if="hasAccess('view_user')" class="relative">
             <a
-              :class="{ 'bg-primary-50 text-primary-500': menuIsActive('admin.panel.room.*') }"
-              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+              :class="{
+                'bg-primary-50 text-primary-500 dark:bg-slate-700 dark:text-slate-100':
+                  menuIsActive('admin.panel.room.*'),
+              }"
+              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 dark:text-slate-100 outline-none transition duration-300 ease-linear hover:bg-primary-100 dark:hover:bg-slate-700 dark:hover:text-slate-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
               data-te-sidenav-link-ref
             >
               <SwatchIcon class="w-5 h-5" />
               <span class="mx-2 text-sm"> {{ __('room') }} </span>
               <span
-                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:text-slate-100"
                 data-te-sidenav-rotate-icon-ref
               >
-                <ChevronDownIcon class="h-5 w-5" />
+                <ChevronDownIcon class="h-5 w-5 dark:text-slate-100" />
               </span>
             </a>
             <ul
@@ -207,7 +218,7 @@
                   :href="route('admin.panel.room.index')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.room.index')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <Bars2Icon class="w-5 h-5 mx-1" />
                   {{ __('list') }}
@@ -217,7 +228,7 @@
                   :href="route('admin.panel.room.create')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.room.create')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <PlusSmallIcon class="w-5 h-5 mx-1" />
                   {{ __('new') }}
@@ -228,17 +239,20 @@
           <!-- Admins links -->
           <li v-if="false && hasAccess('view_admin')" class="relative">
             <a
-              :class="{ 'bg-primary-50 text-primary-500': menuIsActive('admin.panel.admin.*') }"
-              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+              :class="{
+                'bg-primary-50 text-primary-500 dark:bg-slate-700 dark:text-slate-100':
+                  menuIsActive('admin.panel.admin.*'),
+              }"
+              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 dark:text-slate-100 outline-none transition duration-300 ease-linear hover:bg-primary-100 dark:hover:bg-slate-700 dark:hover:text-slate-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
               data-te-sidenav-link-ref
             >
               <UserCircleIcon class="w-5 h-5" />
               <span class="mx-2 text-sm"> {{ __('admins') }} </span>
               <span
-                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:text-slate-100"
                 data-te-sidenav-rotate-icon-ref
               >
-                <ChevronDownIcon class="h-5 w-5" />
+                <ChevronDownIcon class="h-5 w-5 dark:text-slate-100" />
               </span>
             </a>
             <ul
@@ -254,7 +268,7 @@
                   :href="route('admin.panel.admin.index')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.admin.index')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <Bars2Icon class="w-5 h-5 mx-1" />
                   {{ __('list') }}
@@ -263,7 +277,7 @@
                   :href="route('admin.panel.admin.create')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.admin.create')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <PlusSmallIcon class="w-5 h-5 mx-1" />
                   {{ __('new') }}
@@ -275,17 +289,20 @@
           <!-- Support links -->
           <li v-if="false" class="relative">
             <a
-              :class="{ 'bg-primary-50 text-primary-500': menuIsActive('admin.panel.ticket.*') }"
-              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+              :class="{
+                'bg-primary-50 text-primary-500 dark:bg-slate-700 dark:text-slate-100':
+                  menuIsActive('admin.panel.ticket.*'),
+              }"
+              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 dark:text-slate-100 outline-none transition duration-300 ease-linear hover:bg-primary-100 dark:hover:bg-slate-700 dark:hover:text-slate-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
               data-te-sidenav-link-ref
             >
               <LightBulbIcon class="w-5 h-5" />
               <span class="mx-2 text-sm"> {{ __('support') }} </span>
               <span
-                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:text-slate-100"
                 data-te-sidenav-rotate-icon-ref
               >
-                <ChevronDownIcon class="h-5 w-5" />
+                <ChevronDownIcon class="h-5 w-5 dark:text-slate-100" />
               </span>
             </a>
             <ul
@@ -302,7 +319,7 @@
                   :href="route('admin.panel.notification.index')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.notification.index')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <Bars2Icon class="w-5 h-5 mx-1" />
                   {{ __('notifications') }}
@@ -312,7 +329,7 @@
                   :href="route('admin.panel.ticket.index')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.ticket.index')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <Bars2Icon class="w-5 h-5 mx-1" />
                   {{ __('tickets') }}
@@ -322,7 +339,7 @@
                   :href="route('admin.panel.ticket.create')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.ticket.create')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <PlusSmallIcon class="w-5 h-5 mx-1" />
                   {{ __('new_ticket') }}
@@ -335,18 +352,19 @@
           <li v-if="hasAccess('view_financial') || hasAccess('view_transaction')" class="relative">
             <a
               :class="{
-                'bg-primary-50 text-primary-500': menuIsActive('admin.panel.transaction.*'),
+                'bg-primary-50 text-primary-500 dark:bg-slate-700 dark:text-slate-100':
+                  menuIsActive('admin.panel.transaction.*'),
               }"
-              class="flex cursor-pointer items-center truncate rounded-[5px] px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+              class="flex cursor-pointer items-center truncate rounded-[5px] px-3 py-4 text-[0.875rem] text-gray-600 dark:text-slate-100 outline-none transition duration-300 ease-linear hover:bg-primary-100 dark:hover:bg-slate-700 dark:hover:text-slate-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
               data-te-sidenav-link-ref
             >
               <CurrencyDollarIcon class="w-5 h-5" />
               <span class="mx-2 text-sm"> {{ __('financial') }} </span>
               <span
-                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:text-slate-100"
                 data-te-sidenav-rotate-icon-ref
               >
-                <ChevronDownIcon class="h-5 w-5" />
+                <ChevronDownIcon class="h-5 w-5 dark:text-slate-100" />
               </span>
             </a>
             <ul
@@ -363,7 +381,7 @@
                   :href="route('admin.panel.transaction.user.index')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.transaction.user.index')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <Bars2Icon class="w-5 h-5 mx-1" />
                   {{ __('users') }}
@@ -373,7 +391,7 @@
                   :href="route('admin.panel.transaction.index')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.transaction.index')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <Bars2Icon class="w-5 h-5 mx-1" />
                   {{ __('transactions') }}
@@ -385,17 +403,20 @@
           <!-- Settings links -->
           <li v-if="hasAccess('view_setting')" class="relative">
             <a
-              :class="{ 'bg-primary-50 text-primary-500': menuIsActive('admin.panel.setting.*') }"
-              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+              :class="{
+                'bg-primary-50 text-primary-500 dark:bg-slate-700 dark:text-slate-100':
+                  menuIsActive('admin.panel.setting.*'),
+              }"
+              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 dark:text-slate-100 outline-none transition duration-300 ease-linear hover:bg-primary-100 dark:hover:bg-slate-700 dark:hover:text-slate-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
               data-te-sidenav-link-ref
             >
               <Cog6ToothIcon class="w-5 h-5" />
               <span class="mx-2 text-sm"> {{ __('settings') }} </span>
               <span
-                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:text-slate-100"
                 data-te-sidenav-rotate-icon-ref
               >
-                <ChevronDownIcon class="h-5 w-5" />
+                <ChevronDownIcon class="h-5 w-5 dark:text-slate-100" />
               </span>
             </a>
             <ul
@@ -411,7 +432,7 @@
                   :href="route('admin.panel.setting.index')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.setting.index')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <Bars2Icon class="w-5 h-5 mx-1" />
                   {{ __('list') }}
@@ -421,7 +442,7 @@
                   :href="route('admin.panel.user.create')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.user.create')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <PlusSmallIcon class="w-5 h-5 mx-1" />
                   {{ __('new') }}
@@ -433,17 +454,20 @@
           <!-- Logs links -->
           <li v-if="hasAccess('view_logs')" class="relative">
             <a
-              :class="{ 'bg-primary-50 text-primary-500': menuIsActive('admin.panel.log.*') }"
-              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+              :class="{
+                'bg-primary-50 text-primary-500 dark:bg-slate-700 dark:text-slate-100':
+                  menuIsActive('admin.panel.log.*'),
+              }"
+              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 dark:text-slate-100 outline-none transition duration-300 ease-linear hover:bg-primary-100 dark:hover:bg-slate-700 dark:hover:text-slate-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
               data-te-sidenav-link-ref
             >
               <ChartBarIcon class="w-5 h-5" />
               <span class="mx-2 text-sm"> {{ __('logs') }} </span>
               <span
-                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:text-slate-100"
                 data-te-sidenav-rotate-icon-ref
               >
-                <ChevronDownIcon class="h-5 w-5" />
+                <ChevronDownIcon class="h-5 w-5 dark:text-slate-100" />
               </span>
             </a>
             <ul
@@ -459,7 +483,7 @@
                   :href="route('admin.panel.log.index')"
                   role="menuitem"
                   :class="subMenuIsActive('admin.panel.log.index')"
-                  class="flex border-s-2 hover:border-primary-500 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
                 >
                   <Bars2Icon class="w-5 h-5 mx-1" />
                   {{ __('list') }}
@@ -655,8 +679,8 @@ export default {
     },
     subMenuIsActive(link, params = null) {
       return this.route().current(`${link}`, params)
-        ? 'text-primary-500 bg-primary-50 border-s border-primary-500  '
-        : 'text-gray-500   '
+        ? 'text-primary-500 bg-primary-50 dark:text-slate-100 dark:bg-slate-500  border-s border-slate-500 dark:border-slate-100   '
+        : 'text-gray-500 dark:text-slate-300 dark:border-slate-500  '
     },
   },
 }
