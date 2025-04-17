@@ -232,7 +232,7 @@ export default class Telegram {
     //   const log = Helper.TELEGRAM_LOGS[i]
     //   res = await this.sendMessage(`${log}`, msg, mode, null, null, false, topic)
     // }
-    res = await this.sendMessage(Helper.TELEGRAM_LOGS[2], msg, mode, null, null, false, topic)
+    res = await this.sendMessage(Helper.TELEGRAM_LOGS[0], msg, mode, null, null, false, topic)
     return res
   }
   public static markdownV2(text: any) {

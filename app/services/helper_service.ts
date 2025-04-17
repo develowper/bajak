@@ -247,14 +247,14 @@ class Helper {
   public static USER_ROLES = ['us', 'bo']
   public static TELEGRAM_LOGS = [72534783, 967072802, -1002584416455 /*, 6270272894*/]
   public static TELEGRAM_TOPICS = {
-    DABERNA_GAME: 7,
-    BLACKJACK_GAME: 21,
-    TRANSACTION: 2,
-    FILE: 6,
-    DESKTOP: 5,
-    USER: 3,
-    STATISTICS: 16,
-    BUG: 18,
+    DABERNA_GAME: null,
+    BLACKJACK_GAME: null,
+    TRANSACTION: null,
+    FILE: null,
+    DESKTOP: null,
+    USER: null,
+    STATISTICS: null,
+    BUG: null,
   }
   public static ADMIN_ROLES = ['go', 'ad']
   public static GAMES = ['daberna', 'dooz', 'blackjack']
