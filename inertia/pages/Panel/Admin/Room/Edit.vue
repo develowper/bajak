@@ -213,7 +213,7 @@
                   </template>
                 </TextInput>
               </div>
-              <div class="my-4">
+              <div class="my-4" v-if="false">
                 <TextInput
                   id="bot_percent"
                   type="number"
@@ -247,7 +247,7 @@
                   </template>
                 </TextInput>
               </div>
-              <div class="my-4">
+              <div class="my-4" v-if="false">
                 <TextInput
                   id="robot_win_percent"
                   type="number"

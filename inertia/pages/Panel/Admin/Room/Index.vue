@@ -301,6 +301,7 @@
                   </div>
                 </th>
                 <th
+                  v-if="false"
                   scope="col"
                   class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
                   @click="
@@ -424,9 +425,9 @@
                 <td class="px-2 py-4">
                   <div>{{ d.winPercent }}</div>
                 </td>
-                <td class="px-2 py-4">
-                  <div>{{ d.botPercent }}</div>
-                </td>
+                <!--                <td class="px-2 py-4">-->
+                <!--                  <div>{{ d.botPercent }}</div>-->
+                <!--                </td>-->
 
                 <td class="px-2 py-4" data-te-dropdown-ref>
                   <button

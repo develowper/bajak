@@ -20,9 +20,11 @@ export default class TransactionController {
 
   async index({ request, inertia }: HttpContext) {
     return inertia.render('Panel/Admin/Transaction/Index', {
-      types: collect(Helper.TRANSACTION.types).map((item: string) => {
-        return { name: item, color: Helper.TRANSACTION.colors[item] }
-      }),
+      types: collect(Helper.TRANSACTION.types)
+        .filter((item) => !['dooz', 'blackjack'].includes(item))
+        .map((item: string) => {
+          return { name: item, color: Helper.TRANSACTION.colors[item] }
+        }),
     })
   }
 
