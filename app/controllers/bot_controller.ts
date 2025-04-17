@@ -103,7 +103,7 @@ export default class BotController {
 
       // *** text
       if (startsWith(text, '/start')) {
-        msg = `■  کاربر [${username ?? '👤'}](tg://user?id=${fromId}) ربات پاریس را استارت زد`
+        msg = `■  کاربر [${username ?? '👤'}](tg://user?id=${fromId}) ربات بجک را استارت زد`
         Telegram.logAdmins(Telegram.markdownV2(msg), this.MODE_MARKDOWN)
 
         const parts = text.split(' ')
@@ -485,7 +485,7 @@ export default class BotController {
                 [{ text: this.user ? '👤حساب کاربری👤' : 'ثبت نام✅' }],
                 !this.user ? [{ text: '🔑 فراموشی رمز 🔑' }] : [],
                 [{ text: '📱 دریافت اپلیکیشن 📱' }],
-                [{ text: '💶 کسب درآمد 💶' }],
+                // [{ text: '💶 کسب درآمد 💶' }],
                 [{ text: '🤖تماس با ما🤖' }],
               ],
           resize_keyboard: true,
