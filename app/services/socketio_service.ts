@@ -47,10 +47,10 @@ export default class SocketIo {
     // console.log('*********   socket service inited ')
     SocketIo.wsIo = new Server(server.getNodeServer(), {
       cors: {
-        // origin: '*',
+        origin: '*',
         // allowedHeaders: '*',
         allowedHeaders: ['request-room'],
-        origin: ["'https://daberna.soheilmarket.ir'", 'https://pwa.soheilmarket.ir'],
+        // origin: ['https://pwa.sib-market.ir', 'https://bajak.sib-market.ir'],
       },
     })
 
