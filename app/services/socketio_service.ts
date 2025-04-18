@@ -169,6 +169,7 @@ export default class SocketIo {
       emitter.on('room-update', (data: any) => {
         SocketIo.wsIo.to(`room-${data.type}`).volatile.emit(`room-update`, data)
         SocketIo.wsIo.to(`ad-room-${data.type}`).volatile.emit(`room-update`, data)
+        console.log(`room-update ${data?.type} cmnd: ${data.cmnd} cards:`, data?.cardCount)
         // logger.info(data)
       })
 
