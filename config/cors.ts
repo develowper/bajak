@@ -8,7 +8,7 @@ import { defineConfig } from '@adonisjs/cors'
  */
 const corsConfig = defineConfig({
   enabled: true,
-  origin: true,
+  origin: '*',
   // origin: ['https://pwa.soheilmarket.ir', '127.0.0.1:3298'],
   // methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
   headers: true,
