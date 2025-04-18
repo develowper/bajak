@@ -90,10 +90,10 @@ export default class RoomController {
     const beforeIpExists = collect(JSON.parse(room.players) ?? []).first(
       (item: any) => ip != null && item.user_ip == ip && item.user_id != user.id
     )
-    if (beforeIpExists) {
-      // await trx.commit()
-      return sendError(i18n.t('messages.validate.duplicate_*', { value: 'ip' }))
-    }
+    // if (beforeIpExists) {
+    //   // await trx.commit()
+    //   return sendError(i18n.t('messages.validate.duplicate_*', { value: 'ip' }))
+    // }
 
     const userFinancials = await UserFinancial.firstOrCreate(
       { userId: user?.id },
