@@ -261,10 +261,10 @@ export default class SocketIo {
                 .seconds ?? 0) < 0)
           ) {
             const game = await Daberna.makeGame(room)
-            console.log('game start', game.id)
+            console.log('emit to ', `room-${room.type}`)
             // SocketIo.wsIo?.to(`room-${room.type}`).emit('game-start', game)
             await this.emitToRoom(`room-${room.type}`, 'game-start', game)
-            SocketIo.wsIo?.in(`room-${room.type}`).socketsLeave(`room-${room.type}`)
+             SocketIo.wsIo?.in(`room-${room.type}`).socketsLeave(`room-${room.type}`)
           }
         }
         // clearInterval(SocketIo.timer)

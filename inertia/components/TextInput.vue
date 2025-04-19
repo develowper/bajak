@@ -122,7 +122,7 @@ const focusNext = (elem) => {
                 ? ' rounded-e '
                 : ' rounded ')
         "
-        class="flex-auto border border-solid border-slate-300 px-3 text-slate-700 transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-slate-700 dark:border-slate-600 dark:text-slate-200 dark:placeholder:text-slate-200 dark:focus:border-primary"
+        class="flex-auto border border-solid border-slate-300 px-3 text-slate-700 transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-slate-700 dark:border-slate-600 dark:text-slate-600 dark:placeholder:text-slate-400 dark:focus:border-primary"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
         ref="input"
