@@ -22,15 +22,16 @@ import collect from 'collect.js'
 import UserFinancial from '#models/user_financial'
 export default function () {
   router.get('test', async () => {
+    return await db.rawQuery(`
+      ALTER TABLE user_financials
+      ALTER COLUMN balance TYPE INTEGER USING balance::INTEGER,
+ALTER COLUMN balance SET DEFAULT 0;
+    `)
+
     await Transaction.query().where('type', 'winwheel').delete()
     await UserFinancial.query().update({ balance: 1000000 })
     return
-    return await db.rawQuery(`
-     ALTER TABLE daberna
-ALTER COLUMN boards
-TYPE jsonb
-USING boards::jsonb;
-    `)
+
     return
     return await Setting.create({
       key: 'blackjack_help',
