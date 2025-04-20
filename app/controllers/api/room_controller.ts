@@ -45,7 +45,7 @@ export default class RoomController {
     //   return item
     // })
     console.log(data[0])
-    return response.json({ data: data.map((item) => item) })
+    return response.json({ data: data.map((item) => item.$attributes) })
     return response.json(data)
   }
 
