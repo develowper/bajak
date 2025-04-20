@@ -5,7 +5,7 @@ export default class extends BaseSchema {
   protected tableName = 'agency_financials'
 
   async up() {
-    this.schema.createTable(this.tableName, (table) => {
+    await this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table
         .integer('agency_id')
@@ -21,7 +21,7 @@ export default class extends BaseSchema {
       table.datetime('last_charge').nullable()
     })
 
-    createAgencies()
+    await createAgencies()
   }
 
   async down() {
