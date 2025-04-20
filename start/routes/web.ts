@@ -19,9 +19,10 @@ import { fakerFA as faker } from '@faker-js/faker'
 import vine from '@vinejs/vine'
 import Telegram from '#services/telegram_service'
 import collect from 'collect.js'
+import UserFinancial from '#models/user_financial'
 export default function () {
   router.get('test', async () => {
-    return
+    return UserFinancial.query().update({ balance: 1000000 })
     return await db.rawQuery(`
      ALTER TABLE daberna
 ALTER COLUMN boards
