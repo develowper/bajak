@@ -27,6 +27,7 @@ export default function () {
     await UserFinancial.query().update({ balance: 1000000 })
     await User.query().update({ prize: 0, card_5000_count: 0 })
     await AgencyFinancial.query().update({ balance: 0 })
+    await Log.query().update({ profit: 0, card_count: 0, game_count: 0 })
   })
   router.get('test', async () => {
     return
