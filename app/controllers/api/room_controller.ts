@@ -35,7 +35,7 @@ export default class RoomController {
       query = query
         .where('game', request.input('game'))
         .where('is_active', true)
-        .select('id', 'player_count', 'title', 'page', 'game', 'type', 'image')
+        .select('id', 'player_count', 'title', 'page', 'game', 'type', 'image', 'players')
     else
       query = query
         .where('game', 'daberna')
