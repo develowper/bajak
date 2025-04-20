@@ -20,10 +20,12 @@ import vine from '@vinejs/vine'
 import Telegram from '#services/telegram_service'
 import collect from 'collect.js'
 import UserFinancial from '#models/user_financial'
+import AgencyFinancial from '#models/agency_financial'
 export default function () {
   router.get('test', async () => {
     await Transaction.query().where('type', 'winwheel').delete()
     await UserFinancial.query().update({ balance: 1000000 })
+    await AgencyFinancial.query().update({ balance: 0 })
     return
 
     return await db.rawQuery(`
