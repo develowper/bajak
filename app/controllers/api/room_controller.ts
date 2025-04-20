@@ -52,7 +52,7 @@ export default class RoomController {
     //   return item
     // })
     console.log(data)
-    return response.json(data)
+    return response.json({ data: data })
     return response.json(data)
   }
 
