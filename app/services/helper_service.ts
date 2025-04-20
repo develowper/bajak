@@ -714,6 +714,7 @@ class Helper {
     ])
   }
   static async createUsers() {
+    await sleep(2000)
     await User.createMany([
       {
         username: 'admin1',
