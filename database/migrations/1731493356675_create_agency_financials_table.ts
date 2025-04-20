@@ -5,7 +5,7 @@ export default class extends BaseSchema {
   protected tableName = 'agency_financials'
 
   async up() {
-    await this.schema.createTable(this.tableName, (table) => {
+    this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table
         .integer('agency_id')
