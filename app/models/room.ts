@@ -129,9 +129,7 @@ export default class Room extends BaseModel {
 
   public getUserCardCount() {
     const user = this.auth?.user
-    const result: any = collect(JSON.parse(this.players ?? '[]') ?? []).first(
-      (item: any) => item.user_id == user?.id
-    )
+    const result: any = collect(this.players).first((item: any) => item.user_id == user?.id)
 
     return result?.card_count ?? 0
   }
@@ -139,7 +137,7 @@ export default class Room extends BaseModel {
     const user = us ?? this.auth?.user
     if (!user) return false
     let res: any[] = []
-    const parsed: any = JSON.parse(this.players) ?? []
+    const parsed: any = this.players
     const beforeExists = collect(parsed).first((item: any) => item.user_id == user.id)
 
     if (!beforeExists) {
@@ -167,7 +165,7 @@ export default class Room extends BaseModel {
   public async setUser(us: any = null, cmnd = 'add') {
     const user = us ?? this.auth?.user
     let res: any[] = []
-    const parsed: any = JSON.parse(this.players ?? '[]') ?? []
+    const parsed: any = this.players
     const beforeExists = collect(parsed).first(
       (item: any) => item.user_id == (user.id ?? user.user_id)
     )
@@ -200,7 +198,7 @@ export default class Room extends BaseModel {
     userCardCount: number | null = null
   ) {
     if (!room.isActive) return
-    const players = JSON.parse(room.players ?? '[]')
+    const players = room.players
     const beforeIds = collect(players).pluck('user_id').toArray()
 
     const botUser =
