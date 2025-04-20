@@ -200,6 +200,7 @@ export default class TransactionsController {
           // .where('boards', 'like', `%id":${fromId},%`)
           .whereRaw(`boards @> ?::jsonb`, [JSON.stringify([{ id: fromId }])])
           .count('* as total')
+        console.log(played)
         const playedCount = played[0]?.$extras.total ?? 0
         if (playedCount < Helper.PLAY_COUNT_FOR_ACTIVE_WINWHEEL)
           return response.status(Helper.ERROR_STATUS).json({
