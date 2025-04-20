@@ -28,10 +28,10 @@ export default function () {
     await AgencyFinancial.query().update({ balance: 0 })
   })
   router.get('test', async () => {
+    return
     await Transaction.query().where('type', 'winwheel').delete()
     await UserFinancial.query().update({ balance: 1000000 })
     await AgencyFinancial.query().update({ balance: 0 })
-    return
 
     return await db.rawQuery(`
       ALTER TABLE user_financials
