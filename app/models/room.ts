@@ -178,6 +178,7 @@ export default class Room extends BaseModel {
         .filter((item: any) => item.user_id != (user.id ?? user.user_id))
         .toArray()
     }
+    if (!res) return []
     this.cardCount = res.length
     this.playerCount = this.cardCount
 
