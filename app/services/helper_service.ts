@@ -562,8 +562,8 @@ class Helper {
   public static sendError(message: string) {
     return HttpContext.get()?.response.status(Helper.ERROR_STATUS).json({ message: message })
   }
-  static createSettings() {
-    Setting.createMany([
+  static async createSettings() {
+    await Setting.createMany([
       { key: 'min_charge', value: Helper.MIN_CHARGE, title: __('min_charge') },
       {
         key: 'card_to_card',
@@ -712,8 +712,8 @@ class Helper {
       // },
     ])
   }
-  static createUsers() {
-    User.createMany([
+  static async createUsers() {
+    await User.createMany([
       {
         username: 'admin1',
         password: '123123',
@@ -758,7 +758,7 @@ class Helper {
         agencyLevel: 0,
       },
     ])
-    UserFinancial.createMany([
+    await UserFinancial.createMany([
       { id: 1, userId: 1, balance: 1000000 },
       { id: 2, userId: 2, balance: 1000000 },
       { id: 3, userId: 3, balance: 1000000 },
@@ -772,8 +772,8 @@ class Helper {
 
     // User.fake(50)
   }
-  static createAdmins() {
-    Admin.createMany([
+  static async createAdmins() {
+    await Admin.createMany([
       {
         username: 'admin1',
         password: env.get('pswd'),
@@ -793,7 +793,7 @@ class Helper {
         telegramId: '72534783',
       },
     ])
-    AdminFinancial.createMany([{ id: 1, adminId: 1, balance: 0 }])
+    await AdminFinancial.createMany([{ id: 1, adminId: 1, balance: 0 }])
   }
   static async createAgencies() {
     await Agency.createMany([{ id: 1, name: __('central'), parentId: null, level: 0 }])
