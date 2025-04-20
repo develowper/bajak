@@ -22,8 +22,8 @@ import collect from 'collect.js'
 import UserFinancial from '#models/user_financial'
 export default function () {
   router.get('test', async () => {
-    Transaction.query().where('type', 'winwheel').delete()
-    UserFinancial.query().update({ balance: 1000000 })
+    await Transaction.query().where('type', 'winwheel').delete()
+    await UserFinancial.query().update({ balance: 1000000 })
     return
     return await db.rawQuery(`
      ALTER TABLE daberna
