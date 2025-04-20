@@ -45,9 +45,7 @@ export default class Room extends BaseModel {
   }*/ {
       serialize: (value) => {
         try {
-          const parsed = typeof value === 'string' ? JSON.parse(value) : value
-
-          return typeof parsed === 'object' && parsed !== null ? parsed : []
+          return typeof value === 'string' ? JSON.parse(value ?? '[]') : (value ?? [])
         } catch {
           return []
         }
@@ -165,7 +163,7 @@ export default class Room extends BaseModel {
       (item: any) => item.user_id == (user.id ?? user.user_id)
     )
     res = parsed
-    console.log(beforeExists, cmnd)
+    // console.log(beforeExists, cmnd)
     if (!beforeExists && cmnd === 'add') {
       parsed.push({
         user_id: user.id,
