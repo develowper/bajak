@@ -194,7 +194,7 @@ export default class SocketIo {
       SocketIo.wsIo?.emit(data.event, data)
     })
 
-    this.setTimeChecker()
+    // this.setTimeChecker()
   }
   public async emitToRoom(room: string, event: string, data: any) {
     // var room = SocketIo.wsIo.sockets.adapter.rooms[room]
@@ -264,7 +264,7 @@ export default class SocketIo {
             console.log('emit to ', `room-${room.type}`)
             // SocketIo.wsIo?.to(`room-${room.type}`).emit('game-start', game)
             await this.emitToRoom(`room-${room.type}`, 'game-start', game)
-             SocketIo.wsIo?.in(`room-${room.type}`).socketsLeave(`room-${room.type}`)
+            SocketIo.wsIo?.in(`room-${room.type}`).socketsLeave(`room-${room.type}`)
           }
         }
         // clearInterval(SocketIo.timer)
