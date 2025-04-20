@@ -21,6 +21,7 @@ import i18nManager from '@adonisjs/i18n/services/main'
 import env from '#start/env'
 import { storage } from '../../../resources/js/storage.js'
 import db from '@adonisjs/lucid/services/db'
+import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 
 @inject()
 export default class RoomController {
@@ -33,7 +34,7 @@ export default class RoomController {
     if (request.input('game'))
       query = query.where('game', request.input('game')).where('is_active', true)
     else query = query.where('game', 'daberna')
-    let data = await query
+    let data = await query.fetch()
 
     // data = data.map((item: Room) => {
     //   if (item.type == 'd5000') item.playerCount = getRandomBetween(50, 80)
@@ -44,7 +45,8 @@ export default class RoomController {
     //   return item
     // })
 
-    return response.json({ data: data.map((item) => item.serialize()) })
+    // return response.json({ data: data.map((item) => item.serialize()) })
+    return response.json(data)
   }
 
   async payAndJoin({ response, request, auth, i18n }: HttpContext) {
