@@ -8,7 +8,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.bigIncrements('id').primary()
       table.enum('type', pluck(Helper.ROOMS, 'type'))
-      table.json('boards')
+      table.jsonb('boards')
       table.json('numbers')
       table.json('winners').nullable()
       table.json('row_winners').nullable()
