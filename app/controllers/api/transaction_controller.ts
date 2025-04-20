@@ -18,6 +18,7 @@ import UserFinancial from '../../models/user_financial.js'
 import collect from 'collect.js'
 import AgencyFinancial from '../../models/agency_financial.js'
 import Daberna from '#models/daberna'
+import env from '#start/env'
 export default class TransactionsController {
   //
   async create({ request, response, auth, i18n }: HttpContext) {
@@ -195,13 +196,17 @@ export default class TransactionsController {
             message: __('try_*_*_later', { item1: `${hour}`, item2: `${min}` }),
           })
         }
-
-        const played = await Daberna.query()
-          // .where('boards', 'like', `%id":${fromId},%`) mysql
+        let played
+        if (env.get('DB_CONNECTION') == 'pg') {
+          played = await Daberna.query()
+            // .where('boards', 'like', `%id":${fromId},%`) mysql
+            // .whereRaw(`boards @> ?::jsonb`, [JSON.stringify([{ user_id: fromId }])])
+            .whereRaw(`boards @> '[{"user_id": "${fromId}"}]'`)
+            .count('* as total')
+        } else {
+          played = await Daberna.query().where('boards', 'like', `%id":${fromId},%`)
           // .whereRaw(`boards @> ?::jsonb`, [JSON.stringify([{ user_id: fromId }])])
-          .whereRaw(`boards @> '[{"user_id": "${fromId}"}]'`)
-          .count('* as total')
-
+        }
         const playedCount = played[0]?.$extras.total ?? 0
         if (playedCount < Helper.PLAY_COUNT_FOR_ACTIVE_WINWHEEL)
           return response.status(Helper.ERROR_STATUS).json({

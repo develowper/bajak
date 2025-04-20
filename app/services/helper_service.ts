@@ -237,7 +237,7 @@ class Helper {
   public static ROOM_REFRESH_TIME = 10
   public static CLEAR_TRANSACTION_DAY = 0
   public static CLEAR_INACTIVE_USERS_DAY = 0
-  public static CARDTOCARD_MINUTE_LIMIT = 1
+  public static CARDTOCARD_MINUTE_LIMIT = 5
   public static WINWHEEL_HOUR_LIMIT = 24
   public static WITHDRAW_HOUR_LIMIT = 24
   public static AGENCY_REF_COUNT = 25
