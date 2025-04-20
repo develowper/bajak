@@ -15,7 +15,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
       table.string('type', 20)
       table.string('name').nullable()
-      table.json('abilities').nullable()
+      table.text('abilities').nullable()
       table.string('hash').notNullable().unique()
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

@@ -2,7 +2,7 @@ import env from '#start/env'
 import { defineConfig } from '@adonisjs/lucid'
 
 const dbConfig = defineConfig({
-  connection: 'mysql' /* 'pg'*/,
+  connection: 'pg' /* 'mysql'*/,
   connections: {
     mysql: {
       client: 'mysql2',
