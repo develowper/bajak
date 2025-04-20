@@ -38,10 +38,27 @@ export default class Room extends BaseModel {
   @column()
   declare page: string
 
-  @column(/*{
+  @column(
+    /*{
      serialize: (value: string) => JSON.parse(value) ?? [],
      consume: (value: any) => JSON.stringify(value)
-  }*/)
+  }*/ {
+      serialize: (value) => {
+        if (typeof value === 'string') {
+          try {
+            return JSON.parse(value)
+          } catch {
+            return [] // or {} if your data is expected to be an object
+          }
+        }
+        if (typeof value === 'object' && value !== null) {
+          return value
+        }
+
+        return [] // fallback if null, undefined, or something weird
+      },
+    }
+  )
   declare players: any
 
   @column()
