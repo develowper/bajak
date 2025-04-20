@@ -22,7 +22,7 @@ export default class extends BaseSchema {
       table.integer('row_win_count').unsigned().defaultTo(0)
       table.bigInteger('prize').unsigned().defaultTo(0)
       table.bigInteger('score').unsigned().defaultTo(0)
-      table.bigInteger('rank').unsigned().defaultTo(0)
+      table.integer('rank').unsigned().defaultTo(0)
       table.integer('today_prize').unsigned().defaultTo(0)
       for (let r of Helper.ROOMS.filter((i) => i.game == 'daberna')) {
         table.bigInteger(`card_${r.cardPrice}_count`).unsigned().defaultTo(0)

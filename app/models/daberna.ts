@@ -24,7 +24,7 @@ export default class Daberna extends BaseModel {
       try {
         const parsed = typeof value === 'string' ? JSON.parse(value) : value
 
-        return (typeof parsed === 'object' && parsed !== null) ? parsed : []
+        return typeof parsed === 'object' && parsed !== null ? parsed : []
       } catch {
         return []
       }
@@ -39,7 +39,7 @@ export default class Daberna extends BaseModel {
       try {
         const parsed = typeof value === 'string' ? JSON.parse(value) : value
 
-        return (typeof parsed === 'object' && parsed !== null) ? parsed : []
+        return typeof parsed === 'object' && parsed !== null ? parsed : []
       } catch {
         return []
       }
@@ -54,7 +54,7 @@ export default class Daberna extends BaseModel {
       try {
         const parsed = typeof value === 'string' ? JSON.parse(value) : value
 
-        return (typeof parsed === 'object' && parsed !== null) ? parsed : []
+        return typeof parsed === 'object' && parsed !== null ? parsed : []
       } catch {
         return []
       }
@@ -69,7 +69,7 @@ export default class Daberna extends BaseModel {
       try {
         const parsed = typeof value === 'string' ? JSON.parse(value) : value
 
-        return (typeof parsed === 'object' && parsed !== null) ? parsed : []
+        return typeof parsed === 'object' && parsed !== null ? parsed : []
       } catch {
         return []
       }
@@ -444,7 +444,7 @@ export default class Daberna extends BaseModel {
     }
     // console.log(boards.map((item) => item.card))
     const af = await AgencyFinancial.find(1)
-    af.balance  =Number(af.balance) + commissionPrice
+    af.balance = Number(af.balance) + commissionPrice
     af.save()
     if (commissionPrice != 0) {
       // console.log('commissionTransaction', commissionPrice)
@@ -472,8 +472,8 @@ export default class Daberna extends BaseModel {
       const financial = user?.financial ?? (await user.related('financial').create({ balance: 0 }))
       financial.balance += rowWinnerPrize
       financial.save()
-      user.rowWinCount++
-      user.prize += rowWinnerPrize
+      user.rowWinCount = Number(user.rowWinCount) + 1
+      user.prize = Number(user.prize) + rowWinnerPrize
       user.todayPrize += rowWinnerPrize
       user.lastWin = DateTime.now()
       user.save()
@@ -503,9 +503,9 @@ export default class Daberna extends BaseModel {
       financial.balance += winnerPrize
       financial.save()
       // console.log('win.transaction', winnerPrize)
-      user.winCount++
-      user.prize += winnerPrize
-      user.score += room.winScore
+      user.winCount = Number(user.winCount) + 1
+      user.prize = Number(user.prize) + winnerPrize
+      user.score = Number(user.score) + room.winScore
       user.todayPrize += winnerPrize
       user.lastWin = DateTime.now()
       user?.save()

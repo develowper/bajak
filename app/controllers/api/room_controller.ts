@@ -145,19 +145,19 @@ export default class RoomController {
 
         switch (room.cardPrice) {
           case 5000:
-            user.card5000Count += cardCount
+            user.card5000Count = Number(user.card5000Count) + cardCount
             user.todayCard5000Count += cardCount
             break
           case 10000:
-            user.card10000Count += cardCount
+            user.card10000Count = Number(user.card10000Count) + cardCount
             user.todayCard10000Count += cardCount
             break
           case 20000:
-            user.card20000Count += cardCount
+            user.card20000Count = Number(user.card20000Count) + cardCount
             user.todayCard20000Count += cardCount
             break
           case 50000:
-            user.card50000Count += cardCount
+            user.card50000Count = Number(user.card50000Count) + cardCount
             user.todayCard50000Count += cardCount
             break
         }
