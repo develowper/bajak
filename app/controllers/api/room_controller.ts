@@ -32,17 +32,8 @@ export default class RoomController {
     // query = query.where('is_active', true)
     if (request.input('id')) query = query.where('id', request.input('id'))
     if (request.input('game'))
-      query = query
-        .where('game', request.input('game'))
-        .where('is_active', true)
-        .where('id', 1)
-        .select('id', 'player_count', 'title', 'page', 'game', 'type', 'image', 'players')
-    else
-      query = query
-        .where('game', 'daberna')
-        .where('is_active', true)
-        .where('id', 1)
-        .select('id', 'player_count', 'title', 'page', 'game', 'type', 'image', 'players')
+      query = query.where('game', request.input('game')).where('is_active', true)
+    else query = query.where('game', 'daberna').where('is_active', true)
     let data = await query
 
     // data = data.map((item: Room) => {
@@ -54,7 +45,7 @@ export default class RoomController {
     //   return item
     // })
     // console.log(data[0].serialize())
-    return response.json({ data: data.map((item) => item) })
+    // return response.json({ data: data.map((item) => item) })
     return response.json(data)
   }
 
