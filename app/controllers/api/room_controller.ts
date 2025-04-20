@@ -32,7 +32,10 @@ export default class RoomController {
     // query = query.where('is_active', true)
     if (request.input('id')) query = query.where('id', request.input('id'))
     if (request.input('game'))
-      query = query.where('game', request.input('game')).where('is_active', true)
+      query = query
+        .where('game', request.input('game'))
+        .where('is_active', true)
+        .select('id', 'player_count', 'title', 'page', 'game', 'type', 'image')
     else
       query = query
         .where('game', 'daberna')
