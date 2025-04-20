@@ -46,7 +46,7 @@ export default class RoomController {
     // })
     // console.log(data[0].serialize())
     // return response.json({ data: data.map((item) => item) })
-    return response.json(data)
+    return response.json({ data: data })
   }
 
   async payAndJoin({ response, request, auth, i18n }: HttpContext) {
