@@ -199,9 +199,7 @@ export default class TransactionsController {
         const played = await Daberna.query()
           // .where('boards', 'like', `%id":${fromId},%`) mysql
           // .whereRaw(`boards @> ?::jsonb`, [JSON.stringify([{ user_id: fromId }])])
-          .whereRaw(`boards @> '[{"user_id": "${fromId}"}]'`, [
-            JSON.stringify([{ user_id: fromId }]),
-          ])
+          .whereRaw(`boards @> '[{"user_id": "${fromId}"}]'`)
           .count('* as total')
         console.log(played)
         const playedCount = played[0]?.$extras.total ?? 0
