@@ -21,7 +21,7 @@ export default class extends BaseSchema {
       table.datetime('last_charge').nullable()
     })
 
-    // createAgencies()
+    createAgencies()
   }
 
   async down() {

@@ -563,7 +563,8 @@ class Helper {
     return HttpContext.get()?.response.status(Helper.ERROR_STATUS).json({ message: message })
   }
   static async createSettings() {
-    await Setting.createMany([
+    await sleep(1000)
+    Setting.createMany([
       { key: 'min_charge', value: Helper.MIN_CHARGE, title: __('min_charge') },
       {
         key: 'card_to_card',
@@ -796,6 +797,7 @@ class Helper {
     await AdminFinancial.createMany([{ id: 1, adminId: 1, balance: 0 }])
   }
   static async createAgencies() {
+    await sleep(1000)
     await Agency.createMany([{ id: 1, name: __('central'), parentId: null, level: 0 }])
     await AgencyFinancial.createMany([{ id: 1, agencyId: 1, balance: 0 }])
   }
