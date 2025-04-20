@@ -804,6 +804,7 @@ class Helper {
     await AgencyFinancial.createMany([{ id: 1, agencyId: 1, balance: 0 }])
   }
   static async createRooms() {
+    await sleep(1000)
     const res = []
     const rooms = Helper.ROOMS.filter((item) => item.game != 'blackjack')
 
