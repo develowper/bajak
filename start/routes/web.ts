@@ -21,6 +21,7 @@ import Telegram from '#services/telegram_service'
 import collect from 'collect.js'
 export default function () {
   router.get('test', async () => {
+    return
     return await db.rawQuery(`
      ALTER TABLE daberna
 ALTER COLUMN boards
