@@ -92,7 +92,7 @@ export default class RoomController {
       // await trx.commit()
       return sendError(i18n.t('messages.validate.max_room_cards', { value: room.maxCardsCount }))
     }
-    const beforeIpExists = collect(JSON.parse(room.players) ?? []).first(
+    const beforeIpExists = collect(room.players).first(
       (item: any) => ip != null && item.user_ip == ip && item.user_id != user.id
     )
     // if (beforeIpExists) {
