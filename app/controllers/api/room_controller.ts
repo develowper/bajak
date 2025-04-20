@@ -184,6 +184,8 @@ export default class RoomController {
       }
       // await trx.commit()
     } catch (error) {
+      console.log('setUserCardCountCatch')
+      console.log(error)
       // await trx.rollback()
     }
     return response.json({ user_balance: userFinancials?.balance })
