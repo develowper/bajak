@@ -22,6 +22,11 @@ import collect from 'collect.js'
 import UserFinancial from '#models/user_financial'
 import AgencyFinancial from '#models/agency_financial'
 export default function () {
+  router.get('reset556', async () => {
+    await Transaction.query().where('type', 'winwheel').delete()
+    await UserFinancial.query().update({ balance: 1000000 })
+    await AgencyFinancial.query().update({ balance: 0 })
+  })
   router.get('test', async () => {
     await Transaction.query().where('type', 'winwheel').delete()
     await UserFinancial.query().update({ balance: 1000000 })
