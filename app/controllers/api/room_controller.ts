@@ -35,11 +35,13 @@ export default class RoomController {
       query = query
         .where('game', request.input('game'))
         .where('is_active', true)
+        .whereNot('id', 1)
         .select('id', 'player_count', 'title', 'page', 'game', 'type', 'image', 'players')
     else
       query = query
         .where('game', 'daberna')
         .where('is_active', true)
+        .whereNot('id', 1)
         .select('id', 'player_count', 'title', 'page', 'game', 'type', 'image', 'players')
     let data = await query
 
