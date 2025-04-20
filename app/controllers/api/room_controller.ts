@@ -42,7 +42,7 @@ export default class RoomController {
         .where('is_active', true)
         .select('id', 'player_count', 'title', 'page', 'game', 'type', 'image')
     let data = await query
-    data = data.map((item) => item.serialize())
+
     // data = data.map((item: Room) => {
     //   if (item.type == 'd5000') item.playerCount = getRandomBetween(50, 80)
     //   else if (item.type == 'd10000') item.playerCount = getRandomBetween(20, 40)
@@ -51,8 +51,8 @@ export default class RoomController {
     //   else if (item.type == 'b1') item.playerCount = getRandomBetween(0, 10)
     //   return item
     // })
-    console.log(data)
-    return response.json({ data: data })
+    console.log(data[0])
+    return response.json({ data: data.map((item) => item.serialize()) })
     return response.json(data)
   }
 
