@@ -44,8 +44,8 @@ export default class RoomController {
     //   else if (item.type == 'b1') item.playerCount = getRandomBetween(0, 10)
     //   return item
     // })
-    console.log(data[0])
-    return response.json({ data: data.map((item) => item.$attributes) })
+    console.log(data[0].toJSON())
+    return response.json({ data: data.map((item) => item.toJSON()) })
     return response.json(data)
   }
 
