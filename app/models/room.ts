@@ -38,10 +38,10 @@ export default class Room extends BaseModel {
   @column()
   declare page: string
 
-  @column({
-    // serialize: (value: string) => JSON.parse(value) ?? [],
-    // consume: (value: any) => JSON.stringify(value)
-  })
+  @column(/*{
+     serialize: (value: string) => JSON.parse(value) ?? [],
+     consume: (value: any) => JSON.stringify(value)
+  }*/)
   declare players: any
 
   @column()
