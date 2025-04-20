@@ -795,9 +795,9 @@ class Helper {
     ])
     AdminFinancial.createMany([{ id: 1, adminId: 1, balance: 0 }])
   }
-  static createAgencies() {
-    Agency.createMany([{ id: 1, name: __('central'), parentId: null, level: 0 }])
-    AgencyFinancial.createMany([{ id: 1, agencyId: 1, balance: 0 }])
+  static async createAgencies() {
+    await Agency.createMany([{ id: 1, name: __('central'), parentId: null, level: 0 }])
+    await AgencyFinancial.createMany([{ id: 1, agencyId: 1, balance: 0 }])
   }
   static async createRooms() {
     const res = []
