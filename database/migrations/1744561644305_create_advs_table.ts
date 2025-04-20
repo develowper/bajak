@@ -5,7 +5,7 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.bigIncrements('id')
+      table.bigIncrements('id').primary()
       table.integer('clicks').unsigned().notNullable().defaultTo(0)
       table.string('title', 255).notNullable()
       table.string('banner_link', 255).notNullable()

@@ -6,7 +6,7 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.bigIncrements('id')
+      table.bigIncrements('id').primary()
       table.enum('type', pluck(Helper.ROOMS, 'type'))
       table.integer('game_count').defaultTo(0)
       table.integer('card_count').defaultTo(0)

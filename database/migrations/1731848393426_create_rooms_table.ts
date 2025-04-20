@@ -6,7 +6,7 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments('id').primary()
       table.enum('game', Helper.GAMES)
       table.string('page', 50)
       table.enum('type', pluck(Helper.ROOMS, 'type'))

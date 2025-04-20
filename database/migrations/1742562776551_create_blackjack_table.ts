@@ -7,7 +7,7 @@ export default class extends BaseSchema {
   async up() {
     const players = ['p1', 'p2', 'p3', 'p4']
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments('id').primary()
       table.enum('type', pluck(Helper.ROOMS, 'type'))
       table.string(`title`, 50)
       players.forEach((p) => {
