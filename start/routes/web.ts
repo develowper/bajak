@@ -25,6 +25,7 @@ export default function () {
   router.get('reset556', async () => {
     await Transaction.query().where('type', 'winwheel').delete()
     await UserFinancial.query().update({ balance: 1000000 })
+    await User.query().update({ prize: 0, card_5000_count: 0 })
     await AgencyFinancial.query().update({ balance: 0 })
   })
   router.get('test', async () => {
