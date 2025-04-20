@@ -36,7 +36,7 @@ export default class extends BaseSchema {
       table.boolean('is_active').defaultTo(true)
       table.tinyint('rwp').unsigned().defaultTo(0)
     })
-    Helper.createBlackJackRooms()
+       Helper.createBlackJackRooms()
   }
 
   async down() {

@@ -830,10 +830,11 @@ class Helper {
     await Room.createMany(res)
   }
   public static async createBlackJackRooms() {
+    await sleep(2000)
     const res = []
     const rooms = Helper.ROOMS.filter((item) => item.game == 'blackjack')
     await Room.query().where('game', 'blackjack').delete()
-    await db.rawQuery('ALTER TABLE `rooms` AUTO_INCREMENT = 9')
+    // await db.rawQuery('ALTER TABLE `rooms` AUTO_INCREMENT = 9')
     for (let index = 0; index < rooms.length; index++) {
       const room = rooms[index]
       const r = await Room.create({
