@@ -130,7 +130,7 @@ export default class Room extends BaseModel {
     const user = us ?? this.auth?.user
     if (!user) return false
     let res: any[] = []
-    const parsed: any = this.players
+    const parsed: any = this.players ?? []
     const beforeExists = collect(parsed).first((item: any) => item.user_id == user.id)
 
     if (!beforeExists) {
