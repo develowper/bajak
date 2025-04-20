@@ -28,7 +28,7 @@ export const updateRoomValidator = vine.compile(
     commission_percent: vine.number().withoutDecimals().min(0),
     row_win_percent: vine.number().withoutDecimals().min(0),
     win_percent: vine.number().withoutDecimals().min(0),
-    bot_percent: vine.number().withoutDecimals().min(0),
+    bot_percent: vine.number().withoutDecimals().min(0).optional(),
     rwp: vine.number().withoutDecimals().min(0),
   })
 )
