@@ -197,7 +197,8 @@ export default class TransactionsController {
         }
 
         const played = await Daberna.query()
-          .where('boards', 'like', `%id":${fromId},%`)
+          // .where('boards', 'like', `%id":${fromId},%`)
+          .whereRaw(`boards @> ?::jsonb`, [JSON.stringify([{ id: fromId }])])
           .count('* as total')
         const playedCount = played[0]?.$extras.total ?? 0
         if (playedCount < Helper.PLAY_COUNT_FOR_ACTIVE_WINWHEEL)

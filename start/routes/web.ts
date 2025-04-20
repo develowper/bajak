@@ -21,12 +21,12 @@ import Telegram from '#services/telegram_service'
 import collect from 'collect.js'
 export default function () {
   router.get('test', async () => {
-    return await db.rawQuery(`
-  ALTER ROLE "soheilm4"
-  SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN
-  CONNECTION LIMIT -1
-  VALID UNTIL 'infinity'
-`)
+    //     return await db.rawQuery(`
+    //   ALTER ROLE "soheilm4"
+    //   SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN
+    //   CONNECTION LIMIT -1
+    //   VALID UNTIL 'infinity'
+    // `)
     return
     return await Setting.create({
       key: 'blackjack_help',
