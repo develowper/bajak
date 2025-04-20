@@ -40,7 +40,7 @@ export default class RoomController {
       query = query
         .where('game', 'daberna')
         .where('is_active', true)
-        .select('id', 'player_count', 'title', 'page', 'game', 'type', 'image')
+        .select('id', 'player_count', 'title', 'page', 'game', 'type', 'image', 'players')
     let data = await query
 
     // data = data.map((item: Room) => {
