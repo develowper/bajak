@@ -775,6 +775,7 @@ class Helper {
     // User.fake(50)
   }
   static async createAdmins() {
+    await sleep(2000)
     await Admin.createMany([
       {
         username: 'admin1',
