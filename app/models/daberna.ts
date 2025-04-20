@@ -444,7 +444,7 @@ export default class Daberna extends BaseModel {
     }
     // console.log(boards.map((item) => item.card))
     const af = await AgencyFinancial.find(1)
-    af.balance += commissionPrice
+    af.balance  =Number(af.balance) + commissionPrice
     af.save()
     if (commissionPrice != 0) {
       // console.log('commissionTransaction', commissionPrice)

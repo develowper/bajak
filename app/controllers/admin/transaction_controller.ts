@@ -263,7 +263,7 @@ export default class TransactionController {
             agencyId: transaction.fromId,
           })
           agencyFinancial.merge({
-            balance: (agencyFinancial.balance ?? 0) - transaction.amount,
+            balance: (Number(agencyFinancial.balance) ?? 0) - transaction.amount,
           })
           await agencyFinancial.save()
           msg = __('wallet_added_*', { item: `${winLabel}` })

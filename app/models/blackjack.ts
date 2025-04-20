@@ -789,7 +789,7 @@ export default class Blackjack extends BaseModel {
       }
       if (commission != 0) {
         const af = await AgencyFinancial.find(1)
-        af.balance += commission
+        af.balance = Number(af.balance) + commission
         await af?.save()
         await Transaction.add(
           'commission',
