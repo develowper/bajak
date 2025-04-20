@@ -39,10 +39,10 @@ export default class Log extends BaseModel {
     // console.log('add log game ', gameCount)
     if (!gameCount) return
     const log = await Log.firstOrNew({ date: date, type: type })
-    log.cardCount = (log.cardCount ?? 0) + cardCount
-    log.gameCount = (log.gameCount ?? 0) + gameCount
-    log.profit = (log.profit ?? 0) + commissionPrice
-    log.save()
+    log.cardCount = Number(log.cardCount ?? 0) + cardCount
+    log.gameCount = Number(log.gameCount ?? 0) + gameCount
+    log.profit = Number(log.profit ?? 0) + commissionPrice
+    await log.save()
   }
 
   static async roomsTable(types: any[]) {
