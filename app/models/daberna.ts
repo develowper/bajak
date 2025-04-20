@@ -19,25 +19,61 @@ export default class Daberna extends BaseModel {
   @column()
   declare type: string
   @column({
-    serialize: (value: string) => JSON.parse(value) ?? [],
+    // serialize: (value: string) => JSON.parse(value) ?? [],
+    serialize: (value) => {
+      try {
+        const parsed = typeof value === 'string' ? JSON.parse(value) : value
+
+        return (typeof parsed === 'object' && parsed !== null) ? parsed : []
+      } catch {
+        return []
+      }
+    },
     // consume: (value: any) => JSON.stringify(value)
   })
   declare boards: any
 
   @column({
-    serialize: (value: string) => JSON.parse(value) ?? [],
+    // serialize: (value: string) => JSON.parse(value) ?? [],
+    serialize: (value) => {
+      try {
+        const parsed = typeof value === 'string' ? JSON.parse(value) : value
+
+        return (typeof parsed === 'object' && parsed !== null) ? parsed : []
+      } catch {
+        return []
+      }
+    },
     // consume: (value: any) => JSON.stringify(value)
   })
   declare numbers: any
 
   @column({
-    serialize: (value: string) => JSON.parse(value) ?? [],
+    // serialize: (value: string) => JSON.parse(value) ?? [],
+    serialize: (value) => {
+      try {
+        const parsed = typeof value === 'string' ? JSON.parse(value) : value
+
+        return (typeof parsed === 'object' && parsed !== null) ? parsed : []
+      } catch {
+        return []
+      }
+    },
     // consume: (value: any) => JSON.stringify(value)
   })
   declare winners: any
   @column({
     // serializeAs: 'row_winners',
-    serialize: (value: string) => JSON.parse(value) ?? [],
+    // serialize: (value: string) => JSON.parse(value) ?? [],
+    serialize: (value) => {
+      try {
+        const parsed = typeof value === 'string' ? JSON.parse(value) : value
+
+        return (typeof parsed === 'object' && parsed !== null) ? parsed : []
+      } catch {
+        return []
+      }
+    },
   })
   declare rowWinners: any
 
@@ -95,7 +131,7 @@ export default class Daberna extends BaseModel {
     room.isActive = false
     await room.save()
 
-    const players = JSON.parse(room.players ?? '[]')
+    const players = room.players
     if (players?.length < 2) {
       room.isActive = true
       await room.save()

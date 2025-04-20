@@ -44,18 +44,13 @@ export default class Room extends BaseModel {
      consume: (value: any) => JSON.stringify(value)
   }*/ {
       serialize: (value) => {
-        if (typeof value === 'string') {
-          try {
-            return JSON.parse(value)
-          } catch {
-            return [] // or {} if your data is expected to be an object
-          }
-        }
-        if (typeof value === 'object' && value !== null) {
-          return value
-        }
+        try {
+          const parsed = typeof value === 'string' ? JSON.parse(value) : value
 
-        return [] // fallback if null, undefined, or something weird
+          return typeof parsed === 'object' && parsed !== null ? parsed : []
+        } catch {
+          return []
+        }
       },
     }
   )
