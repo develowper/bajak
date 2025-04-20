@@ -35,8 +35,8 @@ export default class RoomController {
       query = query
         .where('game', request.input('game'))
         .where('is_active', true)
-        .orderBy('id', 'DESC')
-    else query = query.where('game', 'daberna').where('is_active', true).orderBy('id', 'DESC')
+        .orderBy('id', 'desc')
+    else query = query.where('game', 'daberna').where('is_active', true).orderBy('id', 'desc')
     let data = await query
 
     // data = data.map((item: Room) => {
