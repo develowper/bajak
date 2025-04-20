@@ -45,7 +45,7 @@ export default class RoomController {
     //   return item
     // })
     console.log(data[0].serialize())
-    return response.json({ data: data.map((item) => item.serializeAttributes()) })
+    return response.send(data.map((item) => item.serialize()))
     return response.json(data)
   }
 
