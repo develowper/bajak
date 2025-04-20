@@ -806,7 +806,7 @@ class Helper {
   static async createRooms() {
     await sleep(1000)
     const res = []
-    const rooms = Helper.ROOMS.filter((item) => item.game != 'blackjack')
+    const rooms = Helper.ROOMS.filter((item) => item.game == 'daberna')
 
     for (let index = 0; index < rooms.length; index++) {
       const room = rooms[index]
