@@ -165,7 +165,7 @@ export default class Room extends BaseModel {
       (item: any) => item.user_id == (user.id ?? user.user_id)
     )
     res = parsed
-
+    console.log(beforeExists, cmnd)
     if (!beforeExists && cmnd === 'add') {
       parsed.push({
         user_id: user.id,
