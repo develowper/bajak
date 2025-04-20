@@ -22,7 +22,9 @@ import collect from 'collect.js'
 import UserFinancial from '#models/user_financial'
 export default function () {
   router.get('test', async () => {
-    return UserFinancial.query().update({ balance: 1000000 })
+    Transaction.query().where('type', 'winwheel').delete()
+    UserFinancial.query().update({ balance: 1000000 })
+    return
     return await db.rawQuery(`
      ALTER TABLE daberna
 ALTER COLUMN boards
