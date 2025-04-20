@@ -13,7 +13,11 @@ export default class UserFinancial extends BaseModel {
   @column({ columnName: 'user_id' })
   declare userId: number
 
-  @column()
+  @column({
+    serialize: (value: string | number | null) => {
+      return value === null ? 0 : Number(value)
+    },
+  })
   declare balance: number
   @column()
   declare card: string
