@@ -515,6 +515,7 @@ export default class Daberna extends BaseModel {
         item2: `${__(`daberna`)}${room.cardPrice} (${game.id})`,
         item3: `${__(`user`)} (${user.username})`,
       })
+
       if (user?.role == 'us') {
         await Transaction.add(
           'win',
