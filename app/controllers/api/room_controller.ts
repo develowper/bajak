@@ -291,7 +291,6 @@ export default class RoomController {
             user.todayCard50000Count += cardCount
             break
         }
-
         await user.useTransaction(trx).save()
         console.log('11')
         await trx.commit()
