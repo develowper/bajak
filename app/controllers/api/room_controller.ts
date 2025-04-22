@@ -204,7 +204,7 @@ export default class RoomController {
         .where('type', roomType)
         .forUpdate()
         .first()
-
+      console.log('1')
       if (!user.isActive || !room || Number.isNaN(cardCount)) {
         await trx.rollback()
         return response.status(422).json({
@@ -214,20 +214,21 @@ export default class RoomController {
 
       const userBeforeCardCounts = room.getUserCardCount()
 
+      console.log('2')
       if (userBeforeCardCounts + cardCount > room.maxUserCardsCount) {
         await trx.rollback()
         return response.status(400).json({
           message: i18n.t('messages.validate.max_cards', { value: room.maxUserCardsCount }),
         })
       }
-
+      console.log('3')
       if (room.cardCount + cardCount > room.maxCardsCount) {
         await trx.rollback()
         return response.status(400).json({
           message: i18n.t('messages.validate.max_room_cards', { value: room.maxCardsCount }),
         })
       }
-
+      console.log('4')
       const beforeIpExists = collect(JSON.parse(room.players) ?? []).first(
         (item: any) => !!ip && item.user_ip === ip && item.user_id !== user.id
       )
@@ -237,14 +238,14 @@ export default class RoomController {
           message: i18n.t('messages.validate.duplicate_*', { value: 'ip' }),
         })
       }
-
+      console.log('5')
       const userFinancials = await UserFinancial.firstOrCreate(
         { userId: user?.id },
         { balance: 0 },
         { client: trx }
       )
       const totalPrice = room.cardPrice * cardCount
-
+      console.log('6')
       if (userFinancials.balance < totalPrice) {
         await trx.rollback()
         return response.status(400).json({
@@ -254,7 +255,7 @@ export default class RoomController {
           }),
         })
       }
-
+      console.log('7')
       if (room.setUserCardsCount(userBeforeCardCounts + cardCount, user, ip)) {
         if (userBeforeCardCounts === 0) {
           room.playerCount++
@@ -266,12 +267,12 @@ export default class RoomController {
         if (room.playerCount === 2 && userBeforeCardCounts === 0) {
           room.startAt = DateTime.now().plus({ seconds: room.maxSeconds - 1 })
         }
-
+        console.log('8')
         await room.useTransaction(trx).save()
-
+        console.log('9')
         userFinancials.balance -= totalPrice
         await userFinancials.useTransaction(trx).save()
-
+        console.log('10')
         switch (room.cardPrice) {
           case 5000:
             user.card5000Count += cardCount
@@ -292,9 +293,9 @@ export default class RoomController {
         }
 
         await user.useTransaction(trx).save()
-
+        console.log('11')
         await trx.commit()
-
+        console.log('12')
         emitter.emit('room-update', {
           type: roomType,
           cmnd: 'card-added',
@@ -306,7 +307,7 @@ export default class RoomController {
           player_count: room.playerCount,
           card_count: room.cardCount,
         })
-
+        console.log('13')
         return response.json({ user_balance: userFinancials.balance })
       }
 
