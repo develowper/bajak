@@ -20,11 +20,13 @@ export default class SettingController {
     const dir = request.input('dir') ?? 'DESC'
     const sort = request.input('order_by') ?? 'created_at'
 
-    let query = Setting.query().where('visible', 1)
+    let query = Setting.query()
 
     if (search) query.where('key', 'like', `%${search}%`)
 
-    return response.json(await query.orderBy(sort, dir).paginate(page, Helper.PAGINATE))
+    return response.json(
+      await query.where('visible', true).orderBy(sort, dir).paginate(page, Helper.PAGINATE)
+    )
   }
 
   async update({ request, response, auth, session, inertia }: HttpContext) {
