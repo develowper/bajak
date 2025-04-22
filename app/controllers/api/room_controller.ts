@@ -229,7 +229,7 @@ export default class RoomController {
         })
       }
       console.log('4')
-      const beforeIpExists = collect(JSON.parse(room.players) ?? []).first(
+      const beforeIpExists = collect(room.players ?? []).first(
         (item: any) => !!ip && item.user_ip === ip && item.user_id !== user.id
       )
       if (beforeIpExists) {
