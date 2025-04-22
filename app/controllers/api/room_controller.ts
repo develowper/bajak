@@ -314,7 +314,7 @@ export default class RoomController {
       return response.status(400).json({ message: 'Unexpected error occurred' })
     } catch (error) {
       await trx.rollback()
-      return response.status(400).json({ message: 'Transaction failed', error })
+      return response.status(400).json({ message: error, error })
     }
   }
 }
