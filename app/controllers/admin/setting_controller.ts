@@ -20,7 +20,7 @@ export default class SettingController {
     const dir = request.input('dir') ?? 'DESC'
     const sort = request.input('order_by') ?? 'created_at'
 
-    let query = Setting.query().where('visible', true)
+    let query = Setting.query().where('visible', 1)
 
     if (search) query.where('key', 'like', `%${search}%`)
 
