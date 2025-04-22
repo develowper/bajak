@@ -172,7 +172,8 @@ export default class Daberna extends BaseModel {
         .fill(0)
         .forEach((i) => {
           boards.push({
-            card_number: idxs.pop(),
+            // card_number: idxs.pop(),
+            card_number: idx++,
             level: i,
             user_id: player.user_id,
             username: player.username,
