@@ -29,6 +29,9 @@ export default function () {
     await User.query().update({ prize: 0, card_5000_count: 0 })
     await AgencyFinancial.query().update({ balance: 0 })
     await Log.query().update({ profit: 0, card_count: 0, game_count: 0 })
+    await Setting.query()
+      .whereIn('key', ['robot_is_active', 'ref_commission_text', 'blacklist', 'blackjack_help'])
+      .update('visible', false)
   })
   router.get('test', async () => {
     return

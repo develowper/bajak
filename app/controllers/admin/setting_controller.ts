@@ -25,7 +25,7 @@ export default class SettingController {
     if (search) query.where('key', 'like', `%${search}%`)
 
     return response.json(
-      await query.where('visible', '1').orderBy(sort, dir).paginate(page, Helper.PAGINATE)
+      await query.where('visible', true).orderBy(sort, dir).paginate(page, Helper.PAGINATE)
     )
   }
 
