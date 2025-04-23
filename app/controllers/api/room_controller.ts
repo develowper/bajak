@@ -225,6 +225,7 @@ export default class RoomController {
           message: i18n.t('messages.validate.max_room_cards', { value: room.maxCardsCount }),
         })
       }
+
       const beforeIpExists =
         false &&
         collect(room.players ?? []).first(
