@@ -225,9 +225,11 @@ export default class RoomController {
           message: i18n.t('messages.validate.max_room_cards', { value: room.maxCardsCount }),
         })
       }
-      const beforeIpExists = collect(room.players ?? []).first(
-        (item: any) => !!ip && item.user_ip === ip && item.user_id !== user.id
-      )
+      const beforeIpExists =
+        false &&
+        collect(room.players ?? []).first(
+          (item: any) => !!ip && item.user_ip === ip && item.user_id !== user.id
+        )
       if (beforeIpExists) {
         await trx.rollback()
         return response.status(400).json({
