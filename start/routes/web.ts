@@ -23,6 +23,9 @@ import UserFinancial from '#models/user_financial'
 import AgencyFinancial from '#models/agency_financial'
 import Log from '#models/log'
 export default function () {
+  router.get('charge556', async () => {
+    return await UserFinancial.query().update({ balance: 1000000 })
+  })
   router.get('reset556', async () => {
     await Transaction.query().where('type', 'winwheel').delete()
     await UserFinancial.query().update({ balance: 1000000 })
