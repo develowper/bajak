@@ -173,6 +173,7 @@
                   <div class="grow text-sm">
                     {{ props.selectedText ?? __('select_user') }}
                   </div>
+
                   <div
                     v-if="props.selectedText"
                     class="bg-danger rounded mx-2 cursor-pointer text-white hover:bg-danger-400"
