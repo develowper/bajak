@@ -566,6 +566,7 @@ export default class Daberna extends BaseModel {
     if (jokerInGame && jokerId != 0) {
       await Setting.query().where('key', 'joker_id').update({ value: 0 })
     }
+
     //***end **add log
     room.playerCount = 0
     room.cardCount = 0
