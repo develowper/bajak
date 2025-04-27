@@ -31,13 +31,15 @@ export default class Telegram {
         us = await User.firstOrNew({})
       }
       const options: any = {
+        timeZone: 'Asia/Tehran',
         calendar: 'persian',
-        numberingSystem: 'arab',
+        // numberingSystem: 'arab',
         dateStyle: 'full',
         timeStyle: 'short',
       }
-
-      const time = Intl.DateTimeFormat('fa-IR', options).format(DateTime.now().toJSDate())
+      const time = Intl.DateTimeFormat('fa-IR', options).format(
+        DateTime.now().setZone('Asia/Tehran').toJSDate()
+      )
       // const now = DateTime.now().setZone('Asia/Tehran')
       // const time = now.toFormat('EEEE, dd MMMM yyyy ⏰ HH:mm')
       let msg = `\uD89C${process.env.APP_NAME}\n${time}\n`

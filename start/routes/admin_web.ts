@@ -17,7 +17,7 @@ const SocketController = () => import('#controllers/admin/socket_controller')
 const LogController = () => import('#controllers/admin/log_controller')
 
 export default () => {
-  router.get('daberna/search', [DabernaController, 'search']).as('daberna.search')
+  // router.get('daberna/search', [DabernaController, 'search']).as('daberna.search')
 
   router
     .group(() => {
@@ -82,6 +82,7 @@ export default () => {
           router.get('log/index', [LogController, 'index']).as('log.index')
 
           router.get('daberna/search', [DabernaController, 'search']).as('daberna.search')
+          router.get('daberna/index', [DabernaController, 'index']).as('daberna.index')
         })
         .prefix('panel')
         .as('panel')

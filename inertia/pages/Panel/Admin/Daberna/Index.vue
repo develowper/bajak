@@ -1,7 +1,7 @@
 <template>
   <Panel>
     <template v-slot:header>
-      <title>{{ __('users') }}</title>
+      <title>{{ __('transactions') }}</title>
     </template>
 
     <template v-slot:content>
@@ -10,15 +10,15 @@
         <div class="flex">
           <Bars2Icon class="h-7 w-7 mx-3" />
           <h1 class="text-2xl font-semibold">
-            {{ `${__('users')}` }}
+            {{ `${__('transactions')}  ${params.type ? `(${__(params.type)})` : ``}` }}
           </h1>
         </div>
-        <div>
+        <div v-if="false">
           <Link
-            :href="route('admin.panel.user.create')"
+            :href="route('admin.panel.admin.create')"
             class="inline-flex items-center justify-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold transition-all duration-500 text-white hover:bg-green-600 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
           >
-            {{ __('new_user') }}
+            {{ __('new_transaction') }}
           </Link>
         </div>
       </div>
@@ -118,9 +118,65 @@
                 id="table-search-admins"
                 v-model="params.search"
                 @keydown.enter="getData()"
-                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                class="block ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                 :placeholder="__('search')"
               />
+            </div>
+
+            <!--            select user-->
+            <UserSelector
+              v-if="admin"
+              :colsData="['id', 'username', 'phone', 'agencyId']"
+              :labelsData="['id', 'name', 'phone', 'agency_id']"
+              :link="
+                route('admin.panel.user.search') +
+                (admin.agencyId ? `?agency_id=${admin.agencyId}` : '')
+              "
+              :label="null"
+              :error="null"
+              v-on:change="getData('clear')"
+              :id="'user'"
+              v-model:selected="params.user_id"
+              :preload="null"
+            >
+              <template v-slot:selector="props">
+                <div
+                  :class="props.selectedText ? 'py-2' : 'py-2'"
+                  class="px-4 border border-gray-200 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center"
+                >
+                  <div class="grow text-sm">
+                    {{ props.selectedText ?? __('select_user') }}
+                  </div>
+
+                  <div
+                    v-if="props.selectedText"
+                    class="bg-danger rounded mx-2 cursor-pointer text-white hover:bg-danger-400"
+                    @click.stop="props.clear(), getData('clear')"
+                  >
+                    <XMarkIcon class="w-5 h-5" />
+                  </div>
+                </div>
+              </template>
+            </UserSelector>
+
+            <!--            type selector-->
+            <div class="block flex-grow">
+              <div class="inline-flex" role="group">
+                <div
+                  v-for="(s, idx) in $page.props.types"
+                  type="button"
+                  @click="
+                    params.type == s.name ? (params.type = null) : (params.type = s.name),
+                      getData('clear')
+                  "
+                  class="inline-block select-none border-2 w-24 p-2 text-center text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out hover:border-primary-accent-200 focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 motion-reduce:transition-none dark:border-primary-400"
+                  :class="`  cursor-pointer ${idx == 0 ? 'rounded-s-lg' : idx == $page.props.types.length - 1 ? 'rounded-e-lg' : ''} border-dark-500 ${s.name === params.type ? `text-white dark:text-white bg-${s.color}-500` : `text-${s.color}-500 dark:text-${s.color}-500 bg-white`}`"
+                  data-twe-ripple-init
+                  data-twe-ripple-color="light"
+                >
+                  {{ __(s.name) }}
+                </div>
+              </div>
             </div>
           </div>
           <div class="text-gray-500 text-sm px-4">
@@ -161,14 +217,74 @@
                   scope="col"
                   class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
                   @click="
-                    (params.order_by = 'username'),
+                    (params.order_by = 'created_at'),
                       (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
                       (params.page = 1),
                       getData()
                   "
                 >
                   <div class="flex items-center justify-center">
-                    <span class="px-2"> {{ __('username') }}</span>
+                    <span class="px-2"> {{ __('created_at') }} </span>
+                    <ArrowsUpDownIcon class="w-4 h-4" />
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
+                  @click="
+                    (params.order_by = 'player_count'),
+                      (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
+                      (params.page = 1),
+                      getData()
+                  "
+                >
+                  <div class="flex items-center justify-center">
+                    <span class="px-2"> {{ __('player') }}</span>
+                    <ArrowsUpDownIcon class="w-4 h-4" />
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
+                  @click="
+                    (params.order_by = 'card_count'),
+                      (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
+                      (params.page = 1),
+                      getData()
+                  "
+                >
+                  <div class="flex items-center justify-center">
+                    <span class="px-2"> {{ __('card') }}</span>
+                    <ArrowsUpDownIcon class="w-4 h-4" />
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
+                  @click="
+                    (params.order_by = 'real_total_money'),
+                      (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
+                      (params.page = 1),
+                      getData()
+                  "
+                >
+                  <div class="flex items-center justify-center">
+                    <span class="px-2"> {{ __('input') }}</span>
+                    <ArrowsUpDownIcon class="w-4 h-4" />
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
+                  @click="
+                    (params.order_by = 'real_prize'),
+                      (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
+                      (params.page = 1),
+                      getData()
+                  "
+                >
+                  <div class="flex items-center justify-center">
+                    <span class="px-2"> {{ __('output') }}</span>
                     <ArrowsUpDownIcon class="w-4 h-4" />
                   </div>
                 </th>
@@ -177,114 +293,60 @@
                   scope="col"
                   class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
                   @click="
-                    (params.order_by = 'full_name'),
+                    (params.order_by = 'type'),
                       (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
                       (params.page = 1),
                       getData()
                   "
                 >
                   <div class="flex items-center justify-center">
-                    <span class="px-2"> {{ __('name') }} </span>
+                    <span class="px-2"> {{ __('subject') }} </span>
                     <ArrowsUpDownIcon class="w-4 h-4" />
                   </div>
                 </th>
                 <th
                   scope="col"
-                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
+                  class="px-24 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
                   @click="
-                    (params.order_by = 'balance'),
+                    (params.order_by = 'row_winners'),
                       (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
                       (params.page = 1),
                       getData()
                   "
                 >
                   <div class="flex items-center justify-center">
-                    <span class="px-2"> {{ __('balance') }} </span>
+                    <span class="px-2"> {{ __('row_winners') }}</span>
                     <ArrowsUpDownIcon class="w-4 h-4" />
                   </div>
                 </th>
-
                 <th
                   scope="col"
-                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
+                  class="px-24 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
                   @click="
-                    (params.order_by = 'card'),
+                    (params.order_by = 'winners'),
                       (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
                       (params.page = 1),
                       getData()
                   "
                 >
                   <div class="flex items-center justify-center">
-                    <span class="px-2"> {{ __('card') }} </span>
+                    <span class="px-2"> {{ __('full_winners') }}</span>
                     <ArrowsUpDownIcon class="w-4 h-4" />
                   </div>
                 </th>
                 <th
                   scope="col"
-                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
+                  class="px-24 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
                   @click="
-                    (params.order_by = 'telegram_id'),
+                    (params.order_by = 'boards'),
                       (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
                       (params.page = 1),
                       getData()
                   "
                 >
                   <div class="flex items-center justify-center">
-                    <span class="px-2"> {{ __('telegram') }} </span>
+                    <span class="px-2"> {{ __('players') }}</span>
                     <ArrowsUpDownIcon class="w-4 h-4" />
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
-                  @click="
-                    (params.order_by = 'ref_count'),
-                      (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
-                      (params.page = 1),
-                      getData()
-                  "
-                >
-                  <div class="flex items-center justify-center">
-                    <span class="px-2"> {{ __('invite') }} </span>
-                    <ArrowsUpDownIcon class="w-4 h-4" />
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
-                  @click="
-                    (params.order_by = 'role'),
-                      (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
-                      (params.page = 1),
-                      getData()
-                  "
-                >
-                  <div class="flex items-center justify-center">
-                    <span class="px-2"> {{ __('role') }} </span>
-                    <ArrowsUpDownIcon class="w-4 h-4" />
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
-                  @click="
-                    (params.order_by = 'is_active'),
-                      (params.dir = params.dir == 'ASC' ? 'DESC' : 'ASC'),
-                      (params.page = 1),
-                      getData()
-                  "
-                >
-                  <div class="flex items-center justify-center">
-                    <span class="px-2"> {{ __('status') }} </span>
-                    <ArrowsUpDownIcon class="w-4 h-4" />
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="px-2 py-3 cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
-                >
-                  <div class="flex items-center justify-center">
-                    <span class="px-2"> {{ __('game_statistics') }}</span>
                   </div>
                 </th>
               </tr>
@@ -345,338 +407,59 @@
                   </div>
                 </td>
                 <td class=" ">{{ d.id }}</td>
+                <td>{{ toShamsi(d.createdAt, true) }}</td>
 
                 <td class="px-2 py-4">
-                  <Link :href="route('admin.panel.user.edit', { params: { id: d.id } })">{{
-                    `${__(d.username)}` || '-'
-                  }}</Link>
-                </td>
-
-                <td class="px-2 py-4">
-                  <div v-html="`${__(d.full_name ?? '') || '-'}<br>(${d.phone ?? '-'})`"></div>
+                  <div>{{ d.playerCount }}</div>
                 </td>
                 <td class="px-2 py-4">
-                  <button
-                    @click="
-                      (params.id = d.id),
-                        (params.idx = idx),
-                        (params.cmnd = 'withdraw'),
-                        (params.amount = d.balance),
-                        (params.username = d.username),
-                        (params.balance = d.balance),
-                        chargeModal.show()
-                    "
-                    :id="`dropdownAmount${d.id}`"
-                    class="min-w-[5rem] py-2 cursor-pointer items-center text-center text-sm rounded-md"
-                    :class="`bg-primary-100 hover:bg-primary-200 text-primary-500`"
-                  >
-                    {{ asPrice(d.balance) }}
-                  </button>
-                </td>
-
-                <td class="px-2 py-4">
-                  <div>{{ d.card || '-' }}</div>
+                  <div>{{ d.cardCount }}</div>
                 </td>
                 <td class="px-2 py-4">
-                  <div>{{ d.telegram_id }}</div>
+                  <div>{{ asPrice(d.realTotalMoney) }}</div>
                 </td>
                 <td class="px-2 py-4">
-                  <div>{{ d.ref_count }}</div>
+                  <div>{{ asPrice(d.realPrize) }}</div>
                 </td>
                 <td class="px-2 py-4">
-                  <div>{{ d.role }}</div>
-                </td>
-                <td class="px-2 py-4" data-te-dropdown-ref>
-                  <button
-                    :id="`dropdownStatusSetting${d.id}`"
-                    data-te-dropdown-toggle-ref
-                    aria-expanded="false"
-                    data-te-ripple-init
-                    data-te-ripple-color="light"
-                    class="min-w-[5rem] py-2 cursor-pointer items-center text-center text-sm rounded-md"
-                    :class="`bg-${d.is_active == 1 ? 'green' : 'red'}-100 hover:bg-${d.is_active == 1 ? 'green' : 'red'}-200 text-${d.is_active == 1 ? 'green' : 'red'}-500`"
-                  >
-                    {{ d.is_active == 1 ? __('active') : __('inactive') }}
-                  </button>
-                  <ul
-                    :ref="`statusMenu${d.id}`"
-                    data-te-dropdown-menu-ref
-                    class="absolute z-[1000] m-0 hidden list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-center text-base shadow-lg [&[data-te-dropdown-show]]:block"
-                    tabindex="-1"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-label="User menu"
-                    :aria-labelledby="`dropdownStatusSetting${d.id}`"
-                  >
-                    <li
-                      v-for="(s, ix) in [
-                        {
-                          name: 'active',
-                          color: 'green',
-                          message: __('sure_to_*_?', { item: __('activate') }),
-                        },
-                        {
-                          name: 'inactive',
-                          color: 'red',
-                          message: __('sure_to_*_?', { item: __('inactivate') }),
-                        },
-                      ]"
-                      role="menuitem"
-                      @click="
-                        showDialog('danger', s.message, __('accept'), edit, {
-                          idx: idx,
-                          id: d.id,
-                          cmnd: 'status',
-                          status: s.name,
-                        })
-                      "
-                      class="cursor-pointer text-sm transition-colors hover:bg-gray-100"
-                    >
-                      <div
-                        class="flex items-center justify-center px-6 py-2"
-                        :class="` hover:bg-gray-200 text-${s.color}-500`"
-                      >
-                        {{ __(s.name) }}
-                      </div>
-                      <hr class="border-gray-200" />
-                    </li>
-                  </ul>
-                </td>
-
-                <td>
-                  <UserSelector
-                    :colsData="[
-                      'id',
-                      'type',
-                      'card_count',
-                      'win_prize',
-                      'row_win_prize',
-                      'created_at',
-                    ]"
-                    :labelsData="[
-                      'game',
-                      'type',
-                      'card_count',
-                      'win_prize',
-                      'row_win_prize',
-                      'created_at',
-                    ]"
-                    :callback="{
-                      created_at: (e) => toShamsi(e, true),
-                      win_prize: (e) => asPrice(e),
-                      row_win_prize: (e) => asPrice(e),
-                    }"
-                    :link="route('admin.panel.daberna.search') + `?user_id=${d.id}&cmnd=user`"
-                    :label="null"
-                    :error="null"
-                    :id="'user' + d.id"
-                    :preload="null"
-                  >
-                    <template v-slot:selector="props">
-                      <div
-                        :class="props.selectedText ? 'py-2' : 'py-2'"
-                        class="px-4 border border-gray-200 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center"
-                      >
-                        <div class="grow text-sm">
-                          {{ __('view') }}
-                        </div>
-                      </div>
-                    </template>
-                  </UserSelector>
+                  <div>{{ `${__(d.type)}` || '' }}</div>
                 </td>
                 <td class="px-2 py-4">
-                  <!-- Actions Group -->
                   <div
-                    class="inline-flex rounded-md shadow-sm transition duration-150 ease-in-out focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-                    role="group"
-                  >
-                    <Link
-                      :href="route('admin.panel.user.edit', { params: { id: d.id } })"
-                      type="button"
-                      class="inline-block rounded-s-lg bg-orange-500 text-white px-6 py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400 focus:outline-none focus:ring-0"
-                      data-te-ripple-init
-                      data-te-ripple-color="light"
-                    >
-                      {{ __('edit') }}
-                    </Link>
-                    <button
-                      @click="
-                        showDialog(
-                          'danger',
-                          __('remove_*_?', { item: __('user') }),
-                          __('accept'),
-                          edit,
-                          { idx: idx, id: d.id, cmnd: 'remove' }
+                    v-html="
+                      (d.rowWinners ?? [])
+                        .map(
+                          (i) =>
+                            `[🃏${i.card_number}](👤${i.user_id})[${i.username}]<${asPrice(i.prize)}>`
                         )
-                      "
-                      type="button"
-                      class="inline-block rounded-e-lg bg-red-500 text-white px-6 py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-red-400 focus:outline-none focus:ring-0"
-                      data-te-ripple-init
-                      data-te-ripple-color="light"
-                    >
-                      {{ __('remove') }}
-                    </button>
-                  </div>
+                        .join('♦️')
+                    "
+                  ></div>
+                </td>
+                <td class="px-2 py-4">
+                  <div
+                    v-html="
+                      (d.winners ?? [])
+                        .map(
+                          (i) =>
+                            `[🃏${i.card_number}](👤${i.user_id})[${i.username}]<${asPrice(i.prize)}>`
+                        )
+                        .join('♦️')
+                    "
+                  ></div>
+                </td>
+                <td class="px-2 py-4">
+                  <div
+                    v-html="
+                      (d.boards ?? [])
+                        .map((i) => `[🃏${i.card_number}](👤${i.user_id})[${i.username}]`)
+                        .join('♦️')
+                    "
+                  ></div>
                 </td>
               </tr>
             </tbody>
           </table>
-        </div>
-        <!--        charge modal-->
-        <div
-          data-te-modal-init
-          class="fixed start-3 end-3 top-[20%] lg:w-[50%] lg:mx-auto rounded-lg z-[1055] hidden overflow-y-auto outline-none"
-          :id="`chargeModal`"
-          tabindex="-1"
-          :aria-labelledby="`chargeModalLabel`"
-          aria-hidden="true"
-        >
-          <div
-            data-te-modal-dialog-ref
-            class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[0px]:m-0 min-[0px]:h-full min-[0px]:max-w-none"
-          >
-            <div
-              class="pointer-events-auto relative flex w-full flex-col rounded-md bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600 min-[0px]:h-full min-[0px]:rounded-none min-[0px]:border-0"
-            >
-              <div
-                class="flex items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50 min-[0px]:rounded-none"
-              >
-                <!-- Modal title -->
-                <h5
-                  class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
-                  :id="`chargeModalLabel`"
-                >
-                  <div class="flex items-center">
-                    <ArrowsUpDownIcon class="h-7 w-7 mx-3" />
-                    {{ `${__('charge')} / ${__('withdraw')}` }}
-                  </div>
-                </h5>
-                <!-- Close button -->
-                <button
-                  @click="chargeModal.hide()"
-                  type="button"
-                  class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-                  data-te-modal-dismiss
-                  aria-label="Close"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="h-6 w-6"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div class="flex flex-col items-center justify-center">
-                <div>{{ `${__('user')} (${params.id}) ${params.username}` }}</div>
-                <div>{{ `${__('balance')}: ${asPrice(params.balance)} ${__('currency')}` }}</div>
-              </div>
-
-              <!-- Modal body -->
-              <div class="flex flex-col mx-4 items-stretch p-2 pb-0 min-[0px]:overflow-y-auto">
-                <div class="flex my-2" role="group">
-                  <div
-                    type="button"
-                    @click="
-                      (params.cmnd = 'withdraw'),
-                        (params.description = __('wallet_withdraw_*_from_*', {
-                          item1: `${asPrice(`${params.amount}`)} ${__('currency')}`,
-                          item2: `${__('user')} (${params.username || params.id})`,
-                          item3: `${__('settlement')}`,
-                        }))
-                    "
-                    class="flex border-2 flex-1 p-2 py-3 text-center text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out hover:border-primary-accent-200 focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 motion-reduce:transition-none dark:border-primary-400 dark:text-primary-300 dark:hover:bg-blue-950 dark:focus:bg-blue-950"
-                    :class="`  cursor-pointer ${'rounded-s-lg'} border-dark-500 ${'withdraw' === params.cmnd ? `text-white bg-primary-500` : `text-gray-500 bg-white`}`"
-                    data-twe-ripple-init
-                    data-twe-ripple-color="light"
-                  >
-                    <div class="mx-auto">{{ __('withdraw') }}</div>
-                  </div>
-                  <div
-                    type="button"
-                    @click="
-                      (params.cmnd = 'charge'),
-                        (params.description = __('wallet_charge_*_*_for_*', {
-                          item1: `${asPrice(`${params.amount}`)} ${__('currency')}`,
-                          item2: `${__('user')} (${params.username || params.id})`,
-                          item3: `${__('cardtocard')}`,
-                        }))
-                    "
-                    class="flex border-2 flex-1 p-2 py-3 text-center text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out hover:border-primary-accent-200 focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 motion-reduce:transition-none dark:border-primary-400 dark:text-primary-300 dark:hover:bg-blue-950 dark:focus:bg-blue-950"
-                    :class="`  cursor-pointer ${'rounded-e-lg'} border-dark-500 ${'charge' === params.cmnd ? `text-white bg-primary-500` : `text-gray-500 bg-white`}`"
-                    data-twe-ripple-init
-                    data-twe-ripple-color="light"
-                  >
-                    <div class="mx-auto">{{ __('charge') }}</div>
-                  </div>
-                </div>
-
-                <div class="my-2">
-                  <TextInput
-                    id="amount"
-                    type="number"
-                    :placeholder="__('amount')"
-                    classes="   "
-                    v-model="params.amount"
-                    autocomplete="amount"
-                    :error="errors.amount"
-                  >
-                    <template v-slot:prepend>
-                      <div class="m-2 px-0">
-                        <ArrowsUpDownIcon class="h-5 w-5" />
-                      </div>
-                    </template>
-                  </TextInput>
-                </div>
-
-                <div class="my-2">
-                  <TextInput
-                    id="description"
-                    type="text"
-                    :placeholder="__('description')"
-                    classes="   "
-                    v-model="params.description"
-                    autocomplete="description"
-                    :error="errors.description"
-                  >
-                    <template v-slot:prepend>
-                      <div class="m-2 px-0">
-                        <ChatBubbleLeftEllipsisIcon class="h-5 w-5" />
-                      </div>
-                    </template>
-                  </TextInput>
-                </div>
-              </div>
-
-              <!-- Modal footer -->
-              <div
-                class="mt-auto flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50 min-[0px]:rounded-none"
-              >
-                <div class="flex my-1 w-full" role="group">
-                  <div
-                    class="cursor-pointer flex justify-center items-center hover:bg-success-600 p-3 bg-success text-white grow rounded-s"
-                    :title="__('accept')"
-                    @click="edit(params)"
-                  >
-                    <CheckIcon class="w-4 h-4 mx-1 text-white text-white" />
-                    <div>{{ __('accept') }}</div>
-                  </div>
-                  <div
-                    class="cursor-pointer flex justify-center items-center bg-danger hover:bg-danger-600 p-3 text-white grow rounded-e"
-                    :title="__('cancel')"
-                    @click="chargeModal.hide()"
-                  >
-                    <XMarkIcon class="w-4 h-4 mx-1 text-white text-white" />
-                    <div>{{ __('cancel') }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </template>
@@ -694,12 +477,10 @@ import {
   HomeIcon,
   XMarkIcon,
   ArrowsUpDownIcon,
-  ChatBubbleLeftEllipsisIcon,
 } from '@heroicons/vue/24/outline'
 import Image from '~/components/Image.vue'
 import Tooltip from '~/components/Tooltip.vue'
 
-import { Modal } from 'tw-elements'
 import {
   __,
   asPrice,
@@ -712,15 +493,9 @@ import {
   log,
   setUrlParams,
   isLoading,
-  getError,
   getErrors,
 } from '~/js/mixins.js'
 import { route } from '@izzyjs/route/client'
-import { DateTime } from 'luxon'
-import TextInput from '~/components/TextInput.vue'
-import { PhotoIcon } from '@heroicons/vue/24/outline/index.js'
-import { CheckIcon } from '@heroicons/vue/24/solid/index.js'
-import LoadingIcon from '~/components/LoadingIcon.vue'
 
 export default {
   data() {
@@ -733,7 +508,6 @@ export default {
         type: null,
         order_by: null,
         dir: 'DESC',
-        user_id: null,
       },
       data: [],
       urlParams: getUrlParams(),
@@ -741,16 +515,11 @@ export default {
       toggleSelect: false,
       loading: false,
       error: null,
-      errors: {},
       total: 0,
       admin: this.$page.props.auth.user,
     }
   },
   components: {
-    LoadingIcon,
-    CheckIcon,
-    PhotoIcon,
-    TextInput,
     Head,
     Link,
     HomeIcon,
@@ -763,7 +532,6 @@ export default {
     Pagination,
     ArrowsUpDownIcon,
     Tooltip,
-    ChatBubbleLeftEllipsisIcon,
   },
   mounted() {
     this.tableWrapper = document.querySelector('table').parentElement
@@ -771,29 +539,11 @@ export default {
     this.params.type = this.urlParams.type
     this.params.payed_at = this.urlParams.payed_at ? Number.parseInt(this.urlParams.payed_at) : null
     // setUrlParams( {})
-    const modalEl = document.getElementById('chargeModal')
-    this.chargeModal = new Modal(modalEl)
     this.getData()
     // console.log(this.urlParams)
     // this.showDialog('danger', 'message',()=>{});
     // this.showDialog('danger', 'message',()=>{});
     // this.isLoading(false);
-  },
-  watch: {
-    'params.amount'(newValue, oldValue) {
-      if (this.params.cmnd === 'withdraw')
-        this.params.description = __('wallet_withdraw_*_from_*', {
-          item1: `${asPrice(`${this.params.amount}`)} ${__('currency')}`,
-          item2: `${__('user')} (${this.params.username || this.params.id})`,
-          item3: `${__('settlement')}`,
-        })
-      else if (this.params.cmnd === 'charge')
-        this.params.description = __('wallet_charge_*_*_for_*', {
-          item1: `${asPrice(`${this.params.amount}`)} ${__('currency')}`,
-          item2: `${__('user')} (${this.params.username || this.params.id})`,
-          item3: `${__('cardtocard')}`,
-        })
-    },
   },
   methods: {
     showDialog,
@@ -805,15 +555,14 @@ export default {
     cropText,
     showToast,
     isLoading,
-    getError,
     getErrors,
-
-    getData() {
+    getData(clear) {
       this.loading = true
       this.data = []
+      if (clear) this.params.page = 1
       window.axios
         .get(
-          route(`admin.panel.user.financial.search`),
+          route(`admin.panel.daberna.search`),
           {
             params: this.params,
           },
@@ -835,20 +584,6 @@ export default {
             initTableDropdowns()
             this.setTableHeight()
           })
-
-          // const d = this.data[0]
-          // this.params.id = d.id
-          // this.params.idx = 0
-          // this.params.cmnd = 'withdraw'
-          // this.params.amount = d.balance
-          // this.params.username = d.username
-          // this.params.balance = d.balance
-          // this.params.description = __('wallet_withdraw_*_from_*', {
-          //   item1: `${asPrice(`${this.params.amount}`)} ${__('currency')}`,
-          //   item2: `${__('user')} (${this.params.id})`,
-          //   item3: `${__('settlement')}`,
-          // })
-          // this.chargeModal.show()
         })
 
         .catch((error) => {
@@ -894,38 +629,26 @@ export default {
     edit(params) {
       this.isLoading(true)
       window.axios
-        .patch(route('admin.panel.user.update'), params, {})
+        .patch(route('admin.panel.transaction.update'), params, {})
         .then((response) => {
           if (response.data && response.data.message) {
             this.showToast('success', response.data.message)
           }
 
-          if (response.data.is_active != null) {
-            this.data[params.idx].is_active = response.data.is_active
+          if (response.data.status) {
+            this.data[params.idx].status = response.data.status
           }
 
           if (response.data.payed_at) {
             this.data[params.idx].payedAt = response.data.payed_at
           }
-          if (response.data.balance != null) {
-            this.data[params.idx].balance = response.data.balance
-            this.chargeModal.hide()
-            this.params.id = null
-            this.params.username = null
-            this.params.amount = 0
-            this.params.cmnd = null
-            this.params.description = null
-            this.params.idx = null
-          }
-
           if (response.data.removed) {
-            this.getData()
+            this.getData(true)
           }
         })
 
         .catch((error) => {
-          this.error = this.getError(error)
-          this.errors = this.getErrors(error)
+          this.error = this.getErrors(error)
           if (error.response && error.response.data) {
             if (error.response.data.charge) {
               this.data[params.idx].charge = error.response.data.charge

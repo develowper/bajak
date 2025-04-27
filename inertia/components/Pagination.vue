@@ -1,12 +1,12 @@
 <template>
-  <ul class="flex items-center text-gray-500 border p-0 rounded-lg">
+  <ul class="flex items-center text-gray-500 p-0 rounded-lg">
     <!--disabled first/previous -->
 
     <template v-if="pagination.currentPage === 1">
-      <li class="border-gray-300 p-2 rounded-r bg-gray-100 cursor-pointer">
+      <li class="border-l border-r p-2 rounded-r bg-gray-100 cursor-pointer">
         <ChevronDoubleRightIcon class="w-4 h-4" />
       </li>
-      <li class="border-gray-300 p-2 bg-gray-100 cursor-pointer bg-gray-100">
+      <li class="border-l border-r p-2 bg-gray-100 cursor-pointer bg-gray-100">
         <ChevronRightIcon class="w-4 h-4" />
       </li>
     </template>
@@ -14,13 +14,13 @@
     <template v-else-if="pagination.currentPage > 1">
       <li
         @click="$emit('paginationChanged', { page: 1 })"
-        class="border-gray-300 p-2 rounded-r bg-gray-100 hover:bg-gray-200 cursor-pointer"
+        class="p-2 border-l border-r rounded-r bg-gray-100 hover:bg-gray-200 cursor-pointer"
       >
         <ChevronDoubleRightIcon class="w-4 h-4" />
       </li>
 
       <li
-        class="border-gray-300 p-2 rounded bg-gray-100 hover:bg-gray-200 cursor-pointer"
+        class="p-2 rounded bg-gray-100 hover:bg-gray-200 cursor-pointer"
         @click="$emit('paginationChanged', { page: pagination.currentPage - 1 })"
       >
         <ChevronRightIcon class="w-4 h-4" />
@@ -31,9 +31,9 @@
 
     <li
       v-for="i in this.range(this.from, this.to)"
-      class="border-gray-300 p-1 px-2 hover:bg-gray-200 cursor-pointer"
+      class="p-[.3rem] border-l border-r px-3 hover:bg-primary-200 cursor-pointer"
       :class="
-        (pagination.currentPage == i ? 'bg-white' : 'bg-gray-100') +
+        (pagination.currentPage == i ? 'bg-primary-400 text-white' : 'bg-gray-100') +
         (i == from ? ' border-r border-l' : ' border-l ')
       "
       @click="$emit('paginationChanged', { page: i })"
@@ -45,14 +45,14 @@
 
     <template v-if="pagination.currentPage < pagination.lastPage">
       <li
-        class="border-l border-gray-300 p-2 bg-gray-100 hover:bg-gray-300 cursor-pointer"
+        class="border-l border-r p-2 bg-gray-100 hover:bg-gray-300 cursor-pointer"
         @click="$emit('paginationChanged', { page: pagination.currentPage + 1 })"
       >
         <ChevronLeftIcon class="w-4 h-4" />
       </li>
 
       <li
-        class="border-gray-300 p-1 px-2 rounded-l bg-gray-100 hover:bg-gray-300 cursor-pointer"
+        class="p-1 border-l border-r px-2 rounded-l bg-gray-100 hover:bg-gray-300 cursor-pointer"
         @click="$emit('paginationChanged', { page: pagination.lastPage })"
       >
         {{ pagination.lastPage }}
@@ -60,13 +60,11 @@
     </template>
     <!--disable next/last-->
     <template v-else-if="pagination.currentPage >= pagination.lastPage">
-      <li class="border-gray-300 p-2 bg-gray-100 hover:bg-gray-100 cursor-pointer bg-gray-100">
+      <li class="p-2 bg-gray-100 hover:bg-gray-100 cursor-pointer bg-gray-100">
         <ChevronLeftIcon class="w-4 h-4" />
       </li>
 
-      <li
-        class="border-gray-300 p-1 px-2 rounded-l bg-gray-100 hover:bg-gray-100 cursor-pointer bg-gray-100"
-      >
+      <li class="p-[.3rem] px-3 rounded-l bg-gray-100 hover:bg-gray-100 cursor-pointer bg-gray-100">
         {{ pagination.lastPage }}
       </li>
     </template>

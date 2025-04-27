@@ -12,6 +12,7 @@ import { createUserFakeValidator, createUserValidator, updateUserValidator } fro
 import Telegram from '#services/telegram_service'
 import hash from '@adonisjs/core/services/hash'
 import db from '@adonisjs/lucid/services/db'
+import env from '#start/env'
 
 export default class UserController {
   //
@@ -85,7 +86,9 @@ export default class UserController {
 
     if (search)
       query.where((query) => {
-        query.where('username', 'like', `%${search}%`).orWhere('id', 'like', `%${search}%`)
+        query.where('username', 'like', `%${search}%`)
+        if (env.get('DB_CONNECTION') === 'pg') query.orWhereRaw('id::text LIKE ?', [`%${search}%`])
+        else query.where('id', 'like', `%${search}%`)
       })
     if (type) {
       query.where('type', type)

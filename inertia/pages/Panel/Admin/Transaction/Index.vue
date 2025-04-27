@@ -129,8 +129,8 @@
                 <div
                   type="button"
                   @click="(params.payed_at = params.payed_at === 1 ? null : 1), getData()"
-                  class="inline-block select-none border-2 w-24 p-2 text-center text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out hover:border-primary-accent-200 focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 motion-reduce:transition-none dark:text-white"
-                  :class="`  cursor-pointer ${'rounded-s-lg'} border-dark-500 ${1 === params.payed_at ? `text-white dark:text-white bg-green-500` : `text-gray-500 bg-white`}`"
+                  class="inline-block select-none border-2 w-24 p-2 text-center text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out hover:border-primary-accent-200 focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 motion-reduce:transition-none"
+                  :class="`  cursor-pointer ${'rounded-s-lg'} border-dark-500 ${1 === params.payed_at ? `text-white dark:text-white bg-green-500 ` : `text-gray-500 bg-white dark:text-green-500`}`"
                   data-twe-ripple-init
                   data-twe-ripple-color="light"
                 >
@@ -139,8 +139,8 @@
                 <div
                   type="button"
                   @click="(params.payed_at = params.payed_at === 0 ? null : 0), getData()"
-                  class="inline-block select-none border-2 w-24 p-2 text-center text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out hover:border-primary-accent-200 focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 motion-reduce:transition-none dark:text-white"
-                  :class="`  cursor-pointer ${'rounded-e-lg'} border-dark-500 ${0 === params.payed_at ? `text-white dark:text-white bg-red-500` : `text-gray-500 bg-white`}`"
+                  class="inline-block select-none border-2 w-24 p-2 text-center text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out hover:border-primary-accent-200 focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 motion-reduce:transition-none"
+                  :class="`  cursor-pointer ${'rounded-e-lg'} border-dark-500 ${0 === params.payed_at ? `text-white dark:text-white bg-red-500 ` : `text-gray-500 bg-white dark:text-red-500`}`"
                   data-twe-ripple-init
                   data-twe-ripple-color="light"
                 >

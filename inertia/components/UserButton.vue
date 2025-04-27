@@ -22,7 +22,7 @@
           v-if="chevronShow"
           @mouseover="chevronRotate = true"
           @mouseleave="chevronRotate = false"
-          class="flex flex-col bg-white border shadow-xl rounded-lg transform scale-0 group-hover:scale-100 absolute end-0 top-10 transition duration-200 ease-in-out origin-top"
+          class="flex flex-col bg-white dark:bg-slate-600 border shadow-xl rounded-lg transform scale-0 group-hover:scale-100 absolute end-0 top-10 transition duration-200 ease-in-out origin-top"
         >
           <li>
             <Link
@@ -37,10 +37,10 @@
               />
 
               <div class="flex flex-col p-2">
-                <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                <h1 class="text-sm font-semibold text-gray-700 dark:text-white">
                   {{ user.fullname }}
                 </h1>
-                <div class="text-sm text-gray-500 dark:text-gray-400">
+                <div class="text-sm text-gray-500 dark:text-white">
                   {{ user.phone || user.email }}
                 </div>
               </div>
@@ -52,7 +52,7 @@
           <li>
             <Link
               :href="isAdmin() ? route('admin.panel.index') : route('user.panel.index')"
-              class="flex justify-center px-4 py-4 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+              class="flex justify-center px-4 py-4 text-sm text-gray-600 dark:text-white capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               {{ __('dashboard') }}
             </Link>

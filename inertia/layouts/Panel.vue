@@ -494,6 +494,47 @@
               </li>
             </ul>
           </li>
+
+          <!-- Daberna links -->
+          <li v-if="hasAccess('view_games')" class="relative">
+            <a
+              :class="{
+                'bg-primary-50 text-primary-500 dark:bg-slate-700 dark:text-slate-100':
+                  menuIsActive('admin.panel.daberna.*'),
+              }"
+              class="flex cursor-pointer items-center truncate px-3 py-4 text-[0.875rem] text-gray-600 dark:text-slate-100 outline-none transition duration-300 ease-linear hover:bg-primary-100 dark:hover:bg-slate-700 dark:hover:text-slate-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+              data-te-sidenav-link-ref
+            >
+              <PuzzlePieceIcon class="w-5 h-5" />
+              <span class="mx-2 text-sm"> {{ __('daberna') }} </span>
+              <span
+                class="right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:text-slate-100"
+                data-te-sidenav-rotate-icon-ref
+              >
+                <ChevronDownIcon class="h-5 w-5 dark:text-slate-100" />
+              </span>
+            </a>
+            <ul
+              v-bind="{
+                'data-te-collapse-show': menuIsActive('admin.panel.daberna.*') ? true : null,
+              }"
+              class="!visible relative m-0 hidden list-none data-[te-collapse-show]:block"
+              data-te-collapse-item
+              data-te-sidenav-collapse-ref
+            >
+              <li class="relative ps-7">
+                <Link
+                  :href="route('admin.panel.daberna.index')"
+                  role="menuitem"
+                  :class="subMenuIsActive('admin.panel.daberna.index')"
+                  class="flex border-s-2 hover:border-primary-500 dark:hover:border-slate-200 items-center p-2 text-sm transition-all duration-200 hover:text-primary-700 hover:bg-primary-50 dark:hover:text-slate-100 dark:hover:bg-slate-700"
+                >
+                  <Bars2Icon class="w-5 h-5 mx-1" />
+                  {{ __('list') }}
+                </Link>
+              </li>
+            </ul>
+          </li>
           <li>
             <div class="py-4"></div>
           </li>
@@ -567,6 +608,7 @@ import {
   ShieldCheckIcon,
   SwatchIcon,
   ChartBarIcon,
+  PuzzlePieceIcon,
 } from '@heroicons/vue/24/outline'
 import { QuestionMarkCircleIcon, UserIcon, UserGroupIcon as UGP } from '@heroicons/vue/24/solid'
 import Image from '~/components/Image.vue'
@@ -666,6 +708,7 @@ export default {
     ShieldCheckIcon,
     SwatchIcon,
     ChartBarIcon,
+    PuzzlePieceIcon,
   },
   methods: {
     __,
