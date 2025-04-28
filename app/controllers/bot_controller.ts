@@ -129,7 +129,8 @@ export default class BotController {
           }
         }
 
-        msg = `■ سلام ${firstName} خوش آمدید\n\n■ برای استفاده از تمامی امکانات ربات و اپلیکیشن ابتدا ثبت نام کنید:`
+        msg = `🟨 سلام ${firstName} عزیز، خوش آمدید!
+🟨 جهت انجام بازی، لطفاً ابتدا ثبت‌نام کنید:`
         if (!this.user) {
           res = await Telegram.sendMessage(
             chatId,
@@ -152,14 +153,14 @@ export default class BotController {
         fromId != Helper.TELEGRAM_LOGS[0] &&
         !(await Telegram.isMember(`@${Helper.TELEGRAM_CHANNEL}`, fromId))
       ) {
-        await Telegram.sendMessage(
-          fromId,
-          'عیدی بیت پین برای شما:\n' + 'https://bitpin.ir/signup/?refcode=6jglwabmtn',
-          null
-        )
+        // await Telegram.sendMessage(
+        //   fromId,
+        //   'عیدی بیت پین برای شما:\n' + 'https://bitpin.ir/signup/?refcode=6jglwabmtn',
+        //   null
+        // )
 
         // await Telegram.sendMessage(fromId, 'http://t.me/gapoGramBot?start=73tIM', null, null, null)
-        msg = '📌 *جهت استفاده از ربات و دریافت پیام های اطلاع رسانی در کانال برنامه عضو شوید*'
+        msg = '🔔برای استفاده از ربات و دریافت اطلاعیه‌ها، لطفاً در کانال برنامه عضو شوید'
         res = await Telegram.sendMessage(
           chatId,
           Telegram.markdownV2(msg),
@@ -192,7 +193,7 @@ export default class BotController {
           messageId,
           await this.getKeyboard('user_main')
         )
-      } else if (text === '🤖تماس با ما🤖') {
+      } else if (text === '👨‍💻پشتیبانی👨‍💻') {
         //
         msg = '✏️ *جهت ارتباط با پشتیبانی از لینک های زیر استفاده نمایید*'
         res = await Telegram.sendMessage(
@@ -202,7 +203,7 @@ export default class BotController {
           null,
           await this.getKeyboard('support_links')
         )
-      } else if (text === '📱 دریافت اپلیکیشن 📱') {
+      } else if (text === '📥دانلود برنامه📥') {
         //
         const settings = await Helper.getSettings(['app_url', 'app_version'])
         const appUrl = settings['app_url']
@@ -233,9 +234,10 @@ export default class BotController {
         if (!this.user) {
           msg += '🟠جهت دریافت لینک دعوت خود و کسب درآمد، در ربات ثبت نام کنید' + '\n'
         } else {
-          msg = '🃏 *بازی آنلاین دبرنا* 🃏' + '\n'
-          msg += '💸 هم بازی کن هم درآمد کسب کن 💸' + '\n'
-          msg += '🟪 ثبت نام و دریافت اپلیکیشن 🟪' + '\n'
+          msg = '🎴 *بازی دبرنا بجک* 🎴' + '\n'
+          msg += '💎 بازی و کسب درآمد 💎' + '\n'
+          msg += '🎁 جوایز روزانه و هدایای مناسبتی 🎁' + '\n'
+          msg += '📥 ورود به بازی 📥' + '\n'
           msg += `https://t.me/${Helper.TELEGRAM_BOT}?start=${this.user.telegramId}`
         }
         res = await Telegram.sendMessage(
@@ -247,10 +249,10 @@ export default class BotController {
           null,
           await this.getKeyboard('user_main')
         )
-      } else if (text === '🔑 فراموشی رمز 🔑') {
+      } else if (text === '🔑 بازیابی رمز 🔑') {
         //
         msg =
-          'لطفا دکمه 📱 ارسال شماره تماس 📱 را بزنید. در صورتی که شماره ثبت شده باشد از شما درخواست رمز جدید می شود'
+          'لطفاً روی دکمه 📱ارسال شماره تماس📱 کلیک کنید. اگر شماره شما قبلاً ثبت شده باشد، از شما درخواست رمز جدید خواهد شد'
         await this.updateUserStorage('send-contact')
         res = await Telegram.sendMessage(
           fromId,
@@ -259,7 +261,7 @@ export default class BotController {
           messageId,
           await this.getKeyboard('contact')
         )
-      } else if (text === '📱 ارسال شماره تماس 📱') {
+      } else if (text === '📱ارسال شماره تماس📱') {
         //
         res = await Telegram.sendMessage(
           fromId,
@@ -419,7 +421,7 @@ export default class BotController {
             null,
             await this.getKeyboard('user_main')
           )
-        } else if (text === '📊 آمار 📊') {
+        } else if (text === '📊 گزارشات 📊') {
           const now = DateTime.now()
           const stat = {
             users: await User.query().count('* as total'),
@@ -480,13 +482,13 @@ export default class BotController {
       case 'user_main':
         tmp = {
           keyboard: this.isAdmin
-            ? [[{ text: '📊 آمار 📊' }], [{ text: '📱 بروز رسانی اپلیکیشن 📱' }]]
+            ? [[{ text: '📊 گزارشات 📊' }], [{ text: '📱 بروز رسانی اپلیکیشن 📱' }]]
             : [
                 [{ text: this.user ? '👤حساب کاربری👤' : 'ثبت نام✅' }],
-                !this.user ? [{ text: '🔑 فراموشی رمز 🔑' }] : [],
-                [{ text: '📱 دریافت اپلیکیشن 📱' }],
+                !this.user ? [{ text: '🔑 بازیابی رمز 🔑' }] : [],
+                [{ text: '📥دانلود برنامه📥' }],
                 // [{ text: '💶 کسب درآمد 💶' }],
-                [{ text: '🤖تماس با ما🤖' }],
+                [{ text: '👨‍💻پشتیبانی👨‍💻' }],
               ],
           resize_keyboard: true,
         }
@@ -511,7 +513,7 @@ export default class BotController {
       case 'contact':
         tmp = {
           keyboard: [
-            [{ text: '📱 ارسال شماره تماس 📱', request_contact: true }],
+            [{ text: '📱ارسال شماره تماس📱', request_contact: true }],
             [{ text: 'لغو ❌' }],
           ],
           resize_keyboard: true,
