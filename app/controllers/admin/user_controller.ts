@@ -154,6 +154,7 @@ export default class UserController {
             })
           )
         )
+
         const beforeBalance = data.financial?.balance ?? 0
         if (cmnd == 'withdraw') data.financial.balance -= amount
         else data.financial.balance += amount
