@@ -66,6 +66,7 @@ export default class TransactionController {
             })
           uf.balance -= amount
         }
+
         data.payedAt = now
         await data.save()
         await uf.save()
