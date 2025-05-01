@@ -12,7 +12,7 @@ import Telegram from '#services/telegram_service'
 import Setting from '#models/setting'
 import UserFinancial from '#models/user_financial'
 import AgencyFinancial from '#models/agency_financial'
-import Helper, { toShamsi, __, asPrice } from '#services/helper_service'
+import Helper, { toShamsi, __, asPrice, isPG } from '#services/helper_service'
 import collect from 'collect.js'
 import User from '#models/user'
 export default class TransactionController {
@@ -47,6 +47,8 @@ export default class TransactionController {
     switch (cmnd) {
       case 'settlement':
         const uf = (await UserFinancial.findBy('user_id', data.fromId)) as UserFinancial
+        let beforeBalance = uf?.balance ?? 0
+        let afterBalance = 0
 
         if (data.payedAt)
           return response.badRequest({
@@ -66,11 +68,17 @@ export default class TransactionController {
             })
           uf.balance -= amount
         }
-
         data.payedAt = now
-        await data.save()
         await uf.save()
-        await User.query().where('id', uf.userId).update({ lastTransaction: data.payedAt })
+        afterBalance = uf.balance
+        const info = isPG() ? data.info : (JSON.parse(data.info) ?? {})
+        info.before_balance = beforeBalance
+        info.after_balance = afterBalance
+        data.info = info
+        await data.save()
+        await User.query()
+          .where('id', uf.userId)
+          .update({ lastTransaction: data.payedAt.toFormat('yyyy-MM-dd HH:mm:ss') })
 
         return response.send({
           status: 'success',
