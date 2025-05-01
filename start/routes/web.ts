@@ -37,6 +37,10 @@ export default function () {
       .update('visible', false)
   })
   router.get('test', async () => {
+    return await db.rawQuery(`
+      ALTER TABLE users
+      ADD COLUMN last_transaction DATETIME NULL
+    `)
     return
     await Transaction.query().where('type', 'winwheel').delete()
     await UserFinancial.query().update({ balance: 1000000 })
