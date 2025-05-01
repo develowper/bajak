@@ -414,8 +414,8 @@ export default class TransactionsController {
 
         if (transaction.type === 'charge') {
           const financial = await Helper.FINANCIAL_MODELS[transaction.toType].firstOrNew(
-            { column: transaction.toId },
-            { column: transaction.toId }
+            { [column]: transaction.toId },
+            { [column]: transaction.toId }
           )
           beforeBalance = financial?.balance ?? 0
 
@@ -430,6 +430,11 @@ export default class TransactionsController {
           info: JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
         })
         await transaction.save()
+        if (userType == 'user') {
+          await User.query()
+            .where('id', transaction.toId)
+            .update({ lastTransaction: now.toFormat('yyyy-MM-dd HH:mm:ss') })
+        }
         transaction.user = user
         Telegram.log(null, 'transaction_created', transaction)
       }

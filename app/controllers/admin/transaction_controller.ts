@@ -28,7 +28,7 @@ export default class TransactionController {
     })
   }
 
-  async update({ request, response, auth }: HttpContext) {
+  async update({ request, response, auth, i18n }: HttpContext) {
     const id = request.input('id')
     const cmnd = request.input('cmnd')
     const admin = auth.user as Admin
@@ -57,6 +57,13 @@ export default class TransactionController {
           uf.balance += amount
           uf.lastCharge = now
         } else if (data.type == 'withdraw') {
+          if (uf.balance < amount)
+            return response.badRequest({
+              status: 'danger',
+              message: i18n.t('messages.validate.wallet_now', {
+                item: `${asPrice(uf.balance)} ${i18n.t('messages.currency')}`,
+              }),
+            })
           uf.balance -= amount
         }
         data.payedAt = now
