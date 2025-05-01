@@ -37,6 +37,8 @@ export default function () {
       .update('visible', false)
   })
   router.get('test', async () => {
+    //
+
     return await db.rawQuery(`
       ALTER TABLE users
       ADD COLUMN last_transaction DATETIME NULL
