@@ -41,7 +41,7 @@ export default function () {
 
     return await db.rawQuery(`
       ALTER TABLE users
-      ADD COLUMN last_transaction DATETIME NULL
+      ADD COLUMN last_transaction TIMESTAMP NULL
     `)
     return
     await Transaction.query().where('type', 'winwheel').delete()
