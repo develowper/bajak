@@ -216,7 +216,7 @@ class Helper {
     } as { [key: string]: string },
   }
   public static SUPPORT = {
-    telegram: 'https://t.me/bajak_admin',
+    telegram: 'https://t.me/dbrna_admin',
   }
 
   public static SOCKET_LINK =
@@ -486,8 +486,8 @@ class Helper {
     bank: '',
   }
   public static TELEGRAM_BOT: string = 'dbrna_bot'
-  public static TELEGRAM_LINK: string = 'https://bot.soheil-market.ir/api/bot/telegram/bajak'
-  public static TELEGRAM_CHANNEL: string = 'dabernabajak'
+  public static TELEGRAM_LINK: string = 'https://bot.44-shop.ir/api/bot/telegram/winner'
+  public static TELEGRAM_CHANNEL: string = 'dabernawinner'
 
   public static getFakeHttpCtx(): HttpContext {
     return (

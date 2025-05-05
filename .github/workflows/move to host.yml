@@ -11,12 +11,12 @@ jobs:
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: bajak.sib-market.ir
+          server: 178.239.147.101
           protocol: ftp
           port: 21
           username: soheilm4
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /bajak.sib-market.ir/
+          server-dir: /game/
           dangerous-clean-slate: false
           exclude: |
             **/.git*
