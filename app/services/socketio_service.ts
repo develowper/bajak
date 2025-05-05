@@ -50,7 +50,7 @@ export default class SocketIo {
         origin: '*',
         // allowedHeaders: '*',
         allowedHeaders: ['request-room'],
-        // origin: ['https://pwa.sib-market.ir', 'https://bajak.sib-market.ir'],
+        origin: ['https://pwa.44shop.ir', 'https://game.44shop.ir'],
       },
     })
 

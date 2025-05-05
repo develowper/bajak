@@ -1,5 +1,5 @@
 on: push
-name: bajak app changes
+name: winner app changes
 jobs:
   web-deploy:
     name: Deploy
