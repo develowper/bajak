@@ -1,4 +1,5 @@
 import { defineConfig } from '@adonisjs/cors'
+import env from '#start/env'
 
 /**
  * Configuration options to tweak the CORS policy. The following
@@ -9,7 +10,7 @@ import { defineConfig } from '@adonisjs/cors'
 const corsConfig = defineConfig({
   enabled: true,
   // origin: '*',
-  origin: ['https://pwa.44shop.ir', 'https://game.44shop.ir'],
+  origin: [`https://${env.get('PWA_URL')}`, `https://${env.get('APP_URL')}`],
   // methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
   headers: true,
   exposeHeaders: ['request-room'],

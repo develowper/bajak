@@ -152,7 +152,7 @@ export default class Room extends BaseModel {
         .toArray()
     }
     this.players = JSON.stringify(res)
-
+    this.$dirty.players = true
     return true
   }
   public async setUser(us: any = null, cmnd = 'add') {

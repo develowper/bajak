@@ -15,6 +15,7 @@ import { Agent } from 'node:http'
 import AgencyFinancial from '#models/agency_financial'
 import { DateTime } from 'luxon'
 import Log from '#models/log'
+import db from '@adonisjs/lucid/services/db'
 
 export default class BotController {
   public user: User | Admin | null
@@ -103,7 +104,7 @@ export default class BotController {
 
       // *** text
       if (startsWith(text, '/start')) {
-        msg = `■  کاربر [${username ?? '👤'}](tg://user?id=${fromId}) ربات بجک را استارت زد`
+        msg = `■  کاربر [${username ?? '👤'}](tg://user?id=${fromId}) ربات وینر را استارت زد`
         Telegram.logAdmins(Telegram.markdownV2(msg), this.MODE_MARKDOWN)
 
         const parts = text.split(' ')
@@ -234,7 +235,7 @@ export default class BotController {
         if (!this.user) {
           msg += '🟠جهت دریافت لینک دعوت خود و کسب درآمد، در ربات ثبت نام کنید' + '\n'
         } else {
-          msg = '🎴 *بازی دبرنا بجک* 🎴' + '\n'
+          msg = '🎴 *بازی دبرنا وینر* 🎴' + '\n'
           msg += '💎 بازی و کسب درآمد 💎' + '\n'
           msg += '🎁 جوایز روزانه و هدایای مناسبتی 🎁' + '\n'
           msg += '📥 ورود به بازی 📥' + '\n'
@@ -335,6 +336,7 @@ export default class BotController {
       } else if (text === 'ثبت نام✅') {
         //
         if (this.user) return
+        await db.rawQuery('LOCK TABLES users WRITE')
         this.user = new User()
         this.user.telegramId = fromId
 
@@ -354,6 +356,7 @@ export default class BotController {
         )
         msg = 'نام کاربری را وارد کنید:'
         await this.updateUserStorage('register-username')
+        await db.rawQuery('UNLOCK TABLES')
         res = await Telegram.sendMessage(
           fromId,
           msg,
@@ -548,7 +551,9 @@ export default class BotController {
     if (!this.user) return
 
     this.user.storage = data
-    await this.user?.save()
+    try {
+      await this.user?.save()
+    } catch (er) {}
   }
 
   private async validate(type: any, data: any): Promise<any> {
