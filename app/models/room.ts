@@ -123,7 +123,9 @@ export default class Room extends BaseModel {
   //
   public getUserCardCount() {
     const user = this.auth?.user
-    const result: any = collect(JSON.parse(this.players ?? '[]') ?? []).first((item: any) => {
+    const result: any = collect(
+      typeof this.players === 'string' ? JSON.parse(this.players) : this.players
+    ).first((item: any) => {
       return `${item.user_id}` == `${user?.id}`
     })
     return result?.card_count ?? 0
