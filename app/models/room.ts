@@ -122,9 +122,10 @@ export default class Room extends BaseModel {
   //
   public getUserCardCount() {
     const user = this.auth?.user
-    const result: any = collect(this.players).first(
-      (item: any) => `${item.user_id}` == `${user?.id}`
-    )
+    const result: any = collect(this.players).first((item: any) => {
+      console.log(item.user_id, user?.id)
+      return `${item.user_id}` == `${user?.id}`
+    })
     console.log('getUserCardCount', this.players)
     console.log('getUserCardCount', result?.card_count)
     return result?.card_count ?? 0
