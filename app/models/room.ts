@@ -123,7 +123,8 @@ export default class Room extends BaseModel {
   public getUserCardCount() {
     const user = this.auth?.user
     const result: any = collect(this.players).first((item: any) => item.user_id == user?.id)
-
+    console.log('players', this.players)
+    console.log('res', result)
     return result?.card_count ?? 0
   }
   public setUserCardsCount(count: number, us: User | null = null, ip: any) {
@@ -151,9 +152,8 @@ export default class Room extends BaseModel {
         })
         .toArray()
     }
-    console.log('after cards', res)
 
-    this.players = res
+    this.players = JSON.stringify(res)
     this.$dirty.players = true
     return true
   }
