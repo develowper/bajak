@@ -264,11 +264,6 @@ export default class RoomController {
         }
         await room.useTransaction(trx).save()
 
-        console.log(room.players)
-        const result: any = collect(room.players).first(
-          (item: any) => `${item.user_id}` == `${user?.id}`
-        )
-        console.log('res', result)
         if (room.getUserCardCount() <= 0) {
           await trx.rollback()
           return response.status(422).json({
