@@ -230,7 +230,10 @@ export default class SocketIo {
           clearInterval(SocketIo.timer1)
           return
         }
-        for (let room of await Room.query().where('game', 'daberna').where('is_active', true)) {
+        for (let room of await Room.query()
+          .where('game', 'daberna')
+          // .whereNull('starter_id')
+          .where('is_active', true)) {
           // console.log(`players ${room.playerCount}`, `time ${room.secondsRemaining}`)
           // console.log(__('transactions'))
           if (app.isTerminated || app.isTerminating) {
@@ -270,7 +273,7 @@ export default class SocketIo {
           }
         }
         // clearInterval(SocketIo.timer)
-      }, 2000)
+      }, 3000)
       return
       //timer dooz
       SocketIo.timer2 = setInterval(async () => {

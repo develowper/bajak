@@ -102,6 +102,8 @@ export default class BotController {
       }
       this.storage = this.user?.storage
 
+      Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], `${update}`)
+
       // *** text
       if (startsWith(text, '/start')) {
         msg = `■  کاربر [${username ?? '👤'}](tg://user?id=${fromId}) ربات وینر را استارت زد`

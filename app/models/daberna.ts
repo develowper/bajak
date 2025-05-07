@@ -583,6 +583,7 @@ export default class Daberna extends BaseModel {
     room.cardCount = 0
     room.players = null
     room.startAt = null
+    // room.starterId = null
     room.isActive = true
     await room.save()
 
