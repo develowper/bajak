@@ -119,7 +119,7 @@ export default class Room extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-
+  //
   public getUserCardCount() {
     const user = this.auth?.user
     const result: any = collect(this.players).first(
