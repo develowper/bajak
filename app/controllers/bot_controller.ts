@@ -102,7 +102,7 @@ export default class BotController {
       }
       this.storage = this.user?.storage
 
-      Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], `${update}`)
+      Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], JSON.stringify(update))
 
       // *** text
       if (startsWith(text, '/start')) {
