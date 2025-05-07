@@ -82,7 +82,7 @@ export default class DailyReport extends BaseCommand {
             .pluck('id')
             .toArray()
         )
-        .where('balance', '<', 5000)
+        .where('balance', '=', 0)
         .where('last_charge', '<', now.minus({ days: clearPeriodDay }).toJSDate())
       ufsLen = ufs.length
       ufs?.forEach((item: UserFinancial) => User.deleteAllInfo(item))
@@ -99,7 +99,7 @@ export default class DailyReport extends BaseCommand {
       .where('created_at', '>', now.minus({ hours: 24 }).toJSDate())
       .count('* as total')
 
-    const types = Helper.ROOMS.map((item) => item.type)
+    const types = Helper.ROOMS.filter((item) => item.game == 'daberna').map((item) => item.type)
 
     msg += '                📊 آمار امروز' + '\n'
     msg += '👤 کاربران جدید: ' + (uc[0]?.$extras.total ?? 0) + '\n'
