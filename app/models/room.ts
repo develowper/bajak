@@ -7,6 +7,7 @@ import { getSettings, range } from '#services/helper_service'
 import User from '#models/user'
 import app from '@adonisjs/core/services/app'
 import Daberna from '#models/daberna'
+import { isString } from 'node:util'
 
 // import { HttpContext } from '@adonisjs/http-server/build/standalone'
 // @inject()
@@ -122,7 +123,7 @@ export default class Room extends BaseModel {
   //
   public getUserCardCount() {
     const user = this.auth?.user
-    const result: any = collect(this.players).first((item: any) => {
+    const result: any = collect(JSON.parse(this.players ?? '[]') ?? []).first((item: any) => {
       console.log(item, user?.id)
       return `${item.user_id}` == `${user?.id}`
     })
