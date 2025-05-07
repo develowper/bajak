@@ -151,7 +151,9 @@ export default class Room extends BaseModel {
         })
         .toArray()
     }
-    this.players = JSON.stringify(res)
+    console.log('after cards', res)
+
+    this.players = res
     this.$dirty.players = true
     return true
   }

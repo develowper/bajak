@@ -212,7 +212,6 @@ export default class RoomController {
       }
 
       const userBeforeCardCounts = room.getUserCardCount()
-      console.log('before cards', userBeforeCardCounts)
       if (userBeforeCardCounts + cardCount > room.maxUserCardsCount) {
         await trx.rollback()
         return response.status(400).json({
@@ -265,7 +264,6 @@ export default class RoomController {
         }
         await room.useTransaction(trx).save()
 
-        console.log('after cards', room.getUserCardCount())
         if (room.getUserCardCount() <= 0) {
           await trx.rollback()
           return response.status(422).json({
