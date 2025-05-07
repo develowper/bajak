@@ -454,7 +454,7 @@ export default class BotController {
           //   })
           //   .join('\n')
           msg += (await Log.roomsTable(Helper.ROOMS.map((item) => item.type))) + '\n'
-          msg += '🅿🅰🆁🅸🆂' + '\n'
+          msg += '🆆🅸🅽🅽🅴🆁' + '\n'
           await Telegram.sendMessage(fromId, msg, null, null, await this.getKeyboard('user_main'))
         }
       }
