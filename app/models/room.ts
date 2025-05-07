@@ -122,9 +122,9 @@ export default class Room extends BaseModel {
 
   public getUserCardCount() {
     const user = this.auth?.user
-    const result: any = collect(this.players).first((item: any) => item.user_id == user?.id)
-    console.log('players', this.players)
-    console.log('res', result)
+    const result: any = collect(this.players).first(
+      (item: any) => `${item.user_id}` == `${user?.id}`
+    )
     return result?.card_count ?? 0
   }
   public setUserCardsCount(count: number, us: User | null = null, ip: any) {
@@ -132,7 +132,7 @@ export default class Room extends BaseModel {
     if (!user) return false
     let res: any[] = []
     const parsed: any = this.players ?? []
-    const beforeExists = collect(parsed).first((item: any) => item.user_id == user.id)
+    const beforeExists = collect(parsed).first((item: any) => `${item.user_id}` == `${user?.id}`)
 
     if (!beforeExists) {
       parsed.unshift({

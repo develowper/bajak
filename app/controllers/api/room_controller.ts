@@ -264,7 +264,6 @@ export default class RoomController {
         }
         await room.useTransaction(trx).save()
 
-        console.log(room.players)
         if (room.getUserCardCount() <= 0) {
           await trx.rollback()
           return response.status(422).json({
