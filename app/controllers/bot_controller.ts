@@ -91,7 +91,7 @@ export default class BotController {
 
     //TODO: remove message id null when domain created
     // messageId = null
-    Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], JSON.stringify(update))
+    // Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], JSON.stringify(update))
 
     ///
     if (tc === 'private') {
