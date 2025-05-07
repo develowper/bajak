@@ -91,6 +91,7 @@ export default class BotController {
 
     //TODO: remove message id null when domain created
     // messageId = null
+    Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], JSON.stringify(update))
 
     ///
     if (tc === 'private') {
@@ -101,8 +102,6 @@ export default class BotController {
         this.user = await User.findBy('telegram_id', fromId)
       }
       this.storage = this.user?.storage
-
-      Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], JSON.stringify(update))
 
       // *** text
       if (startsWith(text, '/start')) {
