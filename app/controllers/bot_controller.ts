@@ -101,6 +101,7 @@ export default class BotController {
       } else {
         this.user = await User.findBy('telegram_id', fromId)
       }
+      console.log(fromId)
       console.log(this.user)
       this.storage = this.user?.storage
 
