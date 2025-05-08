@@ -101,6 +101,7 @@ export default class BotController {
       } else {
         this.user = await User.findBy('telegram_id', fromId)
       }
+      console.log(this.user)
       this.storage = this.user?.storage
 
       // *** text
@@ -388,10 +389,9 @@ export default class BotController {
         )
       } else if (text === '👤حساب کاربری👤') {
         //
-        console.log(this.user)
+
         if (!this.user) return
         const financial = await UserFinancial.findBy('user_id', this.user.id)
-        console.log(financial)
         msg = '*نام کاربری*: ' + (this.user.username ?? '➖') + '\n'
         msg += '*نام*: ' + (this.user.fullName ?? '➖') + '\n'
         msg += '*شماره تماس*: ' + (this.user.phone ?? '➖') + '\n'
