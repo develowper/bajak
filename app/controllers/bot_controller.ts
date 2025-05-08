@@ -388,8 +388,10 @@ export default class BotController {
         )
       } else if (text === '👤حساب کاربری👤') {
         //
+        console.log(this.user)
         if (!this.user) return
         const financial = await UserFinancial.findBy('user_id', this.user.id)
+        console.log(financial)
         msg = '*نام کاربری*: ' + (this.user.username ?? '➖') + '\n'
         msg += '*نام*: ' + (this.user.fullName ?? '➖') + '\n'
         msg += '*شماره تماس*: ' + (this.user.phone ?? '➖') + '\n'
