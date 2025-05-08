@@ -339,17 +339,19 @@ export default class BotController {
         if (this.user) return
         await db.transaction(async (trx) => {
           // await db.rawQuery(isPG() ? 'LOCK TABLE users IN EXCLUSIVE MODE' : 'LOCK TABLES users WRITE')
-          this.user = new User()
-          this.user.useTransaction(trx)
-
-          this.user.telegramId = fromId
-
-          this.user.username = `U${DateTime.now().toMillis()}` /* ?? username ?? firstName*/
-          this.user.password = await hash.make(username ?? firstName)
-          this.user.agencyId = 1
-          this.user.agencyLevel = 0
-          this.user.refId = await User.makeRefCode()
-
+          this.user = await User.create(
+            {
+              telegramId: fromId,
+              username: `U${DateTime.now().toMillis()}` /* ?? username ?? firstName*/,
+              password: await hash.make(username ?? firstName),
+              agencyId: 1,
+              agencyLevel: 0,
+              refId: await User.makeRefCode(),
+            },
+            { client: trx }
+          )
+          if (this.user?.id)
+            await UserFinancial.create({ balance: 0, userId: this.user.id }, { client: trx })
           this.user.related('financial').create({ balance: 0 })
           res = await Telegram.sendMessage(
             fromId,
