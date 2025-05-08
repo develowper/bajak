@@ -21,10 +21,10 @@ export default class DailyReport extends BaseCommand {
   static reportTime = DateTime.fromObject({ hour: 2, minute: 0 }, { zone: 'Asia/Tehran' })
   async run() {
     const now = DateTime.now().setZone('Asia/Tehran')
-    if (now.hour !== DailyReport.reportTime.hour || now.minute !== DailyReport.reportTime.minute) {
-      process.exit()
-      return
-    }
+    // if (now.hour !== DailyReport.reportTime.hour || now.minute !== DailyReport.reportTime.minute) {
+    //   process.exit()
+    //   return
+    // }
 
     const clearPeriodDay = (await getSettings('clear_period_day')) ?? 0
 
