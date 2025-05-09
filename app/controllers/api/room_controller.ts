@@ -122,7 +122,7 @@ export default class RoomController {
   //     )
   //   }
   //   try {
-  //     if (room.setUserCardsCount(userBeforeCardCounts + cardCount, user, request.ip())) {
+  //     if (await room.setUserCardsCount(userBeforeCardCounts + cardCount, user, request.ip())) {
   //       if (userBeforeCardCounts == 0) {
   //         room.playerCount++
   //         user.playCount++
@@ -251,7 +251,7 @@ export default class RoomController {
           }),
         })
       }
-      if (room.setUserCardsCount(userBeforeCardCounts + cardCount, user, ip)) {
+      if (await room.setUserCardsCount(userBeforeCardCounts + cardCount, user, ip)) {
         if (userBeforeCardCounts === 0) {
           room.playerCount++
           user.playCount = Number(user.playCount) + 1

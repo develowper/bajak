@@ -176,7 +176,7 @@ export default class Room extends BaseModel {
     return game
   }
 
-  public setUserCardsCount(count: number, us: User | null = null, ip: any) {
+  public async setUserCardsCount(count: number, us: User | null = null, ip: any) {
     const user = us ?? this.auth?.user
     if (!user) return false
     let res: any[] = []
@@ -273,7 +273,7 @@ export default class Room extends BaseModel {
     if (room.maxCardsCount - room.cardCount <= 0) return
     if (room.maxCardsCount - room.cardCount <= 3)
       cardCount = userCardCount ?? room.maxCardsCount - room.cardCount
-    if (room.setUserCardsCount(cardCount, botUser, null)) {
+    if (await room.setUserCardsCount(cardCount, botUser, null)) {
       room.playerCount++
       botUser.playCount++
       room.cardCount += cardCount
