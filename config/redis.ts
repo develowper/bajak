@@ -20,6 +20,7 @@ const redisConfig = defineConfig({
       // host: env.get('REDIS_HOST'),
       // port: env.get('REDIS_PORT'),
       // password: env.get('REDIS_PASSWORD', ''),
+
       path: env.get('REDIS_SOCKET_PATH'),
       db: 0,
       keyPrefix: '',
