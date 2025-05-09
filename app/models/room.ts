@@ -8,6 +8,7 @@ import User from '#models/user'
 import app from '@adonisjs/core/services/app'
 import Daberna from '#models/daberna'
 import { isString } from 'node:util'
+import redis from '@adonisjs/redis/services/main'
 
 // import { HttpContext } from '@adonisjs/http-server/build/standalone'
 // @inject()
@@ -18,6 +19,11 @@ export default class Room extends BaseModel {
     super()
     this.auth = HttpContext.get()?.auth
   }
+  @computed()
+  public get lockKey() {
+    return `${this.type}:lock`
+  }
+
   @column({ isPrimary: true })
   declare id: number
 
@@ -130,10 +136,63 @@ export default class Room extends BaseModel {
     })
     return result?.card_count ?? 0
   }
+  public async redisResetRoom() {
+    const roomKey = this.type
+    await redis.set(this.lockKey, '1', 'EX', 1)
+    await redis.del(roomKey)
+  }
+  public async redisAddPlayer(userId, playerData) {
+    const roomKey = this.type
+    const luaScript = `
+    if redis.call('EXISTS', KEYS[2]) == 1 then
+      return "LOCKED"
+    end
+    local currentCount = redis.call('HLEN', KEYS[1])
+    if currentCount < tonumber(ARGV[3]) then
+      redis.call('HSET', KEYS[1], ARGV[1], ARGV[2])
+      return "ADDED"
+    else
+      return "FULL"
+    end
+  `
+    const result = await redis.eval(
+      luaScript,
+      2,
+      roomKey,
+      this.lockKey,
+      userId,
+      playerData,
+      `${this.maxCardsCount}`
+    )
+    if (result != 'ADDED') console.log(result, this.type, userId, await redis.hlen(roomKey))
+    // return true
+    return result === 'ADDED'
+  }
+  public async createGame() {
+    await redis.set(this.lockKey, '1')
+    const game = await Daberna.makeGame(this)
+    await redis.del(this.type)
+    await redis.del(this.lockKey)
+    return game
+  }
+
   public setUserCardsCount(count: number, us: User | null = null, ip: any) {
     const user = us ?? this.auth?.user
     if (!user) return false
     let res: any[] = []
+    if (
+      !(await this.redisAddPlayer(
+        user.id,
+        JSON.stringify({
+          user_id: user.id,
+          username: user.username,
+          user_role: user.role,
+          user_ip: ip,
+          card_count: count,
+        })
+      ))
+    )
+      return false
     const parsed: any = this.players ?? []
     const beforeExists = collect(parsed).first((item: any) => `${item.user_id}` == `${user?.id}`)
 

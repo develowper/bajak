@@ -265,7 +265,7 @@ export default class SocketIo {
               (startAt?.plus({ seconds: room.maxSeconds })?.diff(DateTime.now(), 'seconds')
                 .seconds ?? 0) < 0)
           ) {
-            const game = await Daberna.makeGame(room)
+            const game = await room.createGame()
             console.log('emit to ', `room-${room.type}`)
             // SocketIo.wsIo?.to(`room-${room.type}`).emit('game-start', game)
             await this.emitToRoom(`room-${room.type}`, 'game-start', game)
