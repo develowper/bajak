@@ -213,7 +213,7 @@ export default class Room extends BaseModel {
                 CASE
                   WHEN NOT EXISTS (
                     SELECT 1
-                    FROM jsonb_array_elements(r.players, '[]'::jsonb) AS player
+                    FROM jsonb_array_elements(COALESCE(r.players, '[]'::jsonb)) AS player
                     WHERE (player ->> 'user_id')::int = ?
                   )
                     THEN COALESCE(r.players, '[]'::jsonb) || jsonb_build_object(
