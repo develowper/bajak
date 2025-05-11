@@ -244,6 +244,7 @@ export default class Room extends BaseModel {
         ]
       )
       console.log(res)
+      trx.commit()
       return true
     } catch (error) {
       console.error(error)
