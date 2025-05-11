@@ -254,10 +254,10 @@ export default class Room extends BaseModel {
     }
   }
 
-  public async pgCreateGame(roomId: number): Promise<'reset' | 'locked'> {
+  public async pgCreateGame(): Promise<any> {
     return await db.transaction(async (trx) => {
       // Try to lock the room row, skip if locked
-      const { rows } = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE', [roomId])
+      const { rows } = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE', [this.id])
 
       if (!(rows?.length ?? null)) {
         return null // Another process is modifying this room (e.g., player being added)
@@ -268,6 +268,8 @@ export default class Room extends BaseModel {
     })
   }
   public async createGame() {
+    return await this.pgCreateGame()
+
     // await redis.set(this.lockKey, '1')
     const game = await Daberna.makeGame(this)
     // await redis.del(this.type)
