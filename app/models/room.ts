@@ -259,10 +259,10 @@ export default class Room extends BaseModel {
     })
   }
   public async createGame() {
-    await redis.set(this.lockKey, '1')
+    // await redis.set(this.lockKey, '1')
     const game = await Daberna.makeGame(this)
-    await redis.del(this.type)
-    await redis.del(this.lockKey)
+    // await redis.del(this.type)
+    // await redis.del(this.lockKey)
     return game
   }
 
