@@ -191,7 +191,7 @@ export default class Room extends BaseModel {
         return false
       }
 
-      await trx.rawQuery(
+      const res = await trx.rawQuery(
         `
           WITH updated AS (
             SELECT id,
@@ -240,7 +240,7 @@ export default class Room extends BaseModel {
           userIp,
         ]
       )
-
+      console.log(res)
       return true
     } catch (error) {
       console.error(error)
