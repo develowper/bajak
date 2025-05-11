@@ -184,6 +184,7 @@ export default class Room extends BaseModel {
         this.id,
       ])
       const room = result.rows?.[0]
+      console.log(room, this.id)
       if (!room) {
         return false // Room is currently locked (resetting or another addPlayer)
       }
