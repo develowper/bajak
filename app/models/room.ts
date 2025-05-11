@@ -194,19 +194,19 @@ export default class Room extends BaseModel {
       const res = await trx.rawQuery(
         `
           WITH updated AS (
-            SELECT id,
+            SELECT r.id,
                    jsonb_agg(
                      CASE
-                       WHEN (player ->> 'user_id')::int = ? THEN
-                     jsonb_set(player, '{card_count}', to_jsonb(?::int), false)
+                       WHEN (player ->> 'user_id')::int = $1 THEN
+                     jsonb_set(player, '{card_count}', to_jsonb($2::int), false)
                    ELSE
                      player
                  END
                    ) AS new_players
             FROM rooms,
                  jsonb_array_elements(COALESCE(r.players, '[]'::jsonb)) AS player
-            WHERE id = ?
-            GROUP BY id
+            WHERE r.id = $3
+            GROUP BY r.id
           )
           UPDATE rooms r
           SET players =
