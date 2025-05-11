@@ -130,7 +130,7 @@ export default class Daberna extends BaseModel {
     if (!app.isReady) return
 
     room.isActive = false
-    await room.save()
+    await room.useTransaction(trx).save()
 
     const players = room.players
     if (players?.length < 2) {
@@ -460,7 +460,7 @@ export default class Daberna extends BaseModel {
     // console.log(boards.map((item) => item.card))
     const af = await AgencyFinancial.find(1)
     af.balance = Number(af.balance) + commissionPrice
-    af.useTransaction(trx).save()
+    await af.useTransaction(trx).save()
     if (commissionPrice != 0) {
       // console.log('commissionTransaction', commissionPrice)
       await Transaction.add(
@@ -487,7 +487,8 @@ export default class Daberna extends BaseModel {
       const user = users.where('id', w.user_id).first()
       if (!user) continue
       // console.log('rowwin.transaction', rowWinnerPrize)
-      const financial = user?.financial ?? (await user.related('financial').create({ balance: 0 }))
+      const financial =
+        user?.financial ?? (await user.related('financial').create({ balance: 0 }, { client: trx }))
       const beforeBalance = financial.balance
       financial.balance += rowWinnerPrize
       await financial.useTransaction(trx).save()
@@ -496,7 +497,7 @@ export default class Daberna extends BaseModel {
       user.prize = Number(user.prize) + rowWinnerPrize
       user.todayPrize += rowWinnerPrize
       user.lastWin = DateTime.now()
-      user.useTransaction(trx).save()
+      await user.useTransaction(trx).save()
       title = __(`*_from_*_to_*`, {
         item1: __(`row_win`),
         item2: `${__(`daberna`)}${room.cardPrice} (${game.id})`,
@@ -532,7 +533,7 @@ export default class Daberna extends BaseModel {
       user.score = Number(user.score) + room.winScore
       user.todayPrize += winnerPrize
       user.lastWin = DateTime.now()
-      user?.useTransaction(trx).save()
+      await user?.useTransaction(trx).save()
 
       title = __(`*_from_*_to_*`, {
         item1: __(`win`),
@@ -560,7 +561,7 @@ export default class Daberna extends BaseModel {
       if (refCommissionPrice > 0) {
         const financial = user.financial
         financial.balance += refCommissionPrice
-        financial.useTransaction(trx).save()
+        await financial.useTransaction(trx).save()
         await Transaction.add(
           'ref_commission',
           'daberna',
