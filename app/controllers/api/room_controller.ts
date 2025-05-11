@@ -308,12 +308,13 @@ export default class RoomController {
       }
 
       await trx.rollback()
-      console.log('Unexpected')
-      return response.status(400).json({ message: 'Unexpected error occurred' })
+      return response.status(422).json({
+        message: i18n.t('messages.room_is_full'),
+      })
     } catch (error) {
       console.log(error)
       await trx.rollback()
-      return response.status(400).json({ message: error, error })
+      return response.status(422).json({ message: error, error })
     }
   }
 }
