@@ -180,11 +180,9 @@ export default class Room extends BaseModel {
     // try {
     return await db.transaction(async (trx) => {
       // Try to lock the room row, skip if locked
-      const result = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE SKIP LOCKED', [
-        this.id,
-      ])
+      const result = await trx.rawQuery('SELECT * FROM rooms WHERE id = ?', [this.id])
       const r = result.rows?.[0]
-      console.log(result)
+      console.log(r, this.id)
       if (!r) {
         return false // Room is currently locked (resetting or another addPlayer)
       }
