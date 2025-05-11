@@ -245,7 +245,8 @@ export default class Room extends BaseModel {
           this.id, // room id
         ]
       )
-      console.log(res.rows[0].players)
+      if ((res?.rows?.[0]?.players ?? []).length > 0)
+        this.players = JSON.stringify(res.rows[0].players)
       return true
     } catch (error) {
       console.error(error)
