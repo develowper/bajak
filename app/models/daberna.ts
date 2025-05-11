@@ -599,7 +599,6 @@ export default class Daberna extends BaseModel {
     // room.starterId = null
     room.isActive = true
     await room.useTransaction(trx).save()
-    await trx.commit()
     return game
   }
 
