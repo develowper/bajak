@@ -264,7 +264,7 @@ export default class Room extends BaseModel {
       }
 
       // Safe to reset the room
-      return await Daberna.makeGame(this)
+      return await Daberna.makeGame(this, trx)
     })
   }
   public async createGame() {
