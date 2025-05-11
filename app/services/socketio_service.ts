@@ -26,6 +26,7 @@ import { DateTime } from 'luxon'
 import Dooz from '#models/dooz'
 import db from '@adonisjs/lucid/services/db'
 import Blackjack from '#models/blackjack'
+import Admin from '#models/admin'
 declare module 'socket.io' {
   interface Socket {
     context: HttpContext
@@ -77,9 +78,9 @@ export default class SocketIo {
 
       if (roomType) {
         const res =
-          this.user?.role != 'ad'
-            ? await socket.join(`room-${roomType}`)
-            : await socket.join(`ad-room-${roomType}`)
+          this.user instanceof Admin
+            ? await socket.join(`ad-room-${roomType}`)
+            : await socket.join(`room-${roomType}`)
 
         // const room = await Room.findBy('type', roomType)
         // if (room)
@@ -382,7 +383,10 @@ export default class SocketIo {
     if (!session || !session.auth_admin_web) {
       return null
     }
-    const user = (await User.find(session.auth_admin_web)) ?? null
+    console.log('session', session)
+    const user = session.auth_admin_web
+      ? await Admin.find(session.auth_admin_web)
+      : ((await User.find(session.auth_admin_web)) ?? null)
     if (!user) {
       socket.disconnect()
     }

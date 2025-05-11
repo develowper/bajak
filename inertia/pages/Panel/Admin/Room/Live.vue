@@ -295,9 +295,13 @@ export default {
       // socket.on("hello", (arg) => {
       //     console.log(arg);
       // });
-      this.socket.on('room-update', (data) => {
+
+      this.socket.on(`ad-room-${this.data.type}`, (data) => {
         this.refresh(data)
       })
+      // this.socket.on('room-update', (data) => {
+      //   this.refresh(data)
+      // })
       this.socket.on('game-start', (data) => {
         console.log('game-start')
         this.refresh(null)
