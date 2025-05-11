@@ -196,42 +196,52 @@ export default class Room extends BaseModel {
           WITH updated AS (
             SELECT
               r.id,
-              jsonb_agg(
-                CASE
-                  WHEN (player ->> 'user_id')::int = ? THEN
-          jsonb_set(player, '{card_count}', to_jsonb(?::int), false)
-        ELSE
-          player
-      END
-              ) AS new_players
-            FROM rooms r,
-                 jsonb_array_elements(r.players) AS player
+              CASE
+                WHEN EXISTS (
+                  SELECT 1
+                  FROM jsonb_array_elements(r.players) AS p
+                  WHERE (p ->> 'user_id')::int = ?
+                )
+                  THEN (
+                  SELECT jsonb_agg(
+                           CASE
+                             WHEN (p ->> 'user_id')::int = ? THEN
+              jsonb_set(p, '{card_count}', to_jsonb(?::int), false)
+            ELSE
+              p
+          END
+                         )
+                  FROM jsonb_array_elements(r.players) AS p
+                )
+                ELSE (
+                  r.players || jsonb_build_object(
+                    'user_id', ?::int,
+                    'username', ?::text,
+                    'card_count', ?::int,
+                    'user_role', ?::text,
+                    'user_ip', ?::text
+                               )::jsonb
+                  )
+                END AS new_players
+            FROM rooms r
             WHERE r.id = ?
-            GROUP BY r.id
           )
           UPDATE rooms r
-          SET players =
-                CASE
-                  WHEN NOT EXISTS (
-                    SELECT 1
-                    FROM jsonb_array_elements(r.players) AS p
-                    WHERE (p ->> 'user_id')::int = ?
-                  ) THEN
-                    r.players || jsonb_build_object(
-                      'user_id', ?::int,
-                      'username', ?::text,
-                      'card_count', ?::int,
-                      'user_role', ?::text,
-                      'user_ip', ?::text
-                                 )::jsonb
-                  ELSE
-                    u.new_players
-                  END
+          SET players = u.new_players
             FROM updated u
-          WHERE r.id = u.id
-
+          WHERE r.id = u.id;
         `,
-        [userId, cardCount, this.id, userId, userId, username, cardCount, userRole, userIp]
+        [
+          userId, // for EXISTS check
+          userId, // for matching in jsonb_agg
+          cardCount, // for updating existing card_count
+          userId, // for jsonb_build_object
+          username,
+          cardCount,
+          userRole,
+          userIp,
+          this.id, // room id
+        ]
       )
       console.log(res)
       return true
