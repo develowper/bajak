@@ -8,7 +8,7 @@ import {
   withdrawValidator,
 } from '#validators/transaction'
 import Transaction from '#models/transaction'
-import Helper, { __, asPrice, getSettings } from '#services/helper_service'
+import Helper, { __, asPrice, getSettings, isPG } from '#services/helper_service'
 import { DateTime } from 'luxon'
 import User from '#models/user'
 import Admin from '#models/admin'
@@ -197,11 +197,11 @@ export default class TransactionsController {
           })
         }
         let played
-        if (env.get('DB_CONNECTION') == 'pg') {
+        if (isPG()) {
           played = await Daberna.query()
             // .where('boards', 'like', `%id":${fromId},%`) mysql
             // .whereRaw(`boards @> ?::jsonb`, [JSON.stringify([{ user_id: fromId }])])
-            .whereRaw(`boards @> '[{"user_id": "${fromId}"}]'`)
+            .whereRaw(`boards @> '[{"user_id": ${fromId}}]'`)
             .count('* as total')
         } else {
           played = await Daberna.query().where('boards', 'like', `%id":${fromId},%`)
