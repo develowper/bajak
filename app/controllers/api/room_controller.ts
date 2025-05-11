@@ -264,12 +264,12 @@ export default class RoomController {
         }
         await room.useTransaction(trx).save()
 
-        if (room.getUserCardCount() <= 0) {
-          await trx.rollback()
-          return response.status(422).json({
-            message: i18n.t('messages.room_is_full'),
-          })
-        }
+        // if (room.getUserCardCount() <= 0) {
+        //   await trx.rollback()
+        //   return response.status(422).json({
+        //     message: i18n.t('messages.room_is_full'),
+        //   })
+        // }
 
         userFinancials.balance -= totalPrice
         await userFinancials.useTransaction(trx).save()
