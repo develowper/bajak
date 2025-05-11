@@ -9,6 +9,7 @@ import app from '@adonisjs/core/services/app'
 import Daberna from '#models/daberna'
 import { isString } from 'node:util'
 import redis from '@adonisjs/redis/services/main'
+import db from '@adonisjs/lucid/services/db'
 
 // import { HttpContext } from '@adonisjs/http-server/build/standalone'
 // @inject()
@@ -168,6 +169,78 @@ export default class Room extends BaseModel {
     // return true
     return result === 'ADDED'
   }
+  public async pgAddPlayer(
+    userId: any,
+    username: any,
+    cardCount: any,
+    userRole: any,
+    userIp: any
+  ): Promise<boolean> {
+    try {
+      return await db.transaction(async (trx) => {
+        // Try to lock the room row, skip if locked
+        const [room] = await trx.rawQuery(
+          'SELECT * FROM rooms WHERE id = ? FOR UPDATE SKIP LOCKED',
+          [this.id]
+        )
+
+        if (!room?.rows?.length) {
+          return false // Room is currently locked (resetting or another addPlayer)
+        }
+        // Proceed to update the players array (same logic as before)
+        await trx.rawQuery(
+          ` WITH updated AS (
+        SELECT id,
+        jsonb_agg(
+          CASE
+      WHEN (player ->> 'user_id')::int = ? THEN
+        jsonb_set(player, '{card_count}', to_jsonb(?)::jsonb, false)
+      ELSE
+      player
+      END
+    ) AS new_players
+      FROM rooms,
+        jsonb_array_elements(players) AS player
+      WHERE id = ?
+        GROUP BY id
+    )
+      UPDATE rooms r
+      SET players =
+        CASE
+      WHEN NOT EXISTS (
+        SELECT 1
+      FROM jsonb_array_elements(players) AS player
+      WHERE (player ->> 'user_id')::int = ?
+    )
+      THEN players || jsonb_build_object('user_id', ?, 'username', ?, 'card_count', ?)::jsonb
+      ELSE u.new_players
+      END
+      FROM updated u
+      WHERE r.id = u.id`,
+          [userId, cardCount, roomId, userId, userId, username, cardCount]
+        )
+
+        return true
+      })
+    } catch (error) {
+      return false
+    }
+  }
+  public async pgCreateGame(roomId: number): Promise<'reset' | 'locked'> {
+    return await db.transaction(async (trx) => {
+      // Try to lock the room row, skip if locked
+      const [room] = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE', [roomId])
+
+      if (!room?.rows?.length) {
+        return 'locked' // Another process is modifying this room (e.g., player being added)
+      }
+
+      // Safe to reset the room
+      const game = await Daberna.makeGame(this)
+
+      return 'reset'
+    })
+  }
   public async createGame() {
     await redis.set(this.lockKey, '1')
     const game = await Daberna.makeGame(this)
@@ -180,6 +253,8 @@ export default class Room extends BaseModel {
     const user = us ?? this.auth?.user
     if (!user) return false
     let res: any[] = []
+    return await this.pgAddPlayer(user.id, user.username, count, user.role, ip)
+
     if (
       !(await this.redisAddPlayer(
         user.id,
