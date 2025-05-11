@@ -198,13 +198,13 @@ export default class Room extends BaseModel {
                    jsonb_agg(
                      CASE
                        WHEN (player ->> 'user_id')::int = ? THEN
-               jsonb_set(player, '{card_count}', to_jsonb(?::int), false)
-             ELSE
-               player
-           END
+                   jsonb_set(player, '{card_count}', to_jsonb(?::int), false)
+                 ELSE
+                   player
+               END
                    ) AS new_players
             FROM rooms r,
-                 jsonb_array_elements( r.players ) AS player
+                 jsonb_array_elements(r.players) AS player
             WHERE r.id = ?
             GROUP BY r.id
           )
@@ -213,10 +213,10 @@ export default class Room extends BaseModel {
                 CASE
                   WHEN NOT EXISTS (
                     SELECT 1
-                    FROM jsonb_array_elements( r.players ) AS player
+                    FROM jsonb_array_elements(r.players) AS player
                     WHERE (player ->> 'user_id')::int = ?
                   )
-                    THEN r.players  || jsonb_build_object(
+                    THEN r.players || jsonb_build_object(
                     'user_id', ?::int,
                     'username', ?::text,
                     'card_count', ?::int,
