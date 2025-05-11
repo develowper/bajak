@@ -245,6 +245,7 @@ export default class Room extends BaseModel {
       return true
       // })
     } catch (error) {
+      console.log(error)
       return false
     }
   }
