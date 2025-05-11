@@ -229,7 +229,9 @@ export default class Room extends BaseModel {
           UPDATE rooms r
           SET players = u.new_players
             FROM updated u
-          WHERE r.id = u.id;
+          WHERE r.id = u.id
+           RETURNING r.players;
+          ;
         `,
         [
           userId, // for EXISTS check
@@ -243,7 +245,7 @@ export default class Room extends BaseModel {
           this.id, // room id
         ]
       )
-      // console.log(res)
+      console.log(res.rows[0].players)
       return true
     } catch (error) {
       console.error(error)
