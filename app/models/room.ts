@@ -169,6 +169,7 @@ export default class Room extends BaseModel {
     // return true
     return result === 'ADDED'
   }
+
   public async pgAddPlayer(
     userId: any,
     username: any,
@@ -179,11 +180,11 @@ export default class Room extends BaseModel {
     // try {
     return await db.transaction(async (trx) => {
       // Try to lock the room row, skip if locked
-      const [room] = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE SKIP LOCKED', [
+      const result = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE SKIP LOCKED', [
         this.id,
       ])
-
-      if (!room?.rows?.length) {
+      const room = result.rows?.[0]
+      if (!room) {
         return false // Room is currently locked (resetting or another addPlayer)
       }
       // Proceed to update the players array (same logic as before)
