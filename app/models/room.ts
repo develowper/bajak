@@ -180,7 +180,9 @@ export default class Room extends BaseModel {
     trx: TransactionClient
   ): Promise<boolean> {
     try {
-      const result = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE', [this.id])
+      const result = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE SKIP LOCKED', [
+        this.id,
+      ])
 
       const r = result.rows?.[0] ?? null
 
@@ -202,7 +204,7 @@ export default class Room extends BaseModel {
                  END
                    ) AS new_players
             FROM rooms,
-                 jsonb_array_elements(players) AS player
+                 jsonb_array_elements(COALESCE(r.players, '[]'::jsonb)) AS player
             WHERE id = ?
             GROUP BY id
           )
