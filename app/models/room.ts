@@ -216,7 +216,7 @@ export default class Room extends BaseModel {
                     FROM jsonb_array_elements(r.players) AS player
                     WHERE (player ->> 'user_id')::int = ?
                   )
-                    THEN r.players || jsonb_build_object(
+                    THEN COALESCE(r.players, '[]'::jsonb) || jsonb_build_object(
                     'user_id', ?::int,
                     'username', ?::text,
                     'card_count', ?::int,
