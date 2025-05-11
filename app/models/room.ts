@@ -172,41 +172,40 @@ export default class Room extends BaseModel {
   }
 
   public async pgAddPlayer(
-    userId: any,
-    username: any,
-    cardCount: any,
-    userRole: any,
-    userIp: any,
+    userId: number,
+    username: string,
+    cardCount: number,
+    userRole: string,
+    userIp: string,
     trx: TransactionClient
   ): Promise<boolean> {
     try {
-      // return await db.transaction(async (trx) => {
-      // Try to lock the room row, skip if locked
       const result = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE SKIP LOCKED', [
         this.id,
       ])
+
       const r = result.rows?.[0] ?? null
 
       if (!r) {
-        console.log(r, this.id)
-        return false // Room is currently locked (resetting or another addPlayer)
+        console.log('Room is locked ', username)
+        return false
       }
-      // Proceed to update the players array (same logic as before)
+
       await trx.rawQuery(
         `
           WITH updated AS (
             SELECT id,
                    jsonb_agg(
                      CASE
-                       WHEN (player ->> 'user_id')::int = $1 THEN
-                       jsonb_set(player, '{card_count}', to_jsonb($2::int), false)
-                       ELSE
-                       player
-                       END
+                       WHEN (player ->> 'user_id')::int = ? THEN
+                     jsonb_set(player, '{card_count}', to_jsonb(?::int), false)
+                   ELSE
+                     player
+                 END
                    ) AS new_players
             FROM rooms,
                  jsonb_array_elements(players) AS player
-            WHERE id = $3
+            WHERE id = ?
             GROUP BY id
           )
           UPDATE rooms r
@@ -215,39 +214,40 @@ export default class Room extends BaseModel {
                   WHEN NOT EXISTS (
                     SELECT 1
                     FROM jsonb_array_elements(r.players) AS player
-                    WHERE (player ->> 'user_id')::int = $4
+                    WHERE (player ->> 'user_id')::int = ?
                   )
                     THEN r.players || jsonb_build_object(
-                    'user_id', $5::int,
-                    'username', $6::text,
-                    'card_count', $7::int,
-                    'user_role', $8::text,
-                    'user_ip', $9::text
+                    'user_id', ?::int,
+                    'username', ?::text,
+                    'card_count', ?::int,
+                    'user_role', ?::text,
+                    'user_ip', ?::text
                                       )::jsonb
                   ELSE u.new_players
                   END
             FROM updated u
-          WHERE r.id = u.id`,
+          WHERE r.id = u.id
+        `,
         [
           userId,
           cardCount,
           this.id,
-          userId, // for updated subquery
+          userId, // repeated for EXISTS check
           userId,
           username,
           cardCount,
           userRole,
-          userIp, // for jsonb_build_object
+          userIp,
         ]
       )
 
       return true
-      // })
     } catch (error) {
-      console.log(error)
+      console.error(error)
       return false
     }
   }
+
   public async pgCreateGame(roomId: number): Promise<'reset' | 'locked'> {
     return await db.transaction(async (trx) => {
       // Try to lock the room row, skip if locked
