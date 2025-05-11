@@ -214,31 +214,21 @@ export default class Room extends BaseModel {
                   WHEN NOT EXISTS (
                     SELECT 1
                     FROM jsonb_array_elements(r.players) AS player
-                    WHERE (player ->> 'user_id')::int = ?
+                    WHERE (player ->> 'user_id')::int = $1
                   )
                     THEN r.players || jsonb_build_object(
-                    'user_id', ?::int,
-                    'username', ?::text,
-                    'card_count', ?::int,
-                    'user_role', ?::text,
-                    'user_ip', ?::text
+                    'user_id', $1::int,
+                    'username', $4::text,
+                    'card_count', $2::int,
+                    'user_role', $6::text,
+                    'user_ip', $7::text
                                       )::jsonb
                   ELSE u.new_players
                   END
             FROM updated u
           WHERE r.id = u.id
         `,
-        [
-          userId,
-          cardCount,
-          this.id,
-          userId, // repeated for EXISTS check
-          userId,
-          username,
-          cardCount,
-          userRole,
-          userIp,
-        ]
+        [userId, cardCount, this.id, username, cardCount, userRole, userIp]
       )
       console.log(res)
       return true
