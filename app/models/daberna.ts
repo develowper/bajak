@@ -581,7 +581,7 @@ export default class Daberna extends BaseModel {
     //***end **add log
     room.playerCount = 0
     room.cardCount = 0
-    room.players = null
+    room.players = []
     room.startAt = null
     // room.starterId = null
     room.isActive = true

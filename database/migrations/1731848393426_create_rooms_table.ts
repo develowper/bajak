@@ -21,7 +21,7 @@ export default class extends BaseSchema {
       table.integer('max_user_cards_count').unsigned()
       table.integer('win_score').unsigned()
       if (isPG()) {
-        table.jsonb('players')
+        table.jsonb('players').defaultTo(`'[]'::jsonb`)
       } else {
         table.json('players') // or table.text('players') for SQLite
       }
