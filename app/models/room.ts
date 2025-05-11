@@ -187,7 +187,7 @@ export default class Room extends BaseModel {
       const r = result.rows?.[0] ?? null
 
       if (!r) {
-        console.log(`Room is locked `, username)
+        console.log(`Room ${this.id} is locked `, username)
         return false
       }
 
@@ -382,6 +382,7 @@ export default class Room extends BaseModel {
       if (room.maxCardsCount - room.cardCount <= 0) return
       if (room.maxCardsCount - room.cardCount <= 3)
         cardCount = userCardCount ?? room.maxCardsCount - room.cardCount
+
       if (await room.setUserCardsCount(cardCount, botUser, null, trx)) {
         room.playerCount++
         botUser.playCount++
