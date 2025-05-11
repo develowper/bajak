@@ -197,15 +197,15 @@ export default class Room extends BaseModel {
             SELECT r.id,
                    jsonb_agg(
                      CASE
-                       WHEN (player ->> 'user_id')::int = $1 THEN
-                     jsonb_set(player, '{card_count}', to_jsonb($2::int), false)
-                   ELSE
-                     player
-                 END
+                       WHEN (player ->> 'user_id')::int = ? THEN
+               jsonb_set(player, '{card_count}', to_jsonb(?::int), false)
+             ELSE
+               player
+           END
                    ) AS new_players
-            FROM rooms,
+            FROM rooms r,
                  jsonb_array_elements(COALESCE(r.players, '[]'::jsonb)) AS player
-            WHERE r.id = $3
+            WHERE r.id = ?
             GROUP BY r.id
           )
           UPDATE rooms r
@@ -214,21 +214,21 @@ export default class Room extends BaseModel {
                   WHEN NOT EXISTS (
                     SELECT 1
                     FROM jsonb_array_elements(r.players) AS player
-                    WHERE (player ->> 'user_id')::int = $1
+                    WHERE (player ->> 'user_id')::int = ?
                   )
                     THEN r.players || jsonb_build_object(
-                    'user_id', $1::int,
-                    'username', $4::text,
-                    'card_count', $2::int,
-                    'user_role', $6::text,
-                    'user_ip', $7::text
+                    'user_id', ?::int,
+                    'username', ?::text,
+                    'card_count', ?::int,
+                    'user_role', ?::text,
+                    'user_ip', ?::text
                                       )::jsonb
                   ELSE u.new_players
                   END
             FROM updated u
           WHERE r.id = u.id
         `,
-        [userId, cardCount, this.id, username, cardCount, userRole, userIp]
+        [userId, cardCount, this.id, userId, userId, username, cardCount, userRole, userIp]
       )
       console.log(res)
       return true
