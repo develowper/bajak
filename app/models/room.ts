@@ -183,9 +183,9 @@ export default class Room extends BaseModel {
       const result = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE SKIP LOCKED', [
         this.id,
       ])
-      const room = result.rows?.[0]
-      console.log(room, this.id)
-      if (!room) {
+      const r = result.rows?.[0]
+      console.log(r, this.id)
+      if (!r) {
         return false // Room is currently locked (resetting or another addPlayer)
       }
       // Proceed to update the players array (same logic as before)
