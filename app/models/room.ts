@@ -194,41 +194,40 @@ export default class Room extends BaseModel {
       // Proceed to update the players array (same logic as before)
       await trx.rawQuery(
         `
-            WITH updated AS (
-              SELECT id,
-                     jsonb_agg(
-                       CASE
-                         WHEN (player ->> 'user_id')::int = ? THEN
-                         jsonb_set(player, '{card_count}', to_jsonb(?)::jsonb, false)
+          WITH updated AS (
+            SELECT id,
+                   jsonb_agg(
+                     CASE
+                       WHEN (player ->> 'user_id')::int = $1 THEN
+                       jsonb_set(player, '{card_count}', to_jsonb($2::int), false)
                        ELSE
-                         player
-                     END
-                     ) AS new_players
-              FROM rooms,
-                   jsonb_array_elements(players) AS player
-              WHERE id = ?
-              GROUP BY id
-            )
-            UPDATE rooms r
-            SET players =
-                  CASE
-                    WHEN NOT EXISTS (
-                      SELECT 1
-                      FROM jsonb_array_elements(r.players) AS player
-                      WHERE (player ->> 'user_id')::int = ?
-                    )
-                      THEN r.players || jsonb_build_object(
-                      'user_id', ?,
-                      'username', ?,
-                      'card_count', ?,
-                      'user_role', ?,
-                      'user_ip', ?
-                                        )::jsonb
-                    ELSE u.new_players
-                    END
-              FROM updated u
-            WHERE r.id = u.id
-          `,
+                       player
+                       END
+                   ) AS new_players
+            FROM rooms,
+                 jsonb_array_elements(players) AS player
+            WHERE id = $3
+            GROUP BY id
+          )
+          UPDATE rooms r
+          SET players =
+                CASE
+                  WHEN NOT EXISTS (
+                    SELECT 1
+                    FROM jsonb_array_elements(r.players) AS player
+                    WHERE (player ->> 'user_id')::int = $4
+                  )
+                    THEN r.players || jsonb_build_object(
+                    'user_id', $5::int,
+                    'username', $6::text,
+                    'card_count', $7::int,
+                    'user_role', $8::text,
+                    'user_ip', $9::text
+                                      )::jsonb
+                  ELSE u.new_players
+                  END
+            FROM updated u
+          WHERE r.id = u.id`,
         [
           userId,
           cardCount,

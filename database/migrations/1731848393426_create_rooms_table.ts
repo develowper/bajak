@@ -1,5 +1,5 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
-import Helper, { createRooms, pluck } from '../../app/services/helper_service.js'
+import Helper, { createRooms, isPG, pluck } from '../../app/services/helper_service.js'
 
 export default class extends BaseSchema {
   protected tableName = 'rooms'
@@ -20,7 +20,11 @@ export default class extends BaseSchema {
       table.integer('max_cards_count').unsigned()
       table.integer('max_user_cards_count').unsigned()
       table.integer('win_score').unsigned()
-      table.json('players')
+      if (isPG()) {
+        table.jsonb('players')
+      } else {
+        table.json('players') // or table.text('players') for SQLite
+      }
       table.boolean('is_active').defaultTo(true)
       table.timestamp('start_at').nullable()
       table.mediumint('max_seconds').unsigned()
