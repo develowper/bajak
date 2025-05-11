@@ -383,7 +383,7 @@ export default class SocketIo {
     if (!session || !session.auth_admin_web) {
       return null
     }
-    console.log('session', session)
+    // console.log('session', session)
     const user = session.auth_admin_web
       ? await Admin.find(session.auth_admin_web)
       : ((await User.find(session.auth_admin_web)) ?? null)
