@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
-import Helper, { __, asPrice, range, shuffle } from '#services/helper_service'
+import Helper, { __, asPrice, isPG, range, shuffle } from '#services/helper_service'
 import Room from '#models/room'
 import AgencyFinancial from '#models/agency_financial'
 import Transaction from '#models/transaction'
@@ -581,7 +581,7 @@ export default class Daberna extends BaseModel {
     //***end **add log
     room.playerCount = 0
     room.cardCount = 0
-    room.players = []
+    room.players = isPG() ? `'[]'::jsonb` : null
     room.startAt = null
     // room.starterId = null
     room.isActive = true
