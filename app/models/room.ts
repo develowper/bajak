@@ -185,7 +185,7 @@ export default class Room extends BaseModel {
       ])
 
       const r = result.rows?.[0] ?? null
-      console.log('rows', result.rows)
+
       if (!r) {
         console.log(`Room is locked `, username)
         return false
@@ -194,15 +194,16 @@ export default class Room extends BaseModel {
       const res = await trx.rawQuery(
         `
           WITH updated AS (
-            SELECT r.id,
-                   jsonb_agg(
-                     CASE
-                       WHEN (player ->> 'user_id')::int = ? THEN
-                   jsonb_set(player, '{card_count}', to_jsonb(?::int), false)
-                 ELSE
-                   player
-               END
-                   ) AS new_players
+            SELECT
+              r.id,
+              jsonb_agg(
+                CASE
+                  WHEN (player ->> 'user_id')::int = ? THEN
+          jsonb_set(player, '{card_count}', to_jsonb(?::int), false)
+        ELSE
+          player
+      END
+              ) AS new_players
             FROM rooms r,
                  jsonb_array_elements(r.players) AS player
             WHERE r.id = ?
@@ -213,20 +214,22 @@ export default class Room extends BaseModel {
                 CASE
                   WHEN NOT EXISTS (
                     SELECT 1
-                    FROM jsonb_array_elements(r.players) AS player
-                    WHERE (player ->> 'user_id')::int = ?
-                  )
-                    THEN r.players || jsonb_build_object(
-                    'user_id', ?::int,
-                    'username', ?::text,
-                    'card_count', ?::int,
-                    'user_role', ?::text,
-                    'user_ip', ?::text
-                                      )::jsonb
-                  ELSE u.new_players
+                    FROM jsonb_array_elements(r.players) AS p
+                    WHERE (p ->> 'user_id')::int = ?
+                  ) THEN
+                    r.players || jsonb_build_object(
+                      'user_id', ?::int,
+                      'username', ?::text,
+                      'card_count', ?::int,
+                      'user_role', ?::text,
+                      'user_ip', ?::text
+                                 )::jsonb
+                  ELSE
+                    u.new_players
                   END
             FROM updated u
           WHERE r.id = u.id
+
         `,
         [userId, cardCount, this.id, userId, userId, username, cardCount, userRole, userIp]
       )
