@@ -176,20 +176,19 @@ export default class Room extends BaseModel {
     userRole: any,
     userIp: any
   ): Promise<boolean> {
-    try {
-      return await db.transaction(async (trx) => {
-        // Try to lock the room row, skip if locked
-        const [room] = await trx.rawQuery(
-          'SELECT * FROM rooms WHERE id = ? FOR UPDATE SKIP LOCKED',
-          [this.id]
-        )
+    // try {
+    return await db.transaction(async (trx) => {
+      // Try to lock the room row, skip if locked
+      const [room] = await trx.rawQuery('SELECT * FROM rooms WHERE id = ? FOR UPDATE SKIP LOCKED', [
+        this.id,
+      ])
 
-        if (!room?.rows?.length) {
-          return false // Room is currently locked (resetting or another addPlayer)
-        }
-        // Proceed to update the players array (same logic as before)
-        await trx.rawQuery(
-          `
+      if (!room?.rows?.length) {
+        return false // Room is currently locked (resetting or another addPlayer)
+      }
+      // Proceed to update the players array (same logic as before)
+      await trx.rawQuery(
+        `
             WITH updated AS (
               SELECT id,
                      jsonb_agg(
@@ -225,24 +224,24 @@ export default class Room extends BaseModel {
               FROM updated u
             WHERE r.id = u.id
           `,
-          [
-            userId,
-            cardCount,
-            this.id,
-            userId, // for updated subquery
-            userId,
-            username,
-            cardCount,
-            userRole,
-            userIp, // for jsonb_build_object
-          ]
-        )
+        [
+          userId,
+          cardCount,
+          this.id,
+          userId, // for updated subquery
+          userId,
+          username,
+          cardCount,
+          userRole,
+          userIp, // for jsonb_build_object
+        ]
+      )
 
-        return true
-      })
-    } catch (error) {
-      return false
-    }
+      return true
+    })
+    // } catch (error) {
+    //   return false
+    // }
   }
   public async pgCreateGame(roomId: number): Promise<'reset' | 'locked'> {
     return await db.transaction(async (trx) => {
