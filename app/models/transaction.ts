@@ -98,7 +98,7 @@ export default class Transaction extends BaseModel {
         title: t,
         info: info,
       },
-      trx ? { client: trx } : null
+      trx ? { client: trx } : undefined
     )
   }
 
