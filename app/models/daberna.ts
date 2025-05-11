@@ -10,6 +10,7 @@ import app from '@adonisjs/core/services/app'
 import Setting from '#models/setting'
 import Log from '#models/log'
 import Telegram from '#services/telegram_service'
+import { TransactionClient } from '@adonisjs/lucid/build/src/transaction_client/index.js'
 
 export default class Daberna extends BaseModel {
   static table = 'daberna'
@@ -125,7 +126,7 @@ export default class Daberna extends BaseModel {
     return card
   }
 
-  public static async makeGame(room: Room) {
+  public static async makeGame(room: Room, trx: TransactionClient) {
     if (!app.isReady) return
 
     room.isActive = false
@@ -134,7 +135,7 @@ export default class Daberna extends BaseModel {
     const players = room.players
     if (players?.length < 2) {
       room.isActive = true
-      await room.save()
+      await room.useTransaction(trx).save()
       return null
     }
 
@@ -333,7 +334,7 @@ export default class Daberna extends BaseModel {
     // console.log('-----------')
     //***
     const users = collect(
-      await User.query()
+      await User.query({ client: trx })
         .preload('financial')
         .whereIn(
           'id',
@@ -355,7 +356,9 @@ export default class Daberna extends BaseModel {
     const rowWinnerPrize = Math.floor((totalMoney * room.rowWinPercent) / (100 * rowWinners.length))
     const winnerPrize = Math.floor((totalMoney * room.winPercent) / (100 * winners.length))
 
-    const inviterUsers = collect(await User.query().preload('financial').whereIn('id', winnerRefs))
+    const inviterUsers = collect(
+      await User.query({ client: trx }).preload('financial').whereIn('id', winnerRefs)
+    )
     //used commission for refs
     let refCommissionPercent = 0
     let refCommissionPrice = 0
@@ -413,7 +416,7 @@ export default class Daberna extends BaseModel {
     //all not bot
 
     if (realTotalMoney > 0) {
-      await game.save()
+      await game.useTransaction(trx).save()
       room.clearCount++
       const options: any = {
         timeZone: 'Asia/Tehran',
@@ -457,7 +460,7 @@ export default class Daberna extends BaseModel {
     // console.log(boards.map((item) => item.card))
     const af = await AgencyFinancial.find(1)
     af.balance = Number(af.balance) + commissionPrice
-    af.save()
+    af.useTransaction(trx).save()
     if (commissionPrice != 0) {
       // console.log('commissionTransaction', commissionPrice)
       await Transaction.add(
@@ -473,7 +476,10 @@ export default class Daberna extends BaseModel {
           item1: __(`commission`),
           item2: `${__(`daberna`)}${room.cardPrice} (${game.id})`,
           item3: `${__(`agency`)} (${af.agencyId})`,
-        })
+        }),
+
+        null,
+        trx
       )
     }
     let title
@@ -484,13 +490,13 @@ export default class Daberna extends BaseModel {
       const financial = user?.financial ?? (await user.related('financial').create({ balance: 0 }))
       const beforeBalance = financial.balance
       financial.balance += rowWinnerPrize
-      await financial.save()
+      await financial.useTransaction(trx).save()
       const afterBalance = financial.balance
       user.rowWinCount = Number(user.rowWinCount) + 1
       user.prize = Number(user.prize) + rowWinnerPrize
       user.todayPrize += rowWinnerPrize
       user.lastWin = DateTime.now()
-      user.save()
+      user.useTransaction(trx).save()
       title = __(`*_from_*_to_*`, {
         item1: __(`row_win`),
         item2: `${__(`daberna`)}${room.cardPrice} (${game.id})`,
@@ -507,7 +513,8 @@ export default class Daberna extends BaseModel {
           user?.agencyId,
           null,
           title,
-          JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance })
+          JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
+          trx
         )
       }
     }
@@ -517,7 +524,7 @@ export default class Daberna extends BaseModel {
       const financial = user?.financial ?? (await user.related('financial').create({ balance: 0 }))
       const beforeBalance = financial.balance
       financial.balance += winnerPrize
-      await financial.save()
+      await financial.useTransaction(trx).save()
       const afterBalance = financial.balance
       // console.log('win.transaction', winnerPrize)
       user.winCount = Number(user.winCount) + 1
@@ -525,7 +532,7 @@ export default class Daberna extends BaseModel {
       user.score = Number(user.score) + room.winScore
       user.todayPrize += winnerPrize
       user.lastWin = DateTime.now()
-      user?.save()
+      user?.useTransaction(trx).save()
 
       title = __(`*_from_*_to_*`, {
         item1: __(`win`),
@@ -544,7 +551,8 @@ export default class Daberna extends BaseModel {
           user?.agencyId,
           null,
           title,
-          JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance })
+          JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
+          trx
         )
       }
     }
@@ -552,7 +560,7 @@ export default class Daberna extends BaseModel {
       if (refCommissionPrice > 0) {
         const financial = user.financial
         financial.balance += refCommissionPrice
-        financial.save()
+        financial.useTransaction(trx).save()
         await Transaction.add(
           'ref_commission',
           'daberna',
@@ -560,7 +568,11 @@ export default class Daberna extends BaseModel {
           'user',
           user.id,
           refCommissionPrice,
-          user?.agencyId
+          user?.agencyId,
+          null,
+          null,
+          null,
+          trx
         )
       }
     }
@@ -575,7 +587,7 @@ export default class Daberna extends BaseModel {
       DateTime.now().startOf('day').toJSDate()
     )
     if (jokerInGame && jokerId != 0) {
-      await Setting.query().where('key', 'joker_id').update({ value: 0 })
+      await Setting.query({ client: trx }).where('key', 'joker_id').update({ value: 0 })
     }
 
     //***end **add log
@@ -585,7 +597,7 @@ export default class Daberna extends BaseModel {
     room.startAt = null
     // room.starterId = null
     room.isActive = true
-    await room.save()
+    await room.useTransaction(trx).save()
 
     return game
   }

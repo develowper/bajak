@@ -5,6 +5,7 @@ import Env from '#start/env'
 import axios from 'axios'
 import collect from 'collect.js'
 import Setting from '#models/setting'
+import { TransactionClientContract } from '@adonisjs/lucid/types/database'
 export default class Transaction extends BaseModel {
   @computed()
   public get createdAtShamsi() {
@@ -61,7 +62,8 @@ export default class Transaction extends BaseModel {
     agencyId,
     gateway: string | null = null,
     title: string | null = null,
-    info: any = null
+    info: any = null,
+    trx: TransactionClientContract | null = null
   ): Promise<Transaction> {
     // const i18n = i18nManager.locale(env.get('LOCALE', ''))
     //
@@ -81,20 +83,23 @@ export default class Transaction extends BaseModel {
       })
     // console.log(t)
 
-    return await Transaction.create({
-      agencyId: agencyId,
-      type: type,
-      fromType: fromType,
-      fromId: fromId,
-      toType: toType,
-      toId: toId,
-      amount: amount,
-      gateway: gateway ?? 'wallet',
-      payId: `${Date.now()}`,
-      payedAt: DateTime.now(),
-      title: t,
-      info: info,
-    })
+    return await Transaction.create(
+      {
+        agencyId: agencyId,
+        type: type,
+        fromType: fromType,
+        fromId: fromId,
+        toType: toType,
+        toId: toId,
+        amount: amount,
+        gateway: gateway ?? 'wallet',
+        payId: `${Date.now()}`,
+        payedAt: DateTime.now(),
+        title: t,
+        info: info,
+      },
+      trx ? { client: trx } : null
+    )
   }
 
   public static async makePayUrl(
