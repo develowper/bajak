@@ -185,9 +185,9 @@ export default class Room extends BaseModel {
       ])
 
       const r = result.rows?.[0] ?? null
-
+      console.log('rows', result.rows)
       if (!r) {
-        console.log('Room is locked ', username)
+        console.log(`Room is locked `, username)
         return false
       }
 
