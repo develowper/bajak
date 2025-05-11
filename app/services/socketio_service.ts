@@ -266,6 +266,7 @@ export default class SocketIo {
                 .seconds ?? 0) < 0)
           ) {
             const game = await room.createGame()
+            if (!game) continue
             console.log('emit to ', `room-${room.type}`)
             // SocketIo.wsIo?.to(`room-${room.type}`).emit('game-start', game)
             await this.emitToRoom(`room-${room.type}`, 'game-start', game)
