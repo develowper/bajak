@@ -370,7 +370,7 @@ export default class Room extends BaseModel {
 
       const botUser =
         user ??
-        (await User.query()
+        (await User.query({ client: trx })
           .whereNotIn('id', beforeIds)
           .where('is_active', true)
           .where('role', 'bo')
@@ -394,7 +394,7 @@ export default class Room extends BaseModel {
         )
           room.startAt = DateTime.now().plus({ seconds: room.maxSeconds - 1 })
 
-        await room.save()
+        await room.useTransaction(trx).save()
         switch (room.cardPrice) {
           case 5000:
             botUser.card5000Count += cardCount
@@ -414,14 +414,13 @@ export default class Room extends BaseModel {
             break
         }
 
-        await botUser.save()
+        await botUser.useTransaction(trx).save()
         // console.log('*************')
         // console.log(room.type)
         // console.log(room.cardCount)
         // console.log(room.secondsRemaining)
         // console.log(room.players)
-
-        emitter.emit('room-update', {
+        const data = {
           type: room.type,
           cmnd: 'card-added',
           players: room.players,
@@ -433,7 +432,8 @@ export default class Room extends BaseModel {
           user_id: botUser?.id,
           username: botUser?.username,
           user_card_count: cardCount,
-        })
+        }
+        emitter.emit('room-update', data)
 
         // await Daberna.startRooms([room])
       }

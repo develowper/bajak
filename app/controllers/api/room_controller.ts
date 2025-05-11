@@ -293,7 +293,8 @@ export default class RoomController {
         }
         await user.useTransaction(trx).save()
         await trx.commit()
-        emitter.emit('room-update', {
+
+        const data = {
           type: roomType,
           cmnd: 'card-added',
           game_id: room.clearCount,
@@ -303,7 +304,8 @@ export default class RoomController {
           seconds_remaining: room.playerCount > 1 ? room.secondsRemaining : room.maxSeconds,
           player_count: room.playerCount,
           card_count: room.cardCount,
-        })
+        }
+        emitter.emit('room-update', data)
         return response.json({ user_balance: userFinancials.balance })
       }
 
