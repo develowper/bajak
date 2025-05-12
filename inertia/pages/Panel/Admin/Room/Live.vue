@@ -296,7 +296,7 @@ export default {
       //     console.log(arg);
       // });
 
-      this.socket.on(`ad-room-${this.data.type}`, (data) => {
+      this.socket.on(`room-update`, (data) => {
         this.refresh(data)
       })
       // this.socket.on('room-update', (data) => {
