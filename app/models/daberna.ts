@@ -443,13 +443,22 @@ export default class Daberna extends BaseModel {
       logText +=
         `🔶 برنده خطی: ${rowWinners
           .map((i: any) => {
-            return `کارت ${i.card_number}` + '🔹' + `${i.username}` + '🔹' + asPrice(rowWinnerPrize)
+            return (
+              '🧍' +
+              `کارت ${i.card_number}` +
+              '▪️' +
+              `${i.username}` +
+              '▪️' +
+              asPrice(rowWinnerPrize)
+            )
           })
           .join('\n')}` + '\n'
       logText +=
         `🔷 برنده پر: ${winners
           .map((i: any) => {
-            return `کارت ${i.card_number}` + '🔹' + `${i.username}` + '🔹' + asPrice(winnerPrize)
+            return (
+              '🧍‍♂️' + `کارت ${i.card_number}` + '▪️' + `${i.username}` + '▪️' + asPrice(winnerPrize)
+            )
           })
           .join('\n')}` + '\n'
       // Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], logText)
