@@ -38,8 +38,18 @@ export default function () {
   })
   router.get('test', async () => {
     //
-
     return
+    return await Setting.create({
+      key: 'header_message',
+      visible: true,
+      title: __('header_message'),
+      value: JSON.stringify([
+        { active: 0, text: '' },
+        { active: 0, text: '' },
+        { active: 0, text: '' },
+      ]),
+    })
+
     await Transaction.query().where('type', 'winwheel').delete()
     await UserFinancial.query().update({ balance: 1000000 })
     await AgencyFinancial.query().update({ balance: 0 })

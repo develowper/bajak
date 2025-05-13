@@ -706,6 +706,15 @@ class Helper {
           { icon: 'double', text: __('help_double') },
         ]),
       },
+      {
+        key: 'header_message',
+        title: __('header_message'),
+        value: JSON.stringify([
+          { active: 0, text: '' },
+          { active: 0, text: '' },
+          { active: 0, text: '' },
+        ]),
+      },
       // {
       //   key: 'enamad',
       //   value: Helper.ENAMAD,
