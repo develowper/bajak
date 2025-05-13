@@ -26,10 +26,14 @@ export default class SettingController {
         'withdraw_title',
         'telegram_bot',
         'blackjack_help',
+        'header_message',
       ])
     )
     const cards: { active: number; number: string; name: string }[] = JSON.parse(
       settings.first((item) => item.key === 'card_to_card')?.value ?? '[]'
+    )
+    const headerMessages: any[] = JSON.parse(
+      settings.first((item) => item.key === 'header_message')?.value ?? '[]'
     )
 
     const telegramBot = settings.first((item: any) => item && item.key == 'telegram_bot')?.value
@@ -52,6 +56,7 @@ export default class SettingController {
           type: item.game,
         }
       }),
+      header_messages: collect(headerMessages).whereIn('active', ['1', 1, true]),
       ad: Helper.AD,
       game: await Daberna.find(2),
       blackjack_help: blackjackHelp,
