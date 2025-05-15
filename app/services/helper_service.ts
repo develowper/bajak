@@ -707,6 +707,24 @@ class Helper {
         ]),
       },
       {
+        key: 'gateways',
+        title: __('pay_gates'),
+        value: JSON.stringify([
+          {
+            key: 'ZARINPAL',
+            active: 1,
+            title: '1',
+            value: env.get('ZARINPAL_1'),
+          },
+          {
+            key: 'ZARINPAL',
+            active: 1,
+            title: '2',
+            value: env.get('ZARINPAL_2'),
+          },
+        ]),
+      },
+      {
         key: 'header_message',
         title: __('header_message'),
         value: JSON.stringify([
