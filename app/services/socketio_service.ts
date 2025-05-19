@@ -171,18 +171,18 @@ export default class SocketIo {
         })
 
       emitter.on('room-update', (data: any) => {
-        // SocketIo.wsIo.to(`room-${data.type}`).volatile.emit(`room-update`, data)
-        // SocketIo.wsIo.to(`ad-room-${data.type}`).volatile.emit(`room-update`, data)
-        SocketIo.wsIo.to(`room-${data.type}`).emit(`room-update`, data)
-        SocketIo.wsIo.to(`ad-room-${data.type}`).emit(`room-update`, data)
+        SocketIo.wsIo.to(`room-${data.type}`).volatile.emit(`room-update`, data)
+        SocketIo.wsIo.to(`ad-room-${data.type}`).volatile.emit(`room-update`, data)
+        // SocketIo.wsIo.to(`room-${data.type}`).emit(`room-update`, data)
+        // SocketIo.wsIo.to(`ad-room-${data.type}`).emit(`room-update`, data)
         // console.log(`room-update ${data?.type} cmnd: ${data.cmnd} cards:`, data?.cards)
         // logger.info(data)
       })
 
       emitter.on('game-start', (data: any) => {
         console.log('----------inner game start')
-        socket.to(`room-${data.room_type}`).emit(`game-start`, data)
-        // socket.to(`room-${data.room_type}`).volatile.emit(`game-start`, data)
+        // socket.to(`room-${data.room_type}`).emit(`game-start`, data)
+        socket.to(`room-${data.room_type}`).volatile.emit(`game-start`, data)
         // logger.info(socket.id)
       })
     })
