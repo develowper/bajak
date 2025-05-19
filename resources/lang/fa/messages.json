@@ -248,6 +248,8 @@
   "input": "ورودی",
   "output": "خروجی",
   "header_message": "پیام بالای صفحه",
+  "ads": "تبلیغات",
+  "app_new_version_available": "نسخه جدید از برنامه موجود است",
   "row_winners": "برندگان\u200Cخطی",
   "full_winners": "برندگان\u200Cپر",
   "blackjack_help": "راهنمای بلک جک",

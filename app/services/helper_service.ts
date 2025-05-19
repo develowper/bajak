@@ -733,6 +733,28 @@ class Helper {
           { active: 0, text: '' },
         ]),
       },
+      {
+        key: 'ads',
+        title: __('ads'),
+        value: JSON.stringify([
+          {
+            id: 1,
+            clicks: 0,
+            banner_link: null,
+            click_link: null,
+            is_active: 1,
+          },
+        ]),
+      },
+      {
+        key: 'app_version',
+        value: JSON.stringify({
+          version: 1,
+          title: __('app_new_version_available'),
+          link: `https://t.me/${Helper.TELEGRAM_BOT}`,
+        }),
+        title: __('app_version'),
+      },
       // {
       //   key: 'enamad',
       //   value: Helper.ENAMAD,
