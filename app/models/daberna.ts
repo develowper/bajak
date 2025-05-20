@@ -494,11 +494,9 @@ export default class Daberna extends BaseModel {
     }
     let title
     // console.log('rowWinners', rowWinners)
-    console.log('users', users.pluck('id'))
+    // console.log('users', users.pluck('id'))
     for (const w of rowWinners) {
       const user = users.where('id', `${w.user_id}`).first()
-      console.log('userId', w.user_id)
-      console.log('user', user)
       if (!user) continue
 
       // console.log('rowwin.transaction', rowWinnerPrize)
@@ -512,7 +510,7 @@ export default class Daberna extends BaseModel {
       user.prize = Number(user.prize) + rowWinnerPrize
       user.todayPrize += rowWinnerPrize
       user.lastWin = DateTime.now()
-      console.log('user', user.role, `before:${beforeBalance} after:${afterBalance}`)
+      // console.log('user', user.role, `before:${beforeBalance} after:${afterBalance}`)
       await user.useTransaction(trx).save()
       title = __(`*_from_*_to_*`, {
         item1: __(`row_win`),
@@ -533,7 +531,7 @@ export default class Daberna extends BaseModel {
           JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
           trx
         )
-        console.log(t)
+        // console.log(t)
       }
     }
     for (const w of winners) {
