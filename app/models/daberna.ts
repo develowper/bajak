@@ -493,9 +493,10 @@ export default class Daberna extends BaseModel {
     }
     let title
     // console.log('rowWinners', rowWinners)
-    console.log('users', users)
+    console.log('users', users.pluck('id'))
     for (const w of rowWinners) {
       const user = users.where('id', w.user_id).first()
+      console.log('userId', w.user_id)
       console.log('user', user)
       if (!user) continue
 
