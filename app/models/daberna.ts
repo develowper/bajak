@@ -492,6 +492,7 @@ export default class Daberna extends BaseModel {
       )
     }
     let title
+
     // console.log('rowWinners', rowWinners)
     console.log('users', users.pluck('id'))
     for (const w of rowWinners) {
