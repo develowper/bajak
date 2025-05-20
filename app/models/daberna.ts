@@ -478,7 +478,7 @@ export default class Daberna extends BaseModel {
     // console.time(`updateBalances ${room.type} ${c}`) // Start timer
     for (const user of users.where('role', 'us')) {
       const financial = user.financial ?? (await user.related('financial').create({ balance: 0 }))
-      const p: any = collect(players).where('user_id', user.id).first()
+      const p: any = collect(players).where('user_id', Number(user.id)).first()
       // console.log('find', user.id)
       if (!p) continue
       const from = financial.balance
