@@ -3,6 +3,7 @@ import Helper, { asPrice, isPG } from '#services/helper_service'
 import { HttpContext } from '@adonisjs/core/http'
 import Daberna from '#models/daberna'
 import { DateTime } from 'luxon'
+import collect from 'collect.js'
 
 export default class DabernaController {
   async search({ request, response, auth, i18n }: HttpContext) {
@@ -72,7 +73,7 @@ export default class DabernaController {
 
     //user app vitrin
     if (hourLimit) {
-      const grouped = transformed.reduce((acc, item) => {
+      let grouped = transformed.reduce((acc, item) => {
         const { type, card_count, win_prize, row_win_prize } = item
 
         if (!acc[type]) {
@@ -91,7 +92,18 @@ export default class DabernaController {
         return acc
       }, {})
 
+      const allTypes = collect(Helper.ROOMS).where('game', 'daberna').pluck('type')
+
+      for (let t of allTypes)
+        grouped[`${t}`] = grouped[`${t}`] || {
+          type: `${t}`.slice(1),
+          card_count: 0,
+          win_prize: 0,
+          row_win_prize: 0,
+        }
+
       const groupedArray = Object.values(grouped)
+
       const formattedGroupedArray = groupedArray.map((group) => ({
         ...group,
         win_prize: asPrice(group.win_prize),
@@ -101,11 +113,11 @@ export default class DabernaController {
         (total, group) => total + group.win_prize + group.row_win_prize,
         0
       )
-      return {
+      return response.json({
         prize: asPrice(prize),
         rooms: formattedGroupedArray,
         title: i18n.t('messages.last_*_hours_log', { item: hourLimit }),
-      }
+      })
     }
     // console.log(res.getMeta())
     // console.log(transformed)
