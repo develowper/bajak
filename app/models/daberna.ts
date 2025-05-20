@@ -11,6 +11,7 @@ import Setting from '#models/setting'
 import Log from '#models/log'
 import Telegram from '#services/telegram_service'
 import { TransactionClient } from '@adonisjs/lucid/build/src/transaction_client/index.js'
+import db from '@adonisjs/lucid/services/db'
 
 export default class Daberna extends BaseModel {
   static table = 'daberna'
@@ -462,11 +463,45 @@ export default class Daberna extends BaseModel {
             )
           })
           .join('\n')}` + '\n'
+      logText += '🅿️🅰️🆁🅸🆂' + '\n'
       // Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], logText)
       // Telegram.sendMessage(Helper.TELEGRAM_LOGS[1], logText)
 
-      Telegram.logAdmins(logText, null, Helper.TELEGRAM_TOPICS.DABERNA_GAME)
+      // Telegram.logAdmins(logText, null, Helper.TELEGRAM_TOPICS.DABERNA_GAME)
     }
+
+    //now decrease card prices from user for safety
+
+    let l = `gameId:${game.id}\n`
+    const c = users.where('role', 'us').count()
+    const updates = []
+    // console.time(`updateBalances ${room.type} ${c}`) // Start timer
+    for (const user of users.where('role', 'us')) {
+      const financial = user.financial ?? (await user.related('financial').create({ balance: 0 }))
+      const p: any = collect(players).where('user_id', user.id).first()
+      // console.log('find', user.id)
+      if (!p) continue
+      const from = financial.balance
+      const buy = Number.parseInt(`${p.card_count ?? 0}`) * room.cardPrice
+      // financial.balance -= buy
+      const to = financial.balance - buy
+      // await financial.save()
+      updates.push({ user_id: user.id, balance: financial.balance })
+      l += `userId:${user.id}(${user.username}) buy ${buy} [${from}] \n`
+      // await redis.srem('in', user.id)
+    }
+    if (false && updates.length) {
+      await db.rawQuery(`
+      UPDATE user_financials
+      SET balance = CASE user_id
+        ${updates.map((u) => `WHEN ${u.user_id} THEN ${u.balance}`).join('\n')}
+      END
+      WHERE user_id IN (${updates.map((u) => u.user_id).join(',')})
+    `)
+    }
+    if (logText != '')
+      Telegram.logAdmins(`${logText}\n ${l}`, null, null ?? Helper.TELEGRAM_TOPICS.DABERNA_GAME)
+
     // console.log(boards.map((item) => item.card))
     const af = await AgencyFinancial.find(1)
     af.balance = Number(af.balance) + commissionPrice
