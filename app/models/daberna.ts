@@ -166,7 +166,7 @@ export default class Daberna extends BaseModel {
       .filter((s: any) => s !== '')
 
     let jokerInGame: boolean =
-      jokerId && players.filter((item: any) => item.user_id == jokerId).length > 0
+      jokerId && players.filter((item: any) => `${item.user_id}` == `${jokerId}`).length > 0
 
     players.forEach((player) => {
       Array(player.card_count)
@@ -244,13 +244,14 @@ export default class Daberna extends BaseModel {
         const jokerPolicy =
           tmpWinners.length > 0 &&
           jokerInGame &&
-          (tmpWinners.some((item) => item.user_id != jokerId) ||
-            (tmpWinners.length > 1 && tmpWinners.every((item) => item.user_id == jokerId)))
+          (tmpWinners.some((item) => `${item.user_id}` != `${jokerId}`) ||
+            (tmpWinners.length > 1 &&
+              tmpWinners.every((item) => `${item.user_id}` == `${jokerId}`)))
 
         const sameRowAndFullWinnerPolicy =
           Math.random() < 0.5 &&
           tmpWinners.length > 0 &&
-          rowWinners.some((item) => item.user_id === tmpWinners[0].user_id)
+          rowWinners.some((item) => `${item.user_id}` === `${tmpWinners[0].user_id}`)
 
         const blackListPolicy =
           !jokerInGame &&
@@ -345,7 +346,7 @@ export default class Daberna extends BaseModel {
     const winnerRefs = users
       .whereIn(
         'id',
-        winners.map((item) => item.user_id)
+        winners.map((item) => `${item.user_id}`)
       )
       .whereNotNull('inviterId')
       .pluck('inviterId')
@@ -495,7 +496,7 @@ export default class Daberna extends BaseModel {
     // console.log('rowWinners', rowWinners)
     console.log('users', users.pluck('id'))
     for (const w of rowWinners) {
-      const user = users.where('id', w.user_id).first()
+      const user = users.where('id', `${w.user_id}`).first()
       console.log('userId', w.user_id)
       console.log('user', user)
       if (!user) continue
@@ -536,7 +537,7 @@ export default class Daberna extends BaseModel {
       }
     }
     for (const w of winners) {
-      const user = await users.where('id', w.user_id).first()
+      const user = await users.where('id', `${w.user_id}`).first()
       if (!user) continue
       const financial = user?.financial ?? (await user.related('financial').create({ balance: 0 }))
       const beforeBalance = financial.balance
