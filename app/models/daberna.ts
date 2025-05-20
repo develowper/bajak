@@ -491,7 +491,6 @@ export default class Daberna extends BaseModel {
         trx
       )
     }
-
     let title
     // console.log('rowWinners', rowWinners)
     console.log('users', users.pluck('id'))
