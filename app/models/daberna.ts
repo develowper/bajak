@@ -492,9 +492,11 @@ export default class Daberna extends BaseModel {
       )
     }
     let title
-    console.log('rowWinners', rowWinners)
+    // console.log('rowWinners', rowWinners)
+    console.log('users', users)
     for (const w of rowWinners) {
       const user = users.where('id', w.user_id).first()
+      console.log('user', user)
       if (!user) continue
 
       // console.log('rowwin.transaction', rowWinnerPrize)
