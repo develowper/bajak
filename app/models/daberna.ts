@@ -530,83 +530,87 @@ export default class Daberna extends BaseModel {
     let title
     // console.log('rowWinners', rowWinners)
     // console.log('users', users.pluck('id'))
-    for (const w of rowWinners) {
-      const user = users.where('id', `${w.user_id}`).first()
-      if (!user) continue
+    if (false)
+      for (const w of rowWinners) {
+        const user = users.where('id', `${w.user_id}`).first()
+        if (!user) continue
 
-      // console.log('rowwin.transaction', rowWinnerPrize)
-      const financial =
-        user?.financial ?? (await user.related('financial').create({ balance: 0 }, { client: trx }))
-      const beforeBalance = financial.balance
-      financial.balance += rowWinnerPrize
-      await financial.useTransaction(trx).save()
-      const afterBalance = financial.balance
-      user.rowWinCount = Number(user.rowWinCount) + 1
-      user.prize = Number(user.prize) + rowWinnerPrize
-      user.todayPrize += rowWinnerPrize
-      user.lastWin = DateTime.now()
-      // console.log('user', user.role, `before:${beforeBalance} after:${afterBalance}`)
-      await user.useTransaction(trx).save()
-      title = __(`*_from_*_to_*`, {
-        item1: __(`row_win`),
-        item2: `${__(`daberna`)}${room.cardPrice} (${game.id})`,
-        item3: `${__(`user`)} (${user.username})`,
-      })
-      if (user?.role == 'us') {
-        const t = await Transaction.add(
-          'row_win',
-          'daberna',
-          game.id,
-          'user',
-          user?.id,
-          rowWinnerPrize,
-          user?.agencyId,
-          null,
-          title,
-          JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
-          trx
-        )
-        // console.log(t)
+        // console.log('rowwin.transaction', rowWinnerPrize)
+        const financial =
+          user?.financial ??
+          (await user.related('financial').create({ balance: 0 }, { client: trx }))
+        const beforeBalance = financial.balance
+        financial.balance += rowWinnerPrize
+        await financial.useTransaction(trx).save()
+        const afterBalance = financial.balance
+        user.rowWinCount = Number(user.rowWinCount) + 1
+        user.prize = Number(user.prize) + rowWinnerPrize
+        user.todayPrize += rowWinnerPrize
+        user.lastWin = DateTime.now()
+        // console.log('user', user.role, `before:${beforeBalance} after:${afterBalance}`)
+        await user.useTransaction(trx).save()
+        title = __(`*_from_*_to_*`, {
+          item1: __(`row_win`),
+          item2: `${__(`daberna`)}${room.cardPrice} (${game.id})`,
+          item3: `${__(`user`)} (${user.username})`,
+        })
+        if (user?.role == 'us') {
+          const t = await Transaction.add(
+            'row_win',
+            'daberna',
+            game.id,
+            'user',
+            user?.id,
+            rowWinnerPrize,
+            user?.agencyId,
+            null,
+            title,
+            JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
+            trx
+          )
+          // console.log(t)
+        }
       }
-    }
-    for (const w of winners) {
-      const user = await users.where('id', `${w.user_id}`).first()
-      if (!user) continue
-      const financial = user?.financial ?? (await user.related('financial').create({ balance: 0 }))
-      const beforeBalance = financial.balance
-      financial.balance += winnerPrize
-      await financial.useTransaction(trx).save()
-      const afterBalance = financial.balance
-      // console.log('win.transaction', winnerPrize)
-      user.winCount = Number(user.winCount) + 1
-      user.prize = Number(user.prize) + winnerPrize
-      user.score = Number(user.score) + room.winScore
-      user.todayPrize += winnerPrize
-      user.lastWin = DateTime.now()
-      await user?.useTransaction(trx).save()
+    if (false)
+      for (const w of winners) {
+        const user = await users.where('id', `${w.user_id}`).first()
+        if (!user) continue
+        const financial =
+          user?.financial ?? (await user.related('financial').create({ balance: 0 }))
+        const beforeBalance = financial.balance
+        financial.balance += winnerPrize
+        await financial.useTransaction(trx).save()
+        const afterBalance = financial.balance
+        // console.log('win.transaction', winnerPrize)
+        user.winCount = Number(user.winCount) + 1
+        user.prize = Number(user.prize) + winnerPrize
+        user.score = Number(user.score) + room.winScore
+        user.todayPrize += winnerPrize
+        user.lastWin = DateTime.now()
+        await user?.useTransaction(trx).save()
 
-      title = __(`*_from_*_to_*`, {
-        item1: __(`win`),
-        item2: `${__(`daberna`)}${room.cardPrice} (${game.id})`,
-        item3: `${__(`user`)} (${user.username})`,
-      })
+        title = __(`*_from_*_to_*`, {
+          item1: __(`win`),
+          item2: `${__(`daberna`)}${room.cardPrice} (${game.id})`,
+          item3: `${__(`user`)} (${user.username})`,
+        })
 
-      if (user?.role == 'us') {
-        await Transaction.add(
-          'win',
-          'daberna',
-          game.id,
-          'user',
-          user?.id,
-          winnerPrize,
-          user?.agencyId,
-          null,
-          title,
-          JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
-          trx
-        )
+        if (user?.role == 'us') {
+          await Transaction.add(
+            'win',
+            'daberna',
+            game.id,
+            'user',
+            user?.id,
+            winnerPrize,
+            user?.agencyId,
+            null,
+            title,
+            JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
+            trx
+          )
+        }
       }
-    }
     for (const user of inviterUsers) {
       if (refCommissionPrice > 0) {
         const financial = user.financial
