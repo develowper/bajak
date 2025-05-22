@@ -6,7 +6,7 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.bigIncrements('id').notNullable().primary()
+      table.bigIncrements('id')
       table.string('telegram_id', 30).nullable()
       table.string('phone', 30).nullable()
       table.string('full_name', 100).nullable()

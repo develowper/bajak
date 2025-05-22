@@ -39,14 +39,14 @@ export default class RoomController {
     else query = query.where('game', 'daberna').where('is_active', true).orderBy('id', 'asc')
     let data = await query
 
-    // data = data.map((item: Room) => {
-    //   if (item.type == 'd5000') item.playerCount = getRandomBetween(50, 80)
-    //   else if (item.type == 'd10000') item.playerCount = getRandomBetween(20, 40)
-    //   else if (item.type == 'd20000') item.playerCount = getRandomBetween(10, 20)
-    //   else if (item.type == 'd50000') item.playerCount = getRandomBetween(0, 10)
-    //   else if (item.type == 'b1') item.playerCount = getRandomBetween(0, 10)
-    //   return item
-    // })
+    data = data.map((item: Room) => {
+      if (item.type == 'd5000') item.playerCount = getRandomBetween(50, 80)
+      else if (item.type == 'd10000') item.playerCount = getRandomBetween(20, 40)
+      else if (item.type == 'd20000') item.playerCount = getRandomBetween(10, 20)
+      else if (item.type == 'd50000') item.playerCount = getRandomBetween(0, 10)
+      else if (item.type == 'b1') item.playerCount = getRandomBetween(0, 10)
+      return item
+    })
     // console.log(data[0].serialize())
     // return response.json({ data: data.map((item) => item) })
     return response.json({ data: data })
