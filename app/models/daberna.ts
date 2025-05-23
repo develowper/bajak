@@ -463,7 +463,7 @@ export default class Daberna extends BaseModel {
             )
           })
           .join('\n')}` + '\n'
-      logText += '🅿️🅰️🆁🅸🆂' + '\n'
+      logText += '🆆🅸🅽🅽🅴🆁' + '\n'
       // Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], logText)
       // Telegram.sendMessage(Helper.TELEGRAM_LOGS[1], logText)
 
