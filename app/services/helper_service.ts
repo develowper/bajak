@@ -747,14 +747,29 @@ class Helper {
           },
         ]),
       },
+
       {
-        key: 'app_version',
+        key: 'app_info',
         value: JSON.stringify({
           version: 1,
-          title: __('app_new_version_available'),
-          link: `https://t.me/${Helper.TELEGRAM_BOT}`,
+          update_title: __('app_new_version_available'),
+          update_link: `https://t.me/${Helper.TELEGRAM_BOT}`,
+          maintenance: 0,
+          testers: '1\n2',
         }),
-        title: __('app_version'),
+        title: __('app_info'),
+      },
+      {
+        key: 'support_message',
+        title: __('support_message'),
+        value: JSON.stringify({
+          title: '',
+          questions: [
+            { q: '', a: '', active: 0 },
+            { q: '', a: '', active: 0 },
+            { q: '', a: '', active: 0 },
+          ],
+        }),
       },
       // {
       //   key: 'enamad',
@@ -846,12 +861,12 @@ class Helper {
         telegramId: '72534783',
       },
     ])
-    await AdminFinancial.createMany([{ id: 1, adminId: 1, balance: 0 }])
+    await AdminFinancial.createMany([{   adminId: 1, balance: 0 }])
   }
   static async createAgencies() {
     await sleep(1000)
-    await Agency.createMany([{ id: 1, name: __('central'), parentId: null, level: 0 }])
-    await AgencyFinancial.createMany([{ id: 1, agencyId: 1, balance: 0 }])
+    await Agency.createMany([{ name: __('central'), parentId: null, level: 0 }])
+    await AgencyFinancial.createMany([{ agencyId: 1, balance: 0 }])
   }
   static async createRooms() {
     await sleep(1000)

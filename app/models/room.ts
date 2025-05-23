@@ -366,7 +366,10 @@ export default class Room extends BaseModel {
     if (!room.isActive) return
     await db.transaction(async (trx) => {
       const players = room.players
-      const beforeIds = collect(players).pluck('user_id').toArray()
+      const beforeIds = collect(players)
+        .pluck('user_id')
+        .map((i) => `${i}`)
+        .toArray()
 
       const botUser =
         user ??
