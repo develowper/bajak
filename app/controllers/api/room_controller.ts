@@ -316,7 +316,7 @@ export default class RoomController {
     } catch (error) {
       console.log(error)
       await trx.rollback()
-      return response.status(500).json({ message: error.message || error.toString(), error })
+      return response.status(422).json({ message: error.message || error.toString(), error })
     }
   }
 }

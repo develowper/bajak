@@ -96,7 +96,7 @@ export default class RoomController {
     switch (cmnd) {
       case 'status':
         data.isActive = isActive
-        data.save()
+        await data.save()
         if (data.game == 'blackjack') {
           await Blackjack.query().where('type', data.type).update({ isActive: isActive })
         }
