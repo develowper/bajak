@@ -470,38 +470,6 @@ export default class Daberna extends BaseModel {
       // Telegram.logAdmins(logText, null, Helper.TELEGRAM_TOPICS.DABERNA_GAME)
     }
 
-    //now decrease card prices from user for safety
-
-    let l = `gameId:${game.id}\n`
-    const c = users.where('role', 'us').count()
-    const updates = []
-    // console.time(`updateBalances ${room.type} ${c}`) // Start timer
-    for (const user of users.where('role', 'us')) {
-      const financial = user.financial ?? (await user.related('financial').create({ balance: 0 }))
-      const p: any = collect(players).where('user_id', Number(user.id)).first()
-      // console.log('find', user.id)
-      if (!p) continue
-      const from = financial.balance
-      const buy = Number.parseInt(`${p.card_count ?? 0}`) * room.cardPrice
-      // financial.balance -= buy
-      const to = financial.balance - buy
-      // await financial.save()
-      updates.push({ user_id: user.id, balance: financial.balance })
-      l += `userId:${user.id}(${user.username}) buy ${buy} [${from}] \n`
-      // await redis.srem('in', user.id)
-    }
-    if (false && updates.length) {
-      await db.rawQuery(`
-      UPDATE user_financials
-      SET balance = CASE user_id
-        ${updates.map((u) => `WHEN ${u.user_id} THEN ${u.balance}`).join('\n')}
-      END
-      WHERE user_id IN (${updates.map((u) => u.user_id).join(',')})
-    `)
-    }
-    if (logText != '')
-      Telegram.logAdmins(`${logText}\n ${l}`, null, null ?? Helper.TELEGRAM_TOPICS.DABERNA_GAME)
-
     // console.log(boards.map((item) => item.card))
     const af = await AgencyFinancial.find(1)
     af.balance = Number(af.balance) + commissionPrice
@@ -571,15 +539,17 @@ export default class Daberna extends BaseModel {
       }
     }
     // if (false)
+    console.log('winners', winners.length)
     for (const w of winners) {
       const user = await users.where('id', `${w.user_id}`).first()
+      console.log('user', user?.id)
       if (!user) continue
       const financial = user?.financial ?? (await user.related('financial').create({ balance: 0 }))
       const beforeBalance = financial.balance
       financial.balance += winnerPrize
       await financial.useTransaction(trx).save()
       const afterBalance = financial.balance
-      // console.log('win.transaction', winnerPrize)
+      console.log('win.transaction', winnerPrize)
       user.winCount = Number(user.winCount) + 1
       user.prize = Number(user.prize) + winnerPrize
       user.score = Number(user.score) + room.winScore
@@ -629,6 +599,37 @@ export default class Daberna extends BaseModel {
         )
       }
     }
+
+    //log winners
+    let l = `gameId:${game.id}\n`
+    const c = users.where('role', 'us').count()
+    const updates = []
+    // console.time(`updateBalances ${room.type} ${c}`) // Start timer
+    for (const user of users.where('role', 'us')) {
+      const financial = user.financial ?? (await user.related('financial').create({ balance: 0 }))
+      const p: any = collect(players).where('user_id', Number(user.id)).first()
+      // console.log('find', user.id)
+      if (!p) continue
+      const from = financial.balance
+      const buy = Number.parseInt(`${p.card_count ?? 0}`) * room.cardPrice
+      // financial.balance -= buy
+      const to = financial.balance - buy
+      // await financial.save()
+      updates.push({ user_id: user.id, balance: financial.balance })
+      l += `userId:${user.id}(${user.username}) buy ${buy} [${from}] \n`
+      // await redis.srem('in', user.id)
+    }
+    if (false && updates.length) {
+      await db.rawQuery(`
+      UPDATE user_financials
+      SET balance = CASE user_id
+        ${updates.map((u) => `WHEN ${u.user_id} THEN ${u.balance}`).join('\n')}
+      END
+      WHERE user_id IN (${updates.map((u) => u.user_id).join(',')})
+    `)
+    }
+    if (logText != '')
+      Telegram.logAdmins(`${logText}\n ${l}`, null, null ?? Helper.TELEGRAM_TOPICS.DABERNA_GAME)
 
     //*****add log
 
