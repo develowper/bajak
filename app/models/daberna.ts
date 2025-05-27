@@ -340,7 +340,7 @@ export default class Daberna extends BaseModel {
         .preload('financial')
         .whereIn(
           'id',
-          [...rowWinners, ...winners].map((item: any) => item.user_id)
+          [...players /* ...rowWinners, ...winners*/].map((item: any) => item.user_id)
         )
     )
 
