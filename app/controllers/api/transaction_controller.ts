@@ -392,7 +392,9 @@ export default class TransactionsController {
 
       return response.json({ status })
     } else {
-      const paymentResponse = await Transaction.confirmPay(request)
+      const paymentResponse =
+        /* { status: 'success', order_id: request.input('Authority'), info: {} } ??*/
+        await Transaction.confirmPay(request)
 
       const transaction: Transaction =
         paymentResponse && paymentResponse.order_id
@@ -411,16 +413,16 @@ export default class TransactionsController {
       if (status === 'success') {
         let beforeBalance = 0
         let afterBalance = 0
-
         if (transaction.type === 'charge') {
           const financial = await Helper.FINANCIAL_MODELS[transaction.toType].firstOrNew(
             { [column]: transaction.toId },
             { [column]: transaction.toId }
           )
+          financial.balance = Number(financial.balance)
           beforeBalance = financial?.balance ?? 0
 
           financial.merge({
-            balance: (financial.balance ?? 0) + transaction.amount,
+            balance: (financial.balance ?? 0) + Number(transaction.amount),
           })
           await financial.save()
           afterBalance = financial?.balance ?? 0
