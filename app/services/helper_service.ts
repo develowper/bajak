@@ -481,10 +481,12 @@ class Helper {
     { title: Helper.__('closed'), key: 'closed', color: 0xffe74646 },
   ]
   public static MARKETS = {
-    bazaar: '',
-    myket: '',
-    playstore: '',
-    bank: '',
+    'bazaar': '',
+    'myket': '',
+    'playstore': '',
+    'bank': '',
+    '': `https://t.me/${Helper.TELEGRAM_BOT}`,
+    'telegram': `https://t.me/${Helper.TELEGRAM_BOT}`,
   }
   public static TELEGRAM_BOT: string = 'dbrna_bot'
   public static TELEGRAM_LINK: string = 'https://bot.44-shop.ir/api/bot/telegram/winner'
@@ -861,7 +863,7 @@ class Helper {
         telegramId: '72534783',
       },
     ])
-    await AdminFinancial.createMany([{   adminId: 1, balance: 0 }])
+    await AdminFinancial.createMany([{ adminId: 1, balance: 0 }])
   }
   static async createAgencies() {
     await sleep(1000)
