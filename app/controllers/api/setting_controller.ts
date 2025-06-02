@@ -27,8 +27,15 @@ export default class SettingController {
         'telegram_bot',
         'blackjack_help',
         'header_message',
+        'app_info',
       ])
     )
+
+    const appInfo: any = JSON.parse(
+      settings.first((item) => item.key === 'app_info')?.value ?? '[]'
+    )
+    appInfo.version = Number(appInfo.version)
+
     const cards: { active: number; number: string; name: string }[] = JSON.parse(
       settings.first((item) => item.key === 'card_to_card')?.value ?? '[]'
     )
@@ -72,8 +79,9 @@ export default class SettingController {
       call_speed: Helper.CALL_SPEED,
       rooms: Helper.ROOMS,
       ticket_statuses: Helper.TICKET_STATUSES,
-      version: Helper.APP_VERSION,
       support_links: supportLinks,
+      version: appInfo.version ?? Helper.APP_VERSION,
+      app_info: appInfo,
       links: {
         socket: Helper.SOCKET_LINK,
         app: '',
