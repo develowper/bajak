@@ -480,6 +480,10 @@ class Helper {
     { title: Helper.__('processing'), key: 'processing', color: 0xff4477ce },
     { title: Helper.__('closed'), key: 'closed', color: 0xffe74646 },
   ]
+
+  public static TELEGRAM_BOT: string = 'dbrna_bot'
+  public static TELEGRAM_LINK: string = 'https://bot.44-shop.ir/api/bot/telegram/winner'
+  public static TELEGRAM_CHANNEL: string = 'dabernawinner'
   public static MARKETS = {
     'bazaar': '',
     'myket': '',
@@ -488,10 +492,6 @@ class Helper {
     '': `https://t.me/${Helper.TELEGRAM_BOT}`,
     'telegram': `https://t.me/${Helper.TELEGRAM_BOT}`,
   }
-  public static TELEGRAM_BOT: string = 'dbrna_bot'
-  public static TELEGRAM_LINK: string = 'https://bot.44-shop.ir/api/bot/telegram/winner'
-  public static TELEGRAM_CHANNEL: string = 'dabernawinner'
-
   public static getFakeHttpCtx(): HttpContext {
     return (
       storage?.getStore() ?? ({ i18n: i18nManager?.locale(env.get('LOCALE', '')) } as HttpContext)
