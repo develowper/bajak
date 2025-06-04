@@ -174,8 +174,8 @@ export default class Daberna extends BaseModel {
         .fill(0)
         .forEach((i) => {
           boards.push({
-            // card_number: idxs.pop(),
-            card_number: idx++,
+            card_number: idxs.pop(),
+            // card_number: idx++,
             level: i,
             user_id: player.user_id,
             username: player.username,
@@ -544,7 +544,8 @@ export default class Daberna extends BaseModel {
       const user = await users.where('id', `${w.user_id}`).first()
       // console.log('user', user?.id)
       if (!user) continue
-      const financial = user?.financial ?? (await user.related('financial').create({ balance: 0 }))
+      const financial =
+        user?.financial ?? (await user.related('financial').create({ balance: 0 }, { client: trx }))
       const beforeBalance = financial.balance
       financial.balance += winnerPrize
       await financial.useTransaction(trx).save()
