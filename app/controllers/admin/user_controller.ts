@@ -178,6 +178,7 @@ export default class UserController {
             after_balance: afterBalance,
           }),
         })
+        t.user = data
         Telegram.log(null, 'transaction_created', t)
 
         return response.send({
