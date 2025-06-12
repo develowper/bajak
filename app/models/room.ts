@@ -214,13 +214,13 @@ export default class Room extends BaseModel {
                   FROM jsonb_array_elements(r.players) AS p
                 )
                 ELSE (
-                  r.players || jsonb_build_object(
+                  jsonb_build_object(
                     'user_id', ?::int,
                     'username', ?::text,
                     'card_count', ?::int,
                     'user_role', ?::text,
                     'user_ip', ?::text
-                               )::jsonb
+                               )::jsonb || r.players
                   )
                 END AS new_players
             FROM rooms r
