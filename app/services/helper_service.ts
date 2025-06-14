@@ -482,7 +482,8 @@ class Helper {
   ]
 
   public static TELEGRAM_BOT: string = 'dbrna_bot'
-  public static TELEGRAM_LINK: string = 'https://bot.44-shop.ir/api/bot/telegram/winner'
+  // public static TELEGRAM_LINK: string = 'https://bot.44-shop.ir/api/bot/telegram/winner'
+  public static TELEGRAM_LINK: string = 'https://bot.dinamit-home.ir/api/bot/telegram/winner'
   public static TELEGRAM_CHANNEL: string = 'dabernawinner'
   public static MARKETS = {
     'bazaar': '',
