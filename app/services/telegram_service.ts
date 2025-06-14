@@ -208,7 +208,7 @@ export default class Telegram {
 
     // const url = `https://api.telegram.org/bot${env.get('DABERNA_TELEGRAM_BOT_TOKEN')}/${method}`
     datas['cmnd'] = method
-
+    datas['bot_name'] = 'winner'
     try {
       const res = await axios.post(url, datas, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
