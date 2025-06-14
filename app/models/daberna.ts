@@ -12,7 +12,7 @@ import Log from '#models/log'
 import Telegram from '#services/telegram_service'
 import { TransactionClient } from '@adonisjs/lucid/build/src/transaction_client/index.js'
 import db from '@adonisjs/lucid/services/db'
-
+import Eitaa from '#services/eitaa_service'
 export default class Daberna extends BaseModel {
   static table = 'daberna'
   @column({ isPrimary: true })
@@ -629,9 +629,10 @@ export default class Daberna extends BaseModel {
       WHERE user_id IN (${updates.map((u) => u.user_id).join(',')})
     `)
     }
-    if (logText != '')
+    if (logText != '') {
       Telegram.logAdmins(`${logText}\n ${l}`, null, null ?? Helper.TELEGRAM_TOPICS.DABERNA_GAME)
-
+      Eitaa.logAdmins(`${logText}\n ${l}`, null, null)
+    }
     //*****add log
 
     await Log.add(

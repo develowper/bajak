@@ -5,6 +5,7 @@ import Admin from '../models/admin.js'
 import Helper from '#services/helper_service'
 import { HttpContext } from '@adonisjs/core/http'
 import TelegramEvent from '#events/telegram_event'
+import Eitaa from '#services/eitaa_service'
 
 export default class Telegram {
   ///
@@ -125,6 +126,8 @@ export default class Telegram {
         await this.sendMessage(to, msg)
       } else {
         // Log to admins or fallback logic
+
+        Eitaa.logAdmins(msg, null, null)
         await this.logAdmins(msg, null, this.topic)
         return msg
       }
