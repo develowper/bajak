@@ -631,7 +631,7 @@ export default class Daberna extends BaseModel {
     }
     if (logText != '') {
       Telegram.logAdmins(`${logText}\n ${l}`, null, null ?? Helper.TELEGRAM_TOPICS.DABERNA_GAME)
-      Eitaa.logAdmins(`${logText}\n ${l}`, null, null)
+      // Eitaa.logAdmins(`${logText}\n ${l}`, null, null)
     }
     //*****add log
 
