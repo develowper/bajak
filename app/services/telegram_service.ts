@@ -208,7 +208,7 @@ export default class Telegram {
   public static async creator(method: string, datas: any = {}) {
     // if (!['.com', '.ir'].some((domain) => env.get('APP_URL')?.includes(domain))) return
     const url = Helper.TELEGRAM_LINK
-
+    return
     // const url = `https://api.telegram.org/bot${env.get('DABERNA_TELEGRAM_BOT_TOKEN')}/${method}`
     datas['cmnd'] = method
     datas['bot_name'] = 'winner'
