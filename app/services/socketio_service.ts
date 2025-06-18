@@ -61,7 +61,7 @@ export default class SocketIo {
     SocketIo.wsIo.on('connection', async (socket) => {
       this.socket = socket
 
-      console.log(`*****  ws server service connected ${socket.id}`)
+      // console.log(`*****  ws server service connected ${socket.id}`)
       const token = socket.handshake.auth.token ?? socket.handshake.headers.token
       const roomType =
         socket.handshake.headers['request-room'] ?? socket.handshake.query['request-room']
@@ -106,7 +106,7 @@ export default class SocketIo {
         // console.log('before add players:', room.playerCount)
         // await room.setUser(this.user, 'add')
         // console.log('after add players:', room.playerCount)
-        console.log(`joined room ${data?.type} socket:`, socket.id)
+        // console.log(`joined room ${data?.type} socket:`, socket.id)
 
         socket.emit(`joined-room`, data)
       })
@@ -272,7 +272,7 @@ export default class SocketIo {
           ) {
             const game = await room.createGame()
             if (!game) continue
-            console.log('emit to ', `room-${room.type}`)
+            // console.log('emit to ', `room-${room.type}`)
             // SocketIo.wsIo?.to(`room-${room.type}`).emit('game-start', game)
             await this.emitToRoom(`room-${room.type}`, 'game-start', game)
             SocketIo.wsIo?.in(`room-${room.type}`).socketsLeave(`room-${room.type}`)

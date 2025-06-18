@@ -11,6 +11,7 @@ import Telegram from '#services/telegram_service'
 import Transaction from '#models/transaction'
 import db from '@adonisjs/lucid/services/db'
 import Daberna from '#models/daberna'
+import Eitaa from '#services/eitaa_service'
 
 export default class DailyReport extends BaseCommand {
   static commandName = 'report:daily'
@@ -148,7 +149,9 @@ export default class DailyReport extends BaseCommand {
     }, {})
     // await Telegram.sendMessage(`${Helper.TELEGRAM_LOGS[0]}`, msg)
     // await Telegram.sendMessage(`${Helper.TELEGRAM_LOGS[1]}`, msg)
+    Eitaa.logAdmins(msg, null, null)
     await Telegram.logAdmins(msg, null, Helper.TELEGRAM_TOPICS.STATISTICS)
+
     await User.query().update({ ...zeroTodayData, todayPrize: 0 })
 
     // try {
