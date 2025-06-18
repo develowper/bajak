@@ -32,10 +32,10 @@ export default class Eitaa {
       const res = await axios.post(url, datas, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       })
-      console.log('**********res**********')
-      console.log(res)
+      // console.log('**********res**********')
+      // console.log(res)
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 
