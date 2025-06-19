@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, computed } from '@adonisjs/lucid/orm'
-import Helper, { __ } from '#services/helper_service'
+import Helper, { __, sleep } from '#services/helper_service'
 import Env from '#start/env'
 import axios from 'axios'
 import collect from 'collect.js'
@@ -140,7 +140,7 @@ export default class Transaction extends BaseModel {
                 },
               }
             )
-
+            await sleep(500)
             const result = response.data
 
             if (result && result.data.code === 100) {

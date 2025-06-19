@@ -9,7 +9,7 @@ import Room from '#models/room'
 import Daberna from '#models/daberna'
 import i18nManager from '@adonisjs/i18n/services/main'
 import env from '#start/env'
-import Helper, { __, getSettings } from '#services/helper_service'
+import Helper, { __, getSettings, sleep } from '#services/helper_service'
 import { storage } from '#start/globals'
 import app from '@adonisjs/core/services/app'
 import Encryption from '@adonisjs/core/services/encryption'
@@ -275,11 +275,12 @@ export default class SocketIo {
             // console.log('emit to ', `room-${room.type}`)
             // SocketIo.wsIo?.to(`room-${room.type}`).emit('game-start', game)
             await this.emitToRoom(`room-${room.type}`, 'game-start', game)
+            await sleep(200)
             SocketIo.wsIo?.in(`room-${room.type}`).socketsLeave(`room-${room.type}`)
           }
         }
         // clearInterval(SocketIo.timer)
-      }, 3000)
+      }, 2000)
       return
       //timer dooz
       SocketIo.timer2 = setInterval(async () => {
