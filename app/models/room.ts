@@ -3,7 +3,7 @@ import { BaseModel, column, computed } from '@adonisjs/lucid/orm'
 import collect from 'collect.js'
 import { HttpContext } from '@adonisjs/core/http'
 import emitter from '@adonisjs/core/services/emitter'
-import { getSettings, range } from '#services/helper_service'
+import {getSettings, isPG, range} from '#services/helper_service'
 import User from '#models/user'
 import app from '@adonisjs/core/services/app'
 import Daberna from '#models/daberna'
@@ -359,12 +359,17 @@ export default class Room extends BaseModel {
   }
 
   public static async addBot(
-    room: Room,
+    roomData: Room,
     user: User | null = null,
     userCardCount: number | null = null
   ) {
-    if (!room.isActive) return
+    if (!roomData.isActive) return
     await db.transaction(async (trx) => {
+      const room: Room = await Room.query({ client: trx })
+        .where('id', roomData.id)
+        .forUpdate()
+        .first()
+      if (!room) return
       const players = room.players
       const beforeIds = collect(players)
         .pluck('user_id')
@@ -377,7 +382,7 @@ export default class Room extends BaseModel {
           .whereNotIn('id', beforeIds)
           .where('is_active', true)
           .where('role', 'bo')
-          .orderByRaw('RAND()')
+          .orderByRaw(isPG() ? 'RANDOM()' : 'RAND()')
           .first())
 
       if (!botUser /*|| beforeIds.includes(user?.id)*/) return
@@ -388,7 +393,7 @@ export default class Room extends BaseModel {
 
       if (await room.setUserCardsCount(cardCount, botUser, null, trx)) {
         room.playerCount++
-        botUser.playCount++
+        botUser.playCount = Number(botUser.playCount) + 1
         room.cardCount += cardCount
         // room.playerCount = JSON.parse(room.players ?? '[]').length
         if (
@@ -400,20 +405,20 @@ export default class Room extends BaseModel {
         await room.useTransaction(trx).save()
         switch (room.cardPrice) {
           case 5000:
-            botUser.card5000Count += cardCount
-            botUser.todayCard5000Count += cardCount
+            botUser.card5000Count = Number(botUser.card5000Count) + cardCount
+            botUser.todayCard5000Count = Number(botUser.todayCard5000Count) + cardCount
             break
           case 10000:
-            botUser.card10000Count += cardCount
-            botUser.todayCard10000Count += cardCount
+            botUser.card10000Count = Number(botUser.card10000Count) + cardCount
+            botUser.todayCard10000Count = Number(botUser.todayCard10000Count) + cardCount
             break
           case 20000:
-            botUser.card20000Count += cardCount
-            botUser.todayCard20000Count += cardCount
+            botUser.card20000Count = Number(botUser.card20000Count) + cardCount
+            botUser.todayCard20000Count = Number(botUser.todayCard20000Count) + cardCount
             break
           case 50000:
-            botUser.card50000Count += cardCount
-            botUser.todayCard50000Count += cardCount
+            botUser.card50000Count = Number(botUser.card50000Count) + cardCount
+            botUser.todayCard50000Count = Number(botUser.todayCard50000Count) + cardCount
             break
         }
 

@@ -122,6 +122,7 @@ export default class Transaction extends BaseModel {
           const zarinpalData = {
             merchant_id: gateway?.key /*?? Env.get('ZARINPAL_TOKEN')*/,
             amount: `${price}0`,
+
             callback_url: `https://${Env.get('APP_URL')}/api/payment/done`,
             description: description,
             mobile: phone,
@@ -130,19 +131,27 @@ export default class Transaction extends BaseModel {
           }
 
           try {
-            const response = await axios.post(
-              'https://api.zarinpal.com/pg/v4/payment/request.json',
-              zarinpalData,
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json',
-                },
-              }
-            )
-            await sleep(500)
-            const result = response.data
-
+            // const response = await axios.post(
+            //   'https://api.zarinpal.com/pg/v4/payment/request.json',
+            //   zarinpalData,
+            //   {
+            //     headers: {
+            //       'Content-Type': 'application/json',
+            //       'Accept': 'application/json',
+            //     },
+            //   }
+            // )
+            // const result = response.data
+            const response = await fetch('https://api.zarinpal.com/pg/v4/payment/request.json', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json', // Important for sending JSON
+              },
+              body: JSON.stringify(zarinpalData), // Convert the JavaScript object to a JSON string
+            })
+            // await sleep(100)
+            const result: any = await response.json()
+            // console.log(result)
             if (result && result.data.code === 100) {
               return {
                 status: 'success',

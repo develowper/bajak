@@ -26,6 +26,7 @@ export default class Eitaa {
   }
 
   static async creator(method: string, datas: any = {}) {
+    return
     const url =
       'https://eitaayar.ir/api/' + env.get('EITAA_BOT_TOKEN', 'YOUR-BOT-TOKEN') + '/' + method
     try {

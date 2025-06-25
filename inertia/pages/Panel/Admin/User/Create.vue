@@ -41,7 +41,7 @@
           <!--          </div>-->
           <div class="flex flex-col mx-2 w-full px-2">
             <form @submit.prevent="submit">
-              <div class="flex items-center" v-if="false">
+              <div class="flex items-center" v-if="true">
                 <RadioGroup
                   ref="roleSelector"
                   class="grow"

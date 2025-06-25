@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
-import Helper, { __, asPrice, isPG, range, shuffle } from '#services/helper_service'
+import Helper, {__, asPrice, isPG, range, shuffle, sleep} from '#services/helper_service'
 import Room from '#models/room'
 import AgencyFinancial from '#models/agency_financial'
 import Transaction from '#models/transaction'
@@ -13,6 +13,7 @@ import Telegram from '#services/telegram_service'
 import { TransactionClient } from '@adonisjs/lucid/build/src/transaction_client/index.js'
 import db from '@adonisjs/lucid/services/db'
 import Eitaa from '#services/eitaa_service'
+import SocketIo from "#services/socketio_service";
 export default class Daberna extends BaseModel {
   static table = 'daberna'
   @column({ isPrimary: true })
@@ -167,7 +168,7 @@ export default class Daberna extends BaseModel {
       .filter((s: any) => s !== '')
 
     let jokerInGame: boolean =
-      jokerId && players.filter((item: any) => `${item.user_id}` == `${jokerId}`).length > 0
+      jokerId && players.filter((item: any) => `${item.user_id}` == `${jokerId}`.trim()).length > 0
 
     players.forEach((player) => {
       Array(player.card_count)
@@ -472,7 +473,8 @@ export default class Daberna extends BaseModel {
 
     // console.log(boards.map((item) => item.card))
     const af = await AgencyFinancial.find(1)
-    af.balance = Number(af.balance) + commissionPrice
+    af.balance = Number(af.balance)
+    af.balance = af.balance + commissionPrice
     await af.useTransaction(trx).save()
     if (commissionPrice != 0) {
       // console.log('commissionTransaction', commissionPrice)
@@ -498,7 +500,7 @@ export default class Daberna extends BaseModel {
     let title
     // console.log('rowWinners', rowWinners)
     // console.log('users', users.pluck('id'))
-    // if (false)
+
     for (const w of rowWinners) {
       const user = users.where('id', `${w.user_id}`).first()
       if (!user) continue
@@ -506,6 +508,7 @@ export default class Daberna extends BaseModel {
       // console.log('rowwin.transaction', rowWinnerPrize)
       const financial =
         user?.financial ?? (await user.related('financial').create({ balance: 0 }, { client: trx }))
+      financial.balance = Number(financial.balance)
       const beforeBalance = financial.balance
       financial.balance += rowWinnerPrize
       await financial.useTransaction(trx).save()
@@ -538,16 +541,15 @@ export default class Daberna extends BaseModel {
         // console.log(t)
       }
     }
-    // if (false)
-    // console.log('winners', winners.length)
+
     for (const w of winners) {
       const user = await users.where('id', `${w.user_id}`).first()
-      // console.log('user', user?.id)
       if (!user) continue
-      const financial =
-        user?.financial ?? (await user.related('financial').create({ balance: 0 }, { client: trx }))
+      const financial = user?.financial ?? (await user.related('financial').create({ balance: 0 }))
+
+      financial.balance = Number(financial.balance)
       const beforeBalance = financial.balance
-      financial.balance += winnerPrize
+      financial.balance = financial.balance + winnerPrize
       await financial.useTransaction(trx).save()
       const afterBalance = financial.balance
       // console.log('win.transaction', winnerPrize)
@@ -583,6 +585,7 @@ export default class Daberna extends BaseModel {
     for (const user of inviterUsers) {
       if (refCommissionPrice > 0) {
         const financial = user.financial
+        financial.balance = Number(financial.balance)
         financial.balance += refCommissionPrice
         await financial.useTransaction(trx).save()
         await Transaction.add(
@@ -601,7 +604,8 @@ export default class Daberna extends BaseModel {
       }
     }
 
-    //log winners
+    //telegram
+
     let l = `gameId:${game.id}\n`
     const c = users.where('role', 'us').count()
     const updates = []
@@ -611,6 +615,7 @@ export default class Daberna extends BaseModel {
       const p: any = collect(players).where('user_id', Number(user.id)).first()
       // console.log('find', user.id)
       if (!p) continue
+      financial.balance = Number(financial.balance)
       const from = financial.balance
       const buy = Number.parseInt(`${p.card_count ?? 0}`) * room.cardPrice
       // financial.balance -= buy
@@ -622,12 +627,12 @@ export default class Daberna extends BaseModel {
     }
     if (false && updates.length) {
       await db.rawQuery(`
-      UPDATE user_financials
-      SET balance = CASE user_id
-        ${updates.map((u) => `WHEN ${u.user_id} THEN ${u.balance}`).join('\n')}
+        UPDATE user_financials
+        SET balance = CASE user_id
+          ${updates.map((u) => `WHEN ${u.user_id} THEN ${u.balance}`).join('\n')}
       END
-      WHERE user_id IN (${updates.map((u) => u.user_id).join(',')})
-    `)
+        WHERE user_id IN (${updates.map((u) => u.user_id).join(',')})
+      `)
     }
     if (logText != '') {
       Telegram.logAdmins(`${logText}\n ${l}`, null, null ?? Helper.TELEGRAM_TOPICS.DABERNA_GAME)
@@ -652,8 +657,12 @@ export default class Daberna extends BaseModel {
     room.players = isPG() ? `[]` : null
     room.startAt = null
     // room.starterId = null
+    if (game) await SocketIo.emitToRoom(`room-${room.type}`, 'game-start', game)
+    await sleep(100)
+    if (game) SocketIo.wsIo?.in(`room-${room.type}`).socketsLeave(`room-${room.type}`)
     room.isActive = true
     await room.useTransaction(trx).save()
+
     return game
   }
 

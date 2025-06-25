@@ -112,16 +112,16 @@ export default class SocketIo {
       })
       socket.on('leave-room', async (data) => {
         // logger.info(data)
-        if (!data || data?.type || !this.user) return
+        if (!data || !data?.type || !this.user) return
         socket.leave(`room-${data?.type}`)
         const room = await Room.query()
-          .whereNotIn('game', ['daberna'])
+          .whereNot('game', 'daberna')
           .where('type', data?.type)
           .first()
         if (room) await room.setUser(this.user, 'remove')
         // console.log('before add players:', room.playerCount)
         // socket.removeAllListeners()
-        console.log(`leave room ${data?.type} socket:`, socket.id)
+        // console.log(`leave room ${data?.type} socket:`, socket.id)
         // const room = await Room.query().where('type', data?.type).first()
         // console.log('before remove players:', room.playerCount)
         // await room.setUser(this.user, 'remove')
@@ -203,7 +203,7 @@ export default class SocketIo {
 
     this.setTimeChecker()
   }
-  public async emitToRoom(room: string, event: string, data: any) {
+  public static async emitToRoom(room: string, event: string, data: any) {
     // var room = SocketIo.wsIo.sockets.adapter.rooms[room]
 
     SocketIo.wsIo?.to(`${room}`).volatile.emit(event, data)
@@ -274,13 +274,10 @@ export default class SocketIo {
             if (!game) continue
             // console.log('emit to ', `room-${room.type}`)
             // SocketIo.wsIo?.to(`room-${room.type}`).emit('game-start', game)
-            await this.emitToRoom(`room-${room.type}`, 'game-start', game)
-            await sleep(200)
-            SocketIo.wsIo?.in(`room-${room.type}`).socketsLeave(`room-${room.type}`)
           }
         }
         // clearInterval(SocketIo.timer)
-      }, 2000)
+      }, 3000)
       return
       //timer dooz
       SocketIo.timer2 = setInterval(async () => {

@@ -134,7 +134,7 @@ export default class TransactionsController {
         const cards: { active: number; number: string; name: string }[] = JSON.parse(
           (await getSettings('card_to_card')) ?? '[]'
         )
-        if (!collect(cards).where('active', 1).first()) {
+        if (!collect(cards).whereIn('active', [1, '1']).first()) {
           return response.status(Helper.ERROR_STATUS).json({
             status: 'danger',
             message: __('is_inactive_*', {

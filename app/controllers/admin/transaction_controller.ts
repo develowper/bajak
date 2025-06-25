@@ -41,13 +41,13 @@ export default class TransactionController {
           item: `${__('transaction')}`,
         }),
       })
-    const amount = data.amount
+    const amount = Number(data.amount)
     // const af = await AgencyFinancial.findBy('agency_id', admin.agencyId)
 
     switch (cmnd) {
       case 'settlement':
         const uf = (await UserFinancial.findBy('user_id', data.fromId)) as UserFinancial
-        let beforeBalance = uf?.balance ?? 0
+        let beforeBalance = Number(uf?.balance) ?? 0
         let afterBalance = 0
 
         if (data.payedAt)

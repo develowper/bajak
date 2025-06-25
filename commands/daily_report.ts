@@ -19,7 +19,7 @@ export default class DailyReport extends BaseCommand {
   static aliases = ['report']
   static options: CommandOptions = { staysAlive: false, startApp: true, allowUnknownFlags: false }
 
-  static reportTime = DateTime.fromObject({ hour: 2, minute: 0 }, { zone: 'Asia/Tehran' })
+  static reportTime = DateTime.fromObject({ hour: 8, minute: 0 }, { zone: 'Asia/Tehran' })
   async run() {
     const now = DateTime.now().setZone('Asia/Tehran')
 
@@ -149,7 +149,7 @@ export default class DailyReport extends BaseCommand {
     }, {})
     // await Telegram.sendMessage(`${Helper.TELEGRAM_LOGS[0]}`, msg)
     // await Telegram.sendMessage(`${Helper.TELEGRAM_LOGS[1]}`, msg)
-    Eitaa.logAdmins(msg, null, null)
+      Eitaa.logAdmins(msg, null, null)
     await Telegram.logAdmins(msg, null, Helper.TELEGRAM_TOPICS.STATISTICS)
 
     await User.query().update({ ...zeroTodayData, todayPrize: 0 })
