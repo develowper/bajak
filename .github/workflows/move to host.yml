@@ -11,7 +11,7 @@ jobs:
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: 178.239.147.101
+          server: game.44shop.ir
           protocol: ftp
           port: 21
           username: shopir13
