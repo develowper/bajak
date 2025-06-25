@@ -208,7 +208,7 @@ export default class Telegram {
   public static async creator(method: string, datas: any = {}) {
     // if (!['.com', '.ir'].some((domain) => env.get('APP_URL')?.includes(domain))) return
     const url = Helper.TELEGRAM_LINK
-    return
+    // return
     // const url = `https://api.telegram.org/bot${env.get('DABERNA_TELEGRAM_BOT_TOKEN')}/${method}`
     datas['cmnd'] = method
     datas['bot_name'] = 'winner'
@@ -224,7 +224,7 @@ export default class Telegram {
       }
       return res.data
     } catch (error) {
-      this.logAdmins(JSON.stringify(error), null, Helper.TELEGRAM_TOPICS.BUG)
+      // this.logAdmins(JSON.stringify(error), null, Helper.TELEGRAM_TOPICS.BUG)
 
       // console.log(error)
       // this.sendMessage(`${Helper.TELEGRAM_LOGS[0]}`, `${error.message}\n${JSON.stringify(datas)}`)
