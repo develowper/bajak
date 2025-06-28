@@ -19,7 +19,7 @@ export default class DailyReport extends BaseCommand {
   static aliases = ['report']
   static options: CommandOptions = { staysAlive: false, startApp: true, allowUnknownFlags: false }
 
-  static reportTime = DateTime.fromObject({ hour: 9, minute: 0 }, { zone: 'Asia/Tehran' })
+  static reportTime = DateTime.fromObject({ hour: 8, minute: 0 }, { zone: 'Asia/Tehran' })
   async run() {
     const now = DateTime.now().setZone('Asia/Tehran')
 
