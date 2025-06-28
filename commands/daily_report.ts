@@ -23,6 +23,7 @@ export default class DailyReport extends BaseCommand {
   async run() {
     const now = DateTime.now().setZone('Asia/Tehran')
 
+    console.log(now.hour, now.minute)
     if (now.hour !== DailyReport.reportTime.hour || now.minute !== DailyReport.reportTime.minute) {
       process.exit()
       return
@@ -149,7 +150,7 @@ export default class DailyReport extends BaseCommand {
     }, {})
     // await Telegram.sendMessage(`${Helper.TELEGRAM_LOGS[0]}`, msg)
     // await Telegram.sendMessage(`${Helper.TELEGRAM_LOGS[1]}`, msg)
-      Eitaa.logAdmins(msg, null, null)
+    Eitaa.logAdmins(msg, null, null)
     await Telegram.logAdmins(msg, null, Helper.TELEGRAM_TOPICS.STATISTICS)
 
     await User.query().update({ ...zeroTodayData, todayPrize: 0 })
