@@ -49,7 +49,7 @@ export default class Log extends BaseModel {
     let msg = ''
     const now = DateTime.now()
     const logsToday = collect(
-      await Log.query().where('created_at', '>', now.minus({ hours: 24 }).toJSDate())
+      await Log.query().where('updated_at', '>', now.minus({ hours: 24 }).toJSDate())
     )
 
     //\u200E for LTR \u200F for RTL
