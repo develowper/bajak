@@ -59,11 +59,12 @@ export default class Log extends BaseModel {
 
     // const tableData: any = [['Room', 'Game', 'Card', 'Profit']]
     for (const t of types) {
-      const row = logsToday.where('type', `${t}`).first() ?? {
+      const filtered = logsToday.where('type', `${t}`)
+      const row = {
         type: `${t}`,
-        gameCount: 0,
-        cardCount: 0,
-        profit: 0,
+        gameCount: filtered.sum('gameCount') ?? 0,
+        cardCount: filtered.sum('cardCount') ?? 0,
+        profit: filtered.sum('profit') ?? 0,
       }
       tableData.push([`${row.type}`, row.gameCount, row.cardCount, asPrice(row.profit)])
     }
