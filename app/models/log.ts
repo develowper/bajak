@@ -51,7 +51,6 @@ export default class Log extends BaseModel {
     const logsToday = collect(
       await Log.query().where('updated_at', '>', now.minus({ hours: 24 }).toJSDate())
     )
-
     //\u200E for LTR \u200F for RTL
     const tableData: any = [
       ['اتاق', 'تعداد بازی', 'تعداد کارت', 'سود'].map((item) => `\u200E${item}`),
