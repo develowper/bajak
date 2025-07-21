@@ -18,6 +18,7 @@ export default class DabernaController {
     let query = Daberna.query()
     const isPg = isPG()
     console.log(
+      userId,
       await Daberna.query().whereRaw(`boards @> '[{"user_id": "${userId}"}]'`).count('* as total')
     )
     if (userId) {
@@ -70,8 +71,6 @@ export default class DabernaController {
           .reduce((sum, item) => sum + item.prize, 0)
         return i
       })
-      console.log(transformed)
-      console.log(res.getMeta())
       return response.json({ data: transformed, meta: res.getMeta() })
     } else return res
   }
