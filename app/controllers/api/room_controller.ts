@@ -22,6 +22,7 @@ import env from '#start/env'
 import { storage } from '../../../resources/js/storage.js'
 import db from '@adonisjs/lucid/services/db'
 import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
+import Lottery from '#models/lottery'
 
 @inject()
 export default class RoomController {
@@ -195,10 +196,18 @@ export default class RoomController {
     const user = auth.user as User
     const roomType = request.input('room_type')
     const cardCount = Number.parseInt(request.input('card_count'))
+    const cardNumber = Number.parseInt(request.input('card_number')) //lottery
     const ip = request.ip()
     const trx = await db.transaction()
 
     try {
+      if (Helper.MAINTENANCE && !Helper.TESTERS.includes(user.id)) {
+        await trx.rollback()
+        return response.status(422).json({
+          message: i18n.t('messages.we_are_updating'),
+        })
+      }
+
       const room = await Room.query({ client: trx })
         .where('is_active', true)
         .where('type', roomType)
@@ -251,7 +260,29 @@ export default class RoomController {
           }),
         })
       }
-      if (await room.setUserCardsCount(userBeforeCardCounts + cardCount, user, ip, trx)) {
+      let addRes
+      if (roomType == 'lottery') {
+        const setting = await Setting.findBy('key', 'lottery')
+        let lottery: any = JSON.parse(setting?.value ?? '[]')
+        if (Number(lottery.status) != 1) {
+          await trx.rollback()
+          return response.status(400).json({
+            message: i18n.t('messages.is_inactive_*', { item: i18n.t('lottery') }),
+          })
+        }
+
+        addRes = await room.setLotteryCardCount(cardNumber, user, ip, trx)
+        if (addRes != 'added') {
+          await trx.rollback()
+          return response.status(400).json({
+            message: i18n.t(`messages.${addRes}`),
+          })
+        } else addRes = true
+      } else {
+        addRes = await room.setUserCardsCount(userBeforeCardCounts + cardCount, user, ip, trx)
+      }
+
+      if (addRes) {
         if (userBeforeCardCounts === 0) {
           room.playerCount++
           user.playCount = Number(user.playCount) + 1
@@ -293,17 +324,31 @@ export default class RoomController {
         }
         await user.useTransaction(trx).save()
         await trx.commit()
-
-        const data = {
-          type: roomType,
-          cmnd: 'card-added',
-          game_id: room.clearCount,
-          cards: room.cardCount,
-          players: room.players,
-          start_with_me: room.startWithMe,
-          seconds_remaining: room.playerCount > 1 ? room.secondsRemaining : room.maxSeconds,
-          player_count: room.playerCount,
-          card_count: room.cardCount,
+        let data
+        if (roomType == 'lottery') {
+          const attach = await Lottery.emmitInfo(room)
+          data = {
+            type: roomType,
+            cmnd: 'card-added',
+            game_id: room.clearCount,
+            cards: room.cardCount /* */,
+            players: room.players /* p*/,
+            player_count: room.playerCount /* await redis.hlen(room.type)*/,
+            card_count: room.cardCount,
+            ...attach,
+          }
+        } else {
+          data = {
+            type: roomType,
+            cmnd: 'card-added',
+            game_id: room.clearCount,
+            cards: room.cardCount,
+            players: room.players,
+            start_with_me: room.startWithMe,
+            seconds_remaining: room.playerCount > 1 ? room.secondsRemaining : room.maxSeconds,
+            player_count: room.playerCount,
+            card_count: room.cardCount,
+          }
         }
         emitter.emit('room-update', data)
         return response.json({ user_balance: userFinancials.balance })

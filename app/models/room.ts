@@ -3,7 +3,7 @@ import { BaseModel, column, computed } from '@adonisjs/lucid/orm'
 import collect from 'collect.js'
 import { HttpContext } from '@adonisjs/core/http'
 import emitter from '@adonisjs/core/services/emitter'
-import {getSettings, isPG, range} from '#services/helper_service'
+import { getSettings, isPG, range } from '#services/helper_service'
 import User from '#models/user'
 import app from '@adonisjs/core/services/app'
 import Daberna from '#models/daberna'
@@ -11,6 +11,7 @@ import { isString } from 'node:util'
 import redis from '@adonisjs/redis/services/main'
 import db from '@adonisjs/lucid/services/db'
 import { TransactionClient } from '@adonisjs/lucid/build/src/transaction_client/index.js'
+import { TransactionClientContract } from '@adonisjs/lucid/types/database'
 
 // import { HttpContext } from '@adonisjs/http-server/build/standalone'
 // @inject()
@@ -326,6 +327,50 @@ export default class Room extends BaseModel {
     this.players = JSON.stringify(res)
     this.$dirty.players = true
     return true
+  }
+  async setLotteryCardCount(
+    cardNumber: number,
+    us: User,
+    ip: string,
+    trx: TransactionClientContract
+  ): Promise<any> {
+    const user = us ?? this.auth?.user
+    if (!user) return false
+    let res: any[] = []
+    let result = ''
+    const parsed: any = typeof this.players === 'string' ? JSON.parse(this.players) : this.players
+    const beforeUser = collect(parsed).first((item: any) => item.user_id == user.id)
+
+    if (collect(parsed).first((item: any) => item.card_numbers.includes(cardNumber))) {
+      return 'card_bought_before'
+    }
+    if (!beforeUser) {
+      parsed.unshift({
+        user_id: user.id,
+        username: user.username,
+        user_role: user.role,
+        user_ip: ip,
+        card_count: 1,
+        card_numbers: [cardNumber],
+      })
+      res = parsed
+      if (parsed.length > 0) this.starterId = user.id
+    } else {
+      const cardNumbers = [...(beforeUser.card_numbers ?? []), cardNumber]
+
+      res = collect(parsed)
+        .map((item: any) => {
+          if (item.user_id == user.id) {
+            item.card_numbers = cardNumbers
+            item.card_count = cardNumbers.length
+          }
+          return item
+        })
+        .toArray()
+    }
+    this.players = JSON.stringify(res)
+    this.$dirty.players = true
+    return 'added'
   }
   public async setUser(us: any = null, cmnd = 'add') {
     const user = us ?? this.auth?.user
