@@ -17,7 +17,7 @@ export default class DabernaController {
     sort = ['row_win_prize', 'win_prize', 'card_count'].includes(sort) ? 'id' : sort
     let query = Daberna.query()
     const isPg = isPG()
-    console.log(await Daberna.query().whereRaw(`boards @> '[{"user_id": "${userId}"}]'`).count())
+    console.log(await Daberna.query().whereRaw(`boards @> '[{"user_id": "${userId}"}]'`))
     if (userId) {
       if (isPg) query.whereRaw(`boards @> '[{"user_id": "${userId}"}]'`)
       else query.where('boards', 'like', `%id":${userId},%`)
