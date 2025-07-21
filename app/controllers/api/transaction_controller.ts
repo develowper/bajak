@@ -208,7 +208,7 @@ export default class TransactionsController {
           // .whereRaw(`boards @> ?::jsonb`, [JSON.stringify([{ user_id: fromId }])])
         }
         const playedCount = played[0]?.$extras.total ?? 0
-        if (playedCount < Helper.PLAY_COUNT_FOR_ACTIVE_WINWHEEL)
+        if (Number(playedCount) < Helper.PLAY_COUNT_FOR_ACTIVE_WINWHEEL)
           return response.status(Helper.ERROR_STATUS).json({
             status: 'danger',
             message: __('you_most_play_*_for_winwheel_yours_*', {
