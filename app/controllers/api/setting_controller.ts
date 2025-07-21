@@ -74,12 +74,12 @@ export default class SettingController {
         }
       }),
       header_messages: collect(headerMessages).whereIn('active', ['1', 1, true]).pluck('text'),
-      game_types: collect(Helper.ROOMS).map((item) =>
-        collect(item).only(['game', 'type', 'cardPrice']).all()
-      ),
+      game_types: collect(Helper.ROOMS)
+        .filter((i) => t.game == 'daberna')
+        .map((item) => collect(item).only(['game', 'type', 'cardPrice']).all()),
       log_hours_limit: `${Helper.DABERNA_LOG_HOUR_LIMIT}`,
       ad: Helper.AD,
-      game:null /* await Daberna.find(2)*/,
+      game: null /* await Daberna.find(2)*/,
       blackjack_help: blackjackHelp,
       cards: Helper.BLACKJACK.cards,
       coins: Helper.BLACKJACK.coins,
