@@ -17,6 +17,7 @@ export default class DabernaController {
     sort = ['row_win_prize', 'win_prize', 'card_count'].includes(sort) ? 'id' : sort
     let query = Daberna.query()
     const isPg = isPG()
+    console.log(await Daberna.query().whereRaw(`boards @> '[{"user_id": "${userId}"}]'`).count())
     if (userId) {
       if (isPg) query.whereRaw(`boards @> '[{"user_id": "${userId}"}]'`)
       else query.where('boards', 'like', `%id":${userId},%`)
@@ -67,6 +68,8 @@ export default class DabernaController {
           .reduce((sum, item) => sum + item.prize, 0)
         return i
       })
+      console.log(transformed)
+      console.log(res.getMeta())
       return response.json({ data: transformed, meta: res.getMeta() })
     } else return res
   }
