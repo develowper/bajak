@@ -202,8 +202,9 @@ class Helper {
       'winwheel',
       'dooz',
       'blackjack',
+      'lottery',
     ],
-    fromTypes: ['agency', 'user', 'admin', 'daberna', 'blackjack', 'dooz'],
+    fromTypes: ['agency', 'user', 'admin', 'daberna', 'blackjack', 'dooz', 'lottery'],
     colors: {
       win: 'green',
       row_win: 'teal',
@@ -241,6 +242,7 @@ class Helper {
   public static CLEAR_INACTIVE_USERS_DAY = 0
   public static CARDTOCARD_MINUTE_LIMIT = 5
   public static DABERNA_LOG_DAY_LIMIT = 3
+  public static DABERNA_LOG_HOUR_LIMIT = 24
   public static WINWHEEL_HOUR_LIMIT = 24
   public static WITHDRAW_HOUR_LIMIT = 24
   public static AGENCY_REF_COUNT = 25
@@ -258,9 +260,10 @@ class Helper {
     USER: 4,
     STATISTICS: 5,
     BUG: 6,
+    LOTTERY: null,
   }
   public static ADMIN_ROLES = ['go', 'ad']
-  public static GAMES = ['daberna', 'dooz', 'blackjack']
+  public static GAMES = ['daberna', 'dooz', 'blackjack', 'lottery']
   public static BLOCK_IPS = [
     /*'94.24.99.175', '5.121.179.55', '91.108.5.21', '45.32.192.18'*/
   ]
@@ -475,6 +478,22 @@ class Helper {
       rowWinPercent: Helper.DOOZ.rowWinPercent,
       winPercent: Helper.DOOZ.winPercent,
       rwp: Helper.DOOZ.rwp,
+    },
+    {
+      game: 'lottery',
+      type: 'lottery',
+      title: `${Helper.__('lottery')}`,
+      maxCardsCount: 64,
+      cardPrice: 10000,
+      winScore: 1,
+      maxUserCardsCount: 3,
+      page: `/LotteryGame`,
+      image: `storage/rooms/lottery.jpg`,
+      maxSeconds: 15,
+      commissionPercent: 10,
+      rowWinPercent: 0,
+      winPercent: 90,
+      rwp: 0,
     },
   ]
   public static TICKET_STATUSES = [
@@ -775,6 +794,17 @@ class Helper {
             { q: '', a: '', active: 0 },
             { q: '', a: '', active: 0 },
           ],
+        }),
+      },
+      {
+        key: 'lottery',
+        title: __('lottery'),
+        value: JSON.stringify({
+          active: 0,
+          title: '',
+          winners_prize: `50\n30\n10`,
+          start_at: '24:00',
+          winners: null,
         }),
       },
       // {

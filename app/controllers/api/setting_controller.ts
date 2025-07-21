@@ -6,6 +6,7 @@ import { collect } from 'collect.js'
 import { json } from 'stream/consumers'
 import Room from '#models/room'
 import Daberna from '#models/daberna'
+import Lottery from '#models/lottery'
 @inject()
 export default class SettingController {
   // constructor(protected helper: Helper) {
@@ -28,6 +29,8 @@ export default class SettingController {
         'blackjack_help',
         'header_message',
         'app_info',
+        'support_message',
+        'lottery',
       ])
     )
 
@@ -36,12 +39,19 @@ export default class SettingController {
     )
     appInfo.version = Number(appInfo.version)
 
+    let lottery: any = settings.first((item) => item.key === 'lottery')
+    lottery = await Lottery.emmitInfo(await Room.findBy('game', 'lottery'), lottery)
+
     const cards: { active: number; number: string; name: string }[] = JSON.parse(
       settings.first((item) => item.key === 'card_to_card')?.value ?? '[]'
     )
     const headerMessages: any[] = JSON.parse(
       settings.first((item) => item.key === 'header_message')?.value ?? '[]'
     )
+    const supportMessage: any = JSON.parse(
+      settings.first((item) => item.key === 'support_message')?.value ?? '{}'
+    )
+    supportMessage.questions = collect(supportMessage.questions ?? []).whereIn('active', ['1', 1])
 
     const telegramBot = settings.first((item: any) => item && item.key == 'telegram_bot')?.value
     const supportTelegram = settings.first((item: any) => item && item.key == 'support_telegram')
@@ -64,14 +74,19 @@ export default class SettingController {
         }
       }),
       header_messages: collect(headerMessages).whereIn('active', ['1', 1, true]).pluck('text'),
+      game_types: collect(Helper.ROOMS).map((item) =>
+        collect(item).only(['game', 'type', 'cardPrice']).all()
+      ),
+      log_hours_limit: `${Helper.DABERNA_LOG_HOUR_LIMIT}`,
       ad: Helper.AD,
-      game: await Daberna.find(2),
+      game:null /* await Daberna.find(2)*/,
       blackjack_help: blackjackHelp,
       cards: Helper.BLACKJACK.cards,
       coins: Helper.BLACKJACK.coins,
       winwheel: JSON.parse(winWheel?.value),
       card_to_card: collect(cards).where('active', '1').random(),
       policy: policy,
+      support_message: supportMessage,
       charge_title: settings.first((item) => item.key == 'charge_title')?.value,
       card_to_card_title: settings.first((item) => item.key == 'card_to_card_title')?.value,
       withdraw_title: settings.first((item) => item.key == 'withdraw_title')?.value,

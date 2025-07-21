@@ -16,6 +16,7 @@ import AgencyFinancial from '#models/agency_financial'
 import { DateTime } from 'luxon'
 import Log from '#models/log'
 import db from '@adonisjs/lucid/services/db'
+import Agency from "#models/agency";
 
 export default class BotController {
   public user: User | Admin | null
@@ -461,10 +462,17 @@ export default class BotController {
           //     return tmp
           //   })
           //   .join('\n')
-          msg +=
-            (await Log.roomsTable(
-              Helper.ROOMS.filter((item) => item.game == 'daberna').map((item) => item.type)
-            )) + '\n'
+          const agencyIds = await Agency.query().select('id')
+          const agencyTypes = agencyIds.map((agency) => `a_${agency.id}`)
+
+          const types = [
+            ...Helper.ROOMS.filter((i) => ['daberna', 'lottery'].includes(i.game)).map(
+              (item) => item.type
+            ),
+            ...agencyTypes,
+          ]
+
+          msg += (await Log.roomsTable(types)) + '\n'
           msg += '🆆🅸🅽🅽🅴🆁' + '\n'
           await Telegram.sendMessage(fromId, msg, null, null, await this.getKeyboard('user_main'))
         }

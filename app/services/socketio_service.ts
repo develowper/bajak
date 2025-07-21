@@ -27,6 +27,7 @@ import Dooz from '#models/dooz'
 import db from '@adonisjs/lucid/services/db'
 import Blackjack from '#models/blackjack'
 import Admin from '#models/admin'
+import Lottery from '#models/lottery'
 declare module 'socket.io' {
   interface Socket {
     context: HttpContext
@@ -39,6 +40,7 @@ export default class SocketIo {
   public static timer1
   public static timer2
   public static timer3
+  public static timer4
   constructor(/*protected app: ApplicationService*/) {
     // console.log('*********   socket service created ')
     // console.log(Daberna.makeCard())
@@ -115,7 +117,7 @@ export default class SocketIo {
         if (!data || !data?.type || !this.user) return
         socket.leave(`room-${data?.type}`)
         const room = await Room.query()
-          .whereNot('game', 'daberna')
+          .whereNotIn('game', ['daberna', 'lottery'])
           .where('type', data?.type)
           .first()
         if (room) await room.setUser(this.user, 'remove')
@@ -278,6 +280,18 @@ export default class SocketIo {
         }
         // clearInterval(SocketIo.timer)
       }, 3000)
+
+      //timer lottery
+      SocketIo.timer4 = setInterval(async () => {
+        if (app.isTerminated || app.isTerminating) {
+          clearInterval(SocketIo.timer4)
+          return
+        }
+
+        const lottery = await Lottery.createGame()
+        if (lottery) await SocketIo.emitToRoom(`room-lottery`, 'game-start', lottery)
+        // clearInterval(SocketIo.timer2)
+      }, 10000)
       return
       //timer dooz
       SocketIo.timer2 = setInterval(async () => {
