@@ -228,8 +228,38 @@ export default class TransactionsController {
             prize: winLabel,
             index: randomIndex,
           })
-        desc = __('winwheel_prize_*', { item: asPrice(`${winLabel}`) })
+        desc = __('winwheel_prize_*_to_*', {
+          item: asPrice(`${winLabel}`),
+          item2: `${user?.username}(${user?.id})`,
+        })
 
+        let msg = __('no_prize_unfortunately')
+
+        const uf = await UserFinancial.firstOrNew({
+          userId: user?.id,
+        })
+        uf.balance = Number(uf.balance)
+
+        let _beforeBalance = uf.balance
+        let _afterBalance = uf.balance
+        if (winLabel > 0) {
+          uf.merge({
+            balance: (uf.balance ?? 0) + winLabel,
+          })
+          await uf.save()
+          _afterBalance = uf.balance
+
+          const agencyFinancial = await AgencyFinancial.firstOrNew({
+            agencyId: user?.agencyId,
+          })
+          agencyFinancial.balance = Number(agencyFinancial.balance)
+
+          agencyFinancial.merge({
+            balance: (agencyFinancial.balance ?? 0) - winLabel,
+          })
+          await agencyFinancial.save()
+          msg = __('wallet_added_*', { item: `${winLabel}` })
+        }
         const transaction = await Transaction.create({
           agencyId: user?.agencyId,
           title: desc,
@@ -242,28 +272,13 @@ export default class TransactionsController {
           amount: winLabel,
           payId: `${orderId}`,
           appVersion: appVersion,
-          info: null,
+          info: JSON.stringify({
+            before_balance: _beforeBalance,
+            after_balance: _afterBalance,
+          }),
           payedAt: now,
         })
-        let msg = __('no_prize_unfortunately')
-        if (winLabel > 0) {
-          const financial = await UserFinancial.firstOrNew({
-            userId: transaction.toId,
-          })
-          financial.merge({
-            balance: (financial.balance ?? 0) + transaction.amount,
-          })
-          await financial.save()
 
-          const agencyFinancial = await AgencyFinancial.firstOrNew({
-            agencyId: transaction.fromId,
-          })
-          agencyFinancial.merge({
-            balance: (Number(agencyFinancial.balance) ?? 0) - transaction.amount,
-          })
-          await agencyFinancial.save()
-          msg = __('wallet_added_*', { item: `${winLabel}` })
-        }
         return response.json({
           status: 'success',
           message: msg,
