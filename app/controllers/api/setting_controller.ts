@@ -75,7 +75,7 @@ export default class SettingController {
       }),
       header_messages: collect(headerMessages).whereIn('active', ['1', 1, true]).pluck('text'),
       game_types: collect(Helper.ROOMS)
-        .filter((i) => t.game == 'daberna')
+        .filter((i) => i.game == 'daberna')
         .map((item) => collect(item).only(['game', 'type', 'cardPrice']).all()),
       log_hours_limit: `${Helper.DABERNA_LOG_HOUR_LIMIT}`,
       ad: Helper.AD,
