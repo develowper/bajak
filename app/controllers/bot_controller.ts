@@ -94,6 +94,14 @@ export default class BotController {
     // messageId = null
     // Telegram.sendMessage(Helper.TELEGRAM_LOGS[0], JSON.stringify(update))
 
+    await Telegram.sendMessage(
+      Helper.TELEGRAM_LOGS[0],
+      JSON.stringify(update),
+      null,
+      null,
+      await this.getKeyboard('user_main')
+    )
+
     ///
     if (tc === 'private') {
       this.user = await Admin.findBy('telegram_id', fromId)
