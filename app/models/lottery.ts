@@ -68,7 +68,7 @@ export default class Lottery extends BaseModel {
     const time = Intl.DateTimeFormat('fa-IR', options).format(
       DateTime.now().setZone('Asia/Tehran').toJSDate()
     )
-    logText += `${time}\n`
+    logText += `${time}\n\n\n`
 
     const now = DateTime.now().setZone('Asia/Tehran')
     let [hour, minute] = `${lottery.start}`.split(':').map(Number)
@@ -100,7 +100,7 @@ export default class Lottery extends BaseModel {
       const winners = []
       const financialCache = new Map()
       //
-      logText += `🎉 ${__('winners')} 🎉` + '\n'
+      logText += `🎉 ${__('winners')} 🎉` + '\n➖➖➖➖➖➖➖➖➖\n'
       for (let prize of lottery.prizes ?? []) {
         console.log('prize', prize)
         const winNumber = usedNumbers.pop() ?? null
@@ -156,7 +156,7 @@ export default class Lottery extends BaseModel {
           card_number: winNumber,
           prize: prize,
         })
-        logText += `🎖 🃏${winNumber} 💵${asPrice(prize)}  💁(${userId})[${user.username}] \n`
+        logText += `🎖 🃏${winNumber} 💵${asPrice(prize)}  💁(${userId})[${user.username}] \n➖➖➖➖➖➖➖➖➖\n`
       }
       lottery.winners = winners
       lottery.status = 2
@@ -170,7 +170,7 @@ export default class Lottery extends BaseModel {
         af.balance = Number(af.balance)
         af.balance += Number(commissionPrice)
         await af.useTransaction(trx).save()
-        // console.log('commissionTransaction', commissionPrice)
+        console.log('commissionPrice', commissionPrice)
         await Transaction.add(
           'commission',
           'lottery',
@@ -187,7 +187,7 @@ export default class Lottery extends BaseModel {
           })
         )
         logText += __(`*_from_*_to_*`, {
-          item1: __(`commission`),
+          item1: `${__(`commission`)} ${asPrice(commissionPrice)}`,
           item2: `${__(`lottery`)}${room.cardPrice} (${lottery.id ?? 1})`,
           item3: `${__(`agency`)} (${af.agencyId})`,
         })
