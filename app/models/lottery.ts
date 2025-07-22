@@ -55,7 +55,7 @@ export default class Lottery extends BaseModel {
     let lottery: any = JSON.parse(setting?.value ?? '{}')
     console.log('lottery', lottery)
     console.log('status', lottery.status)
-    if (lottery.status != 1) return null
+    if (Number(lottery.status) != 1) return null
 
     const now = DateTime.now().setZone('Asia/Tehran')
     let [hour, minute] = `${lottery.start}`.split(':').map(Number)
