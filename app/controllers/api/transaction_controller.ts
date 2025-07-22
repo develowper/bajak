@@ -506,7 +506,7 @@ export default class TransactionsController {
 
     if (search) query.where('title', 'like', `%${search}%`)
     if (type) {
-      if (type == 'win') query.whereIn('type', ['win', 'winwheel'])
+      if (type == 'win') query.whereIn('type', ['win', 'winwheel', 'lottery'])
       else if (type == 'charge') query.whereIn('type', ['charge', 'cardtocard'])
       else query.where('type', type)
     }

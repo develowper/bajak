@@ -57,7 +57,7 @@ export default class Lottery extends BaseModel {
     // console.log('status', lottery.status)
     if (Number(lottery.status) != 1) return null
 
-    let logText = `🎰🎰${__('lottery')}🎰🎰`
+    let logText = `🎰🎰${__('lottery')}🎰🎰\n`
     const options: any = {
       timeZone: 'Asia/Tehran',
       calendar: 'persian',
@@ -68,7 +68,7 @@ export default class Lottery extends BaseModel {
     const time = Intl.DateTimeFormat('fa-IR', options).format(
       DateTime.now().setZone('Asia/Tehran').toJSDate()
     )
-    logText += `${time}\n\n\n`
+    logText += `${time}\n\n`
 
     const now = DateTime.now().setZone('Asia/Tehran')
     let [hour, minute] = `${lottery.start}`.split(':').map(Number)
