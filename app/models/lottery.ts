@@ -167,7 +167,8 @@ export default class Lottery extends BaseModel {
 
       if (commissionPrice != 0) {
         const af = await AgencyFinancial.find(1)
-        af.balance += commissionPrice
+        af.balance = Number(af.balance)
+        af.balance += Number(commissionPrice)
         await af.useTransaction(trx).save()
         // console.log('commissionTransaction', commissionPrice)
         await Transaction.add(
