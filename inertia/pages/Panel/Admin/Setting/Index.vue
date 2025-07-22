@@ -542,7 +542,7 @@ export default {
       params: {
         page: 1,
         search: null,
-        paginate: this.$page.props.pageItems[0],
+        paginate: this.$page.props.pageItems[2],
         order_by: null,
         dir: 'DESC',
         id: null,
