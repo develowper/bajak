@@ -260,7 +260,7 @@ class Helper {
     USER: 4,
     STATISTICS: 5,
     BUG: 6,
-    LOTTERY: null,
+    LOTTERY: 25962,
   }
   public static ADMIN_ROLES = ['go', 'ad']
   public static GAMES = ['daberna', 'dooz', 'blackjack', 'lottery']
