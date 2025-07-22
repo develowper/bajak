@@ -71,6 +71,7 @@ export default class SettingController {
       .where('is_active', true)
 
     return response.json({
+      lottery: lottery,
       games: games.map((item) => {
         return {
           title: i18n.t(`messages.${item.game}`),
@@ -83,6 +84,7 @@ export default class SettingController {
         .map((item) => collect(item).only(['game', 'type', 'cardPrice']).all()),
       log_hours_limit: `${Helper.DABERNA_LOG_HOUR_LIMIT}`,
       ad: Helper.AD,
+
       game: null /* await Daberna.find(2)*/,
       blackjack_help: blackjackHelp,
       cards: Helper.BLACKJACK.cards,
