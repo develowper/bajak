@@ -50,7 +50,7 @@ export default class Lottery extends BaseModel {
   }
   static async createGame() {
     const setting = await Setting.findBy('key', 'lottery')
-    let lottery: any = JSON.parse(setting?.value ?? '[]')
+    let lottery: any = setting?.value ?? {}
     // console.log('status', lottery.status)
     if (lottery.status != 1) return null
 
