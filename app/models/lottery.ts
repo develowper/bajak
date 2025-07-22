@@ -53,7 +53,7 @@ export default class Lottery extends BaseModel {
     // console.log('setting', setting.value)
     // console.log('settingValue', JSON.parse(setting.value))
     let lottery: any = JSON.parse(setting?.value ?? '{}')
-    console.log('lottery', lottery)
+    // console.log('lottery', lottery)
     console.log('status', lottery.status)
     if (Number(lottery.status) != 1) return null
 
