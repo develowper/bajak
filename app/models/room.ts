@@ -338,7 +338,8 @@ export default class Room extends BaseModel {
     if (!user) return false
     let res: any[] = []
     let result = ''
-    const parsed: any = typeof this.players === 'string' ? JSON.parse(this.players) : this.players
+    const parsed: any =
+      (typeof this.players === 'string' ? JSON.parse(this.players) : this.players) ?? []
     const beforeUser = collect(parsed).first((item: any) => item.user_id == user.id)
 
     if (collect(parsed).first((item: any) => item.card_numbers.includes(cardNumber))) {
