@@ -23,6 +23,7 @@ import { storage } from '../../../resources/js/storage.js'
 import db from '@adonisjs/lucid/services/db'
 import { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Lottery from '#models/lottery'
+import Telegram from '#services/telegram_service'
 
 @inject()
 export default class RoomController {
@@ -278,7 +279,14 @@ export default class RoomController {
           return response.status(400).json({
             message: i18n.t(`messages.${addRes}`),
           })
-        } else addRes = true
+        } else {
+          addRes = true
+          Telegram.logAdmins(
+            `🎫Buy Card ${cardNumber}\n 🧍(${user.id}):[${user.username}]`,
+            null,
+            Helper.TELEGRAM_TOPICS.LOTTERY
+          )
+        }
       } else {
         addRes = await room.setUserCardsCount(userBeforeCardCounts + cardCount, user, ip, trx)
       }

@@ -4,7 +4,7 @@ import User from '#models/user'
 import { TransactionClientContract } from '@adonisjs/lucid/types/database'
 import Room from '#models/room'
 import Setting from '#models/setting'
-import { __, asPrice, shuffle } from '#services/helper_service'
+import Helper, { __, asPrice, shuffle } from '#services/helper_service'
 import db from '@adonisjs/lucid/services/db'
 import collect from 'collect.js'
 import emitter from '@adonisjs/core/services/emitter'
@@ -57,6 +57,19 @@ export default class Lottery extends BaseModel {
     // console.log('status', lottery.status)
     if (Number(lottery.status) != 1) return null
 
+    let logText = `🎰🎰${__('lottery')}🎰🎰`
+    const options: any = {
+      timeZone: 'Asia/Tehran',
+      calendar: 'persian',
+      numberingSystem: 'arab',
+      dateStyle: 'full',
+      timeStyle: 'short',
+    }
+    const time = Intl.DateTimeFormat('fa-IR', options).format(
+      DateTime.now().setZone('Asia/Tehran').toJSDate()
+    )
+    logText += `${time}\n`
+
     const now = DateTime.now().setZone('Asia/Tehran')
     let [hour, minute] = `${lottery.start}`.split(':').map(Number)
 
@@ -87,6 +100,7 @@ export default class Lottery extends BaseModel {
       const winners = []
       const financialCache = new Map()
       //
+      logText += `🎉 ${__('winners')} 🎉` + '\n'
       for (let prize of lottery.prizes ?? []) {
         console.log('prize', prize)
         const winNumber = usedNumbers.pop() ?? null
@@ -142,6 +156,7 @@ export default class Lottery extends BaseModel {
           card_number: winNumber,
           prize: prize,
         })
+        logText += `🎖 🃏${winNumber} 💵${asPrice(prize)}  💁(${userId})[${user.username}] \n`
       }
       lottery.winners = winners
       lottery.status = 2
@@ -170,6 +185,11 @@ export default class Lottery extends BaseModel {
             item3: `${__(`agency`)} (${af.agencyId})`,
           })
         )
+        logText += __(`*_from_*_to_*`, {
+          item1: __(`commission`),
+          item2: `${__(`lottery`)}${room.cardPrice} (${lottery.id ?? 1})`,
+          item3: `${__(`agency`)} (${af.agencyId})`,
+        })
       }
       await Log.add(
         room.type,
@@ -193,6 +213,8 @@ export default class Lottery extends BaseModel {
         console.log('transaction', t.id)
         // Telegram.log(null, 'transaction_created', t)
       }
+      logText += `\n🆆🅸🅽🅽🅴🆁\n`
+      Telegram.logAdmins(`${logText}`, null, Helper.TELEGRAM_TOPICS.LOTTERY)
       return lottery
     }
     return null
