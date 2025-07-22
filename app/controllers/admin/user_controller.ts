@@ -13,6 +13,8 @@ import Telegram from '#services/telegram_service'
 import hash from '@adonisjs/core/services/hash'
 import db from '@adonisjs/lucid/services/db'
 import env from '#start/env'
+import Log from '#models/log'
+import AgencyFinancial from '#models/agency_financial'
 
 export default class UserController {
   //
@@ -154,21 +156,37 @@ export default class UserController {
             })
           )
         )
-
+        data.financial.balance = Number(data?.financial?.balance ?? 0)
         const beforeBalance = data.financial?.balance ?? 0
         if (cmnd == 'withdraw') data.financial.balance -= amount
         else data.financial.balance += amount
         await data.financial.save()
         const afterBalance = data.financial?.balance ?? 0
+        const fromType = cmnd == 'withdraw' ? 'user' : 'agency'
+        const fromId = cmnd == 'withdraw' ? data.id : data.agencyId
+        const toType = cmnd == 'withdraw' ? 'agency' : 'user'
+        const toId = cmnd == 'withdraw' ? data.agencyId : data.id
+
+        await AgencyFinancial.query()
+          .where('id', data.agencyId)
+          .increment('balance', (cmnd == 'withdraw' ? 1 : -1) * Math.abs(amount))
+        await Log.add(
+          `a_${data?.agencyId}`,
+          1,
+          1,
+          (cmnd == 'withdraw' ? 1 : -1) * Math.abs(amount),
+          DateTime.now().startOf('day').toJSDate()
+        )
+
         const t = await Transaction.create({
           agencyId: data?.agencyId,
           title: desc,
           type: cmnd,
           gateway: 'wallet',
-          fromType: 'user',
-          fromId: data?.id,
-          toType: 'user',
-          toId: data?.id,
+          fromType: fromType,
+          fromId: fromId,
+          toType: toType,
+          toId: toId,
           amount: amount,
           payId: now.toMillis(),
           payedAt: now,
