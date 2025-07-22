@@ -80,7 +80,7 @@ export default class Lottery extends BaseModel {
       //find winners
       let commissionPrice = room.cardCount * room.cardPrice
 
-      const players = room.players ?? '[]'
+      const players = room.players ?? []
       const usedNumbers = shuffle(players.map((i) => i.card_numbers).flat() ?? [])
 
       console.log('numbers', usedNumbers)
