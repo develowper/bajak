@@ -498,6 +498,7 @@ export default class TransactionsController {
     const dir = request.input('dir') ?? 'DESC'
     const sort = request.input('sort') ?? 'created_at'
     const now = DateTime.now().setZone('Asia/Tehran')
+
     let query = Transaction.query()
       .whereNotNull('payed_at')
       .where((query) => {
