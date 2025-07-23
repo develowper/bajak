@@ -52,7 +52,7 @@ export default class Lottery extends BaseModel {
       const remainingPrizes = lottery.prizes.slice(room.cardCount)
       const remainingSum = remainingPrizes.reduce((a, b) => a + b, 0)
       const bonusPerWinner = Math.floor(remainingSum / room.cardCount)
-      lottery.prizes = usedPrizes.map(p => p + bonusPerWinner)
+      lottery.prizes = usedPrizes.map((p) => p + bonusPerWinner)
     }
     return lottery
   }
@@ -97,7 +97,7 @@ export default class Lottery extends BaseModel {
       await room.useTransaction(trx).save()
 
       lottery = await Lottery.emmitInfo(room, setting)
-      lottery.id = (lottery?.id ?? 0) + 1
+      lottery.id = Number(lottery?.id ?? 0) + 1
       //find winners
       let commissionPrice = room.cardCount * room.cardPrice
 
@@ -145,7 +145,7 @@ export default class Lottery extends BaseModel {
             payedAt: DateTime.now(),
             title: __(`*_from_*_to_*`, {
               item1: __(`win`),
-              item2: `${__(`lottery`)}${room.cardPrice} (${lottery.id ?? 1})`,
+              item2: `<${__(`lottery`)}${room.cardPrice}> (${lottery.id ?? 1})`,
               item3: `${__(`user`)}  (${user?.id})`,
             }),
             info: JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
