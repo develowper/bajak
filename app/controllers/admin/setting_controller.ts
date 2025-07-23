@@ -16,6 +16,7 @@ export default class SettingController {
     const admin = auth.user
 
     const page = request.input('page') ?? 1
+    const paginate = request.input('paginate') ?? Helper.PAGINATE
     const search = request.input('search')
     const dir = request.input('dir') ?? 'DESC'
     const sort = request.input('order_by') ?? 'created_at'
@@ -25,7 +26,7 @@ export default class SettingController {
     if (search) query.where('key', 'like', `%${search}%`)
 
     return response.json(
-      await query.where('visible', true).orderBy(sort, dir).paginate(page, Helper.PAGINATE)
+      await query.where('visible', true).orderBy(sort, dir).paginate(page, paginate)
     )
   }
 

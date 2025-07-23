@@ -497,12 +497,13 @@ export default class TransactionsController {
     const type = request.input('type')
     const dir = request.input('dir') ?? 'DESC'
     const sort = request.input('sort') ?? 'created_at'
-
+    const now = DateTime.now().setZone('Asia/Tehran')
     let query = Transaction.query()
       .whereNotNull('payed_at')
       .where((query) => {
         query.where({ fromId: userId, fromType: 'user' }).orWhere({ toId: userId, toType: 'user' })
       })
+      .where('payed_at', '>', now.minus({ days: 2 }).toJSDate())
 
     if (search) query.where('title', 'like', `%${search}%`)
     if (type) {

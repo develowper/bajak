@@ -40,12 +40,20 @@ export default class Lottery extends BaseModel {
     lottery.room_id = room.id
     lottery.seconds_remaining = secondsRemaining
     const sum = room.cardCount * room.cardPrice
-    lottery.prizes =
-      lottery.winners_prize?.split('\n')?.map((i) => {
-        const p = Number(i)
-        return p < 100 ? Math.round((p * sum) / 100) : p
-      }) ?? []
+    const allPrizes = lottery.winners_prize?.split('\n')
 
+    lottery.prizes =
+      allPrizes?.map((i) => {
+        const p = Number(i)
+        return p <= 100 ? Math.round((p * sum) / 100) : p
+      }) ?? []
+    if (room.cardCount > 0 && room.cardCount < allPrizes.length) {
+      const usedPrizes = lottery.prizes.slice(0, room.cardCount)
+      const remainingPrizes = lottery.prizes.slice(room.cardCount)
+      const remainingSum = remainingPrizes.reduce((a, b) => a + b, 0)
+      const bonusPerWinner = Math.floor(remainingSum / room.cardCount)
+      lottery.prizes = usedPrizes.map(p => p + bonusPerWinner)
+    }
     return lottery
   }
   static async createGame() {

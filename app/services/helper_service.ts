@@ -235,7 +235,7 @@ class Helper {
   public static APP_VERSION = 1
   public static PAGINATE = 24
   public static MIN_CHARGE = 50000
-  public static MIN_WITHDRAW = 100000
+  public static MIN_WITHDRAW = 200000
   public static CALL_SPEED = 1000
   public static ROOM_REFRESH_TIME = 10
   public static CLEAR_TRANSACTION_DAY = 0
