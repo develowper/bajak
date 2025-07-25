@@ -16,7 +16,7 @@ import AgencyFinancial from '#models/agency_financial'
 import { DateTime } from 'luxon'
 import Log from '#models/log'
 import db from '@adonisjs/lucid/services/db'
-import Agency from "#models/agency";
+import Agency from '#models/agency'
 
 export default class BotController {
   public user: User | Admin | null
@@ -518,7 +518,7 @@ export default class BotController {
                 [{ text: this.user ? '👤حساب کاربری👤' : 'ثبت نام✅' }],
                 !this.user ? [{ text: '🔑 بازیابی رمز 🔑' }] : [],
                 [{ text: '📥دانلود برنامه📥' }],
-                // [{ text: '💶 کسب درآمد 💶' }],
+                [{ text: '💶 کسب درآمد 💶' }],
                 [{ text: '👨‍💻پشتیبانی👨‍💻' }],
               ],
           resize_keyboard: true,
