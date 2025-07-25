@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
-import Helper, {__, asPrice, isPG, range, shuffle, sleep} from '#services/helper_service'
+import Helper, { __, asPrice, isPG, range, shuffle, sleep } from '#services/helper_service'
 import Room from '#models/room'
 import AgencyFinancial from '#models/agency_financial'
 import Transaction from '#models/transaction'
@@ -13,7 +13,7 @@ import Telegram from '#services/telegram_service'
 import { TransactionClient } from '@adonisjs/lucid/build/src/transaction_client/index.js'
 import db from '@adonisjs/lucid/services/db'
 import Eitaa from '#services/eitaa_service'
-import SocketIo from "#services/socketio_service";
+import SocketIo from '#services/socketio_service'
 export default class Daberna extends BaseModel {
   static table = 'daberna'
   @column({ isPrimary: true })
@@ -164,8 +164,9 @@ export default class Daberna extends BaseModel {
 
     blackList = `${blackList}`
       .split('\n')
-      .map((i: any) => i.trim())
-      .filter((s: any) => s !== '')
+      .map(Number)
+      .filter((n) => !Number.isNaN(n))
+      .map(String)
 
     let jokerInGame: boolean =
       jokerId && players.filter((item: any) => `${item.user_id}` == `${jokerId}`.trim()).length > 0
