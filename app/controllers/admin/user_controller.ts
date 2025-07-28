@@ -2,7 +2,7 @@
 
 import type { HttpContext } from '@adonisjs/core/http'
 import UserFinancial from '#models/user_financial'
-import Helper, { __ } from '#services/helper_service'
+import Helper, { __, isPG } from '#services/helper_service'
 import User from '#models/user'
 import Transaction from '#models/transaction'
 import vine from '@vinejs/vine'
@@ -86,12 +86,24 @@ export default class UserController {
     //   query.where({ fromId: userId, fromType: 'user' }).orWhere({ toId: userId, toType: 'user' })
     // })
 
-    if (search)
-      query.where((query) => {
-        query.where('username', 'like', `%${search}%`)
-        if (env.get('DB_CONNECTION') === 'pg') query.orWhereRaw('id::text LIKE ?', [`%${search}%`])
-        else query.where('id', 'like', `%${search}%`)
-      })
+    if (search) {
+      if (isPG())
+        query.where((q) => {
+          q.orWhereRaw(`users.id::text ILIKE ?`, [`%${search}%`])
+          q.orWhereRaw(`users.full_name ILIKE ?`, [`%${search}%`])
+          q.orWhereRaw(`users.phone ILIKE ?`, [`%${search}%`])
+          q.orWhereRaw(`users.username ILIKE ?`, [`%${search}%`])
+          q.orWhereRaw(`users.telegram_id ILIKE ?`, [`%${search}%`])
+        })
+      else
+        query.where((q) => {
+          q.orWhere('users.id', `${search}`)
+            .orWhere('users.full_name', 'like', `%${search}%`)
+            .orWhere('users.phone', 'like', `%${search}%`)
+            .orWhere('users.username', 'like', `%${search}%`)
+            .orWhere('users.telegram_id', 'like', `%${search}%`)
+        })
+    }
     if (type) {
       query.where('type', type)
     }
