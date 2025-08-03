@@ -269,7 +269,7 @@ export default class RoomController {
         if (Number(lottery.status) != 1) {
           await trx.rollback()
           return response.status(400).json({
-            message: i18n.t('messages.is_inactive_*', { item: i18n.t('lottery') }),
+            message: i18n.t('messages.is_inactive_*', { item: i18n.t('messages.lottery') }),
           })
         }
 
