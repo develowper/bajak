@@ -69,11 +69,15 @@ export default class TransactionsController {
           item1: `${asPrice(`${amount}`)} ${__('currency')}`,
           item2: `${__(fromType)} (${user?.username ?? fromId})`,
         })
+        const bankDesc = __('buy_*_by_*', {
+          item1: `${asPrice(`${amount}`)} ${__('currency')}`,
+          item2: `${__(fromType)} (${user?.username ?? fromId})`,
+        })
         const res = await Transaction.makePayUrl(
           orderId,
           amount,
           user?.username as string,
-          desc,
+          bankDesc,
           user?.phone,
           user?.id
         )
@@ -95,6 +99,7 @@ export default class TransactionsController {
           payId: res.order_id,
           gatewayId: res.gateway_id,
           appVersion: appVersion,
+          info: JSON.stringify({ bank_fee: res.fee }), //fee
         })
 
         // }

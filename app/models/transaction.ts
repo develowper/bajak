@@ -119,9 +119,26 @@ export default class Transaction extends BaseModel {
         case 'zarinpal':
           const gateway = await Transaction.getAPI('ZARINPAL')
 
+          //fee
+          const feeResponse = await fetch(
+            'https://payment.zarinpal.com/pg/v4/payment/feeCalculation.json',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json', // Important for sending JSON
+              },
+              body: JSON.stringify({
+                merchant_id: gateway?.key,
+                amount: `${price}0`,
+              }),
+            }
+          )
+          const feeResult: any = await feeResponse.json()
+          const fee = Number(feeResult?.data?.fee ?? 0)
+
           const zarinpalData = {
             merchant_id: gateway?.key /*?? Env.get('ZARINPAL_TOKEN')*/,
-            amount: `${price}0`,
+            amount: Number(`${price}0`) + fee, //fee
 
             callback_url: `https://${Env.get('APP_URL')}/api/payment/done`,
             description: description,
@@ -155,6 +172,7 @@ export default class Transaction extends BaseModel {
             if (result && result.data.code === 100) {
               return {
                 status: 'success',
+                fee: fee, //fee
                 order_id: result.data.authority,
                 gateway_id: gateway?.title,
                 url: `https://www.zarinpal.com/pg/StartPay/${result.data.authority}`,
@@ -274,12 +292,14 @@ export default class Transaction extends BaseModel {
           let result: any = {}
           if (request && request.input('Status') === 'OK') {
             const t = await Transaction.query().where('pay_id', request.input('Authority')).first()
+            const amount = Number(t?.amount ?? 0) * 10 + Number(t?.info?.bank_fee ?? 0) //fee + amount
+
             const data = {
               merchant_id: await Transaction.getAPI(
                 'ZARINPAL',
                 t?.gatewayId
               ) /*?? Env.get('ZARINPAL_TOKEN')*/,
-              amount: (t?.amount ?? 0) * 10,
+              amount: amount,
               authority: request.input('Authority'),
             }
 

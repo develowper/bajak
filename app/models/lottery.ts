@@ -146,7 +146,7 @@ export default class Lottery extends BaseModel {
             title: __(`*_from_*_to_*`, {
               item1: __(`win`),
               item2: `<${__(`lottery`)}${room.cardPrice}> (${lottery.id ?? 1})`,
-              item3: `${__(`user`)}  (${user?.id})`,
+              item3: `${__(`user`)} ${user?.username} (${user?.id})`,
             }),
             info: JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
           },
