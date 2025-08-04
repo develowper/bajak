@@ -1,12 +1,13 @@
 import vine from '@vinejs/vine'
-import Helper from '#services/helper_service'
+import Helper, { getSetting, getSettings } from '#services/helper_service'
+import Setting from '#models/setting'
 
 export const chargeValidator = vine.compile(
   vine.object({
     amount: vine
       .number()
       .withoutDecimals()
-      .min(Helper.MIN_CHARGE)
+      .min((await getSettings('min_charge')) ?? Helper.MIN_CHARGE)
       .optional()
       .requiredWhen('type', 'notIn', ['winwheel']),
     type: vine.string().in(Helper.TRANSACTION.types),
