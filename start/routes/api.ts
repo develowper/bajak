@@ -40,6 +40,8 @@ export default () => {
       router.get('adv/get', [AdvController, 'get']).as('adv.get')
       router.post('adv/click', [AdvController, 'click']).as('adv.click')
       router.get('daberna/search', [DabernaController, 'search']).as('daberna.search')
+      router.get('room/records', [RoomController, 'records']).as('room.records')
+
     })
     // .use(middleware.checkServerStatus)
     .use(

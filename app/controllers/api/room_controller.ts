@@ -373,4 +373,20 @@ export default class RoomController {
       return response.status(422).json({ message: error.message || error.toString(), error })
     }
   }
+
+  async records({ response, request, auth, i18n }: HttpContext) {
+    const user = auth.user as User
+    const roomType = request.input('room_type') ?? ''
+
+    const type = roomType.slice(1)
+
+    const users = await db
+      .from('users')
+      .limit(Helper.TOP_USERS_COUNT)
+      .select('username', `today_card_${type}_count as cardCount`)
+      .where(`today_card_${type}_count`, '>', 0)
+      .orderBy(`today_card_${type}_count`, 'desc')
+
+    return response.json({ data: users })
+  }
 }
