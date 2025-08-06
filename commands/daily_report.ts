@@ -19,8 +19,11 @@ export default class DailyReport extends BaseCommand {
   static description = 'daily report telegram and clear database'
   static aliases = ['report']
   static options: CommandOptions = { staysAlive: false, startApp: true, allowUnknownFlags: false }
-
-  static reportTime = DateTime.fromObject({ hour: 8, minute: 0 }, { zone: 'Asia/Tehran' })
+  static logTime = Helper.LOGTIME.split(':').map(Number)
+  static reportTime = DateTime.fromObject(
+    { hour: DailyReport.logTime[0], minute: DailyReport.logTime[1] },
+    { zone: 'Asia/Tehran' }
+  )
   async run() {
     const now = DateTime.now().setZone('Asia/Tehran')
 
