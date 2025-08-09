@@ -22,6 +22,7 @@ import { io } from 'socket.io-client'
 import { Encryption } from '@adonisjs/core/encryption'
 import Blackjack from '#models/blackjack'
 import db from '@adonisjs/lucid/services/db'
+import axios from 'axios'
 
 const encryption = new Encryption({
   secret: env.get('ENC_KEY', ''),
