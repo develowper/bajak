@@ -24,6 +24,7 @@ import Blackjack from '#models/blackjack'
 import db from '@adonisjs/lucid/services/db'
 import axios from 'axios'
 import string from '@adonisjs/core/helpers/string'
+import Telegram from '#services/telegram_service'
 
 const encryption = new Encryption({
   secret: env.get('ENC_KEY', ''),
@@ -1110,7 +1111,8 @@ class Helper {
       })
       return
     } catch (e) {
-      console.warn(e)
+      Telegram.log(null, 'error', JSON.stringify(e?.response?.data))
+      // console.warn(e)
     }
   }
 }
