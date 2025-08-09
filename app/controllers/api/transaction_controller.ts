@@ -8,7 +8,7 @@ import {
   withdrawValidator,
 } from '#validators/transaction'
 import Transaction from '#models/transaction'
-import Helper, { __, asPrice, getSettings, isPG } from '#services/helper_service'
+import Helper, {__, asPrice, createWordpressOrder, getSettings, isPG} from '#services/helper_service'
 import { DateTime } from 'luxon'
 import User from '#models/user'
 import Admin from '#models/admin'
@@ -426,7 +426,9 @@ export default class TransactionsController {
 
       status = paymentResponse.status
       const orderToken = paymentResponse.order_id
-      const user = await Helper.TRANSACTION_MODELS[transaction?.fromType]?.find(transaction?.fromId)
+      const user: any = await Helper.TRANSACTION_MODELS[transaction?.fromType]?.find(
+        transaction?.fromId
+      )
       const userType = user instanceof Admin ? 'admin' : 'user'
 
       const column = `${transaction.toType}Id`
@@ -458,6 +460,7 @@ export default class TransactionsController {
             .update({ lastTransaction: now.toFormat('yyyy-MM-dd HH:mm:ss') })
         }
         transaction.user = user
+        createWordpressOrder({ username: user?.username, amount: Number(transaction.amount) })
         Telegram.log(null, 'transaction_created', transaction)
       }
 
