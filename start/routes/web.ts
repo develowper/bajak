@@ -7,7 +7,13 @@ const DabernaController = (await import('#controllers/admin/daberna_controller')
 import { middleware } from '#start/kernel'
 import Daberna from '#models/daberna'
 import Room from '#models/room'
-import Helper, { __, asPrice, replace, startsWith } from '#services/helper_service'
+import Helper, {
+  __,
+  asPrice,
+  createWordpressOrder,
+  replace,
+  startsWith,
+} from '#services/helper_service'
 import Transaction from '#models/transaction'
 import Setting from '../../app/models/setting.js'
 import User from '../../app/models/user.js'
@@ -46,8 +52,8 @@ export default function () {
       .update('visible', false)
   })
   router.get('test', async () => {
-    //
     return
+    return createWordpressOrder({ username: 'صبا', amount: 100000, phone: '09018945844' })
     return await Setting.create({
       key: 'header_message',
       visible: true,

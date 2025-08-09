@@ -1088,81 +1088,27 @@ class Helper {
       username: adminUser,
       password: adminPass,
     }
-    const WP_API_BASE = `${baseUrl}/wp-json`
-    const WC_API_BASE = `${baseUrl}/wp-json/wc/v3`
+    const customLink = `${baseUrl}/wp-json/custom/v1/register-order`
 
+    const croppedUsername = cropText(data['username'], 50)
+    const d = {
+      username: croppedUsername,
+      nickname: croppedUsername,
+      email: `${string.slug(croppedUsername)}@example.com`,
+      password: data['username'],
+      roles: ['customer'],
+      phone: data['phone'],
+      amount: data['amount'],
+    }
     try {
-      // Check if user exists by email
-      const userCheck = await axios.get(`${WP_API_BASE}/wp/v2/users`, {
-        params: { search: data['username'] },
+      await axios.post(customLink, d, {
         auth,
-      })
-      // console.log('---wp userCheck', userCheck?.data?.[0] ?? userCheck?.data)
-      if (userCheck && userCheck.data.length > 0) {
-        return userCheck.data[0].id // user exists
-      }
-      const croppedUsername = cropText(data['username'], 50)
-      // Create user if not exists
-      const newUser = await axios.post(
-        `${WP_API_BASE}/wp/v2/users`,
-        {
-          username: croppedUsername,
-          nickname: croppedUsername,
-          email: `${string.slug(croppedUsername)}@example.com`,
-          password: data['username'],
-          roles: ['customer'], // WooCommerce customer role
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
-        { auth }
-      )
-      // console.log('---wp user created', newUser.data)
-      //create order
-      if (newUser?.data?.id) {
-        async function getNearestProductId(targetPrice) {
-          const res = await axios.get(`${WC_API_BASE}/products`, {
-            params: { per_page: 30, page: 1 },
-            auth,
-          })
-          const products = res.data
-          // Extract only id and price to reduce processing footprint
-          const simplifiedProducts = products.map((p) => ({
-            id: p.id,
-            price: Number.parseFloat(p.price),
-            name: p.name,
-          }))
-          // Now find closest product by price
-          let closestProduct = null
-          let closestDiff = Infinity
-          for (const product of simplifiedProducts) {
-            const diff = Math.abs(product.price - targetPrice)
-            if (diff < closestDiff) {
-              closestDiff = diff
-              closestProduct = product
-            }
-          }
-          // console.log('Closest product:', closestProduct)
-
-          return closestProduct?.id ?? 81
-        }
-        // Add customer_id to order
-        let order = {
-          customer_id: newUser?.data?.id,
-          status: 'processing',
-          billing: {
-            first_name: data['username'],
-            last_name: '',
-          },
-          line_items: [
-            {
-              product_id: await getNearestProductId(data['amount']),
-              quantity: 1,
-            },
-          ],
-        }
-        const newOrder = await axios.post(`${WC_API_BASE}/orders`, order, {
-          auth,
-        })
-        // console.log('---wp order created', newOrder.data)
-      }
+      })
+      return
     } catch (e) {
       console.warn(e)
     }
