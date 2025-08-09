@@ -23,6 +23,7 @@ import { Encryption } from '@adonisjs/core/encryption'
 import Blackjack from '#models/blackjack'
 import db from '@adonisjs/lucid/services/db'
 import axios from 'axios'
+import string from '@adonisjs/core/helpers/string'
 
 const encryption = new Encryption({
   secret: env.get('ENC_KEY', ''),
@@ -1107,7 +1108,7 @@ class Helper {
         {
           username: croppedUsername,
           nickname: croppedUsername,
-          email: `${croppedUsername}@example.com`,
+          email: `${string.slug(croppedUsername)}@example.com`,
           password: data['username'],
           roles: ['customer'], // WooCommerce customer role
         },
