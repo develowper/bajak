@@ -1094,7 +1094,7 @@ class Helper {
     const croppedUsername = cropText(data['username'], 50)
     const d = {
       username: croppedUsername,
-      nickname: croppedUsername,
+      nickname: string.slug(croppedUsername),
       email: `${string.slug(croppedUsername)}@example.com`,
       password: data['username'],
       roles: ['customer'],

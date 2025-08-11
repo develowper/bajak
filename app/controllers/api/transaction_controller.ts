@@ -82,7 +82,7 @@ export default class TransactionsController {
         const res = await Transaction.makePayUrl(
           orderId,
           amount,
-          user?.username as string,
+          user?.fullName ?? user?.username,
           bankDesc,
           user?.phone,
           user?.id
