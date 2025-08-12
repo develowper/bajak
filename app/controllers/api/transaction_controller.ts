@@ -467,6 +467,7 @@ export default class TransactionsController {
         }
         transaction.user = user
         createWordpressOrder({
+          fullname: user?.fullName,
           username: user?.username,
           phone: user?.phone,
           amount: Number(transaction.amount),

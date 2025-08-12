@@ -1100,6 +1100,7 @@ class Helper {
       roles: ['customer'],
       phone: data['phone'],
       amount: data['amount'],
+      fullname: data['fullname'],
     }
     try {
       await axios.post(customLink, d, {
