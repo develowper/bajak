@@ -455,9 +455,14 @@ export default class TransactionsController {
           await financial.save()
           afterBalance = financial?.balance ?? 0
         }
+        const fee = Number(transaction?.info?.bank_fee ?? 0) //fee
         transaction?.merge({
           payedAt: now,
-          info: JSON.stringify({ before_balance: beforeBalance, after_balance: afterBalance }),
+          info: JSON.stringify({
+            bank_fee: fee, //fee
+            before_balance: beforeBalance,
+            after_balance: afterBalance,
+          }),
         })
         await transaction.save()
         if (userType == 'user') {
@@ -470,7 +475,7 @@ export default class TransactionsController {
           fullname: user?.fullName,
           username: user?.username,
           phone: user?.phone,
-          amount: Number(transaction.amount),
+          amount: Number(transaction.amount) + fee, //fee
         })
         Telegram.log(null, 'transaction_created', transaction)
       }
